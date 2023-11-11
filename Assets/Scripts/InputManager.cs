@@ -7,7 +7,7 @@ public class InputManager : MonoBehaviour
 {
 
     private PlayerInput playerInput;
-    private PlayerInput.OnFootActions onFoot;
+    public PlayerInput.OnFootActions onFoot;
 
     private PlayerMotor motor;
     private PlayerLook look;
@@ -16,8 +16,10 @@ public class InputManager : MonoBehaviour
     {
         playerInput = new PlayerInput();
         onFoot = playerInput.OnFoot;
+
         motor = GetComponent<PlayerMotor>();
         look = GetComponent<PlayerLook>();
+
         onFoot.Jump.performed += ctx => motor.Jump();
     }
 
@@ -30,11 +32,11 @@ public class InputManager : MonoBehaviour
     void FixedUpdate()
     {
         motor.ProcessMove(onFoot.Movement.ReadValue<Vector2>());
-        Debug.Log("Value: " + onFoot.Look.ReadValue<Vector2>());
+        //Debug.Log("Value: " + onFoot.Look.ReadValue<Vector2>());
 
     }
 
-    private void LateUpdate()
+    void LateUpdate()
     {
         look.ProcessLook(onFoot.Look.ReadValue<Vector2>());
     }
