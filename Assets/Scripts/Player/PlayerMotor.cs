@@ -1,16 +1,19 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class PlayerMotor : MonoBehaviour
 {
-    private CharacterController controller;
+    [HideInInspector] public CharacterController controller;
     private Vector3 playerVelocity;
     public float speed = 5f;
     public float jumpHeight = 3f;
     private bool isGrounded;
     private bool sprinting;
     public float gravity = -9.8f;
+    public Vector3 moveDirection = Vector3.zero;
+    [HideInInspector] public bool moving;
 
     void Start()
     {
@@ -21,13 +24,18 @@ public class PlayerMotor : MonoBehaviour
     void Update()
     {
         isGrounded = controller.isGrounded;
+
+
     }
 
     public void ProcessMove(Vector2 input)
     {
-        Vector3 moveDirection = Vector3.zero;
         moveDirection.x = input.x;
         moveDirection.z = input.y;
+
+
+        moving = moveDirection.x < 0 || moveDirection.y < 0 || moveDirection.x > 0 || moveDirection.y > 0 ? true : false;
+
         controller.Move(transform.TransformDirection(moveDirection) * speed * Time.deltaTime);
 
         playerVelocity.y += gravity * Time.deltaTime;
