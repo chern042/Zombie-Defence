@@ -14,9 +14,11 @@ public class PlayerMotor : MonoBehaviour
     public float gravity = -9.8f;
     public Vector3 moveDirection = Vector3.zero;
     [HideInInspector] public bool moving;
+    [SerializeField] public Animator ani;
 
     void Start()
     {
+        if (ani == null && GetComponent<Animator>()) ani = GetComponent<Animator>();
         controller = GetComponent<CharacterController>();
     }
 
@@ -24,7 +26,6 @@ public class PlayerMotor : MonoBehaviour
     void Update()
     {
         isGrounded = controller.isGrounded;
-
 
     }
 
@@ -34,7 +35,7 @@ public class PlayerMotor : MonoBehaviour
         moveDirection.z = input.y;
 
 
-        moving = moveDirection.x < 0 || moveDirection.y < 0 || moveDirection.x > 0 || moveDirection.y > 0 ? true : false;
+        moving = moveDirection.x < 0 || moveDirection.z < 0 || moveDirection.x > 0 || moveDirection.z > 0 ? true : false;
 
         controller.Move(transform.TransformDirection(moveDirection) * speed * Time.deltaTime);
 
@@ -44,7 +45,8 @@ public class PlayerMotor : MonoBehaviour
             playerVelocity.y = -2f;
         }
         controller.Move(playerVelocity * Time.deltaTime);
-        //Debug.Log(playerVelocity.y);
+
+
 
     }
 
@@ -66,6 +68,25 @@ public class PlayerMotor : MonoBehaviour
         else
         {
             speed = 5f;
+        }
+    }
+
+
+
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.collider.CompareTag("Wall"))
+        {
+            ani.SetBool("Hide", true);
+        }
+    }
+
+    private void OnCollisionExit(Collision collision)
+    {
+        if (collision.collider.CompareTag("Wall"))
+        {
+            ani.SetBool("Hide", false);
         }
     }
 }

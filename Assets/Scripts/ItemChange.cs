@@ -10,7 +10,6 @@ namespace EvolveGames
         [Header("Item Change")]
         [SerializeField] public Animator ani;
         [SerializeField] Image ItemCanvasLogo;
-        [SerializeField] bool LoopItems = true;
         [SerializeField, Tooltip("You can add your new item here.")] GameObject[] Items;
         [SerializeField, Tooltip("These logos must have the same order as the items.")] Sprite[] ItemLogos;
         [SerializeField] int ItemIdInt;
@@ -34,24 +33,9 @@ namespace EvolveGames
         }
         private void Update()
         {
-            if (Input.GetAxis("Mouse ScrollWheel") > 0f)
-            {
-                ItemIdInt++;
-            }
 
-            if (Input.GetAxis("Mouse ScrollWheel") < 0f)
-            {
-                ItemIdInt--;
-            }
-
-            if(Input.GetKeyDown(KeyCode.H))
-            {
-                if (ani.GetBool("Hide")) Hide(false);
-                else Hide(true);
-            }
-
-            if (ItemIdInt < 0) ItemIdInt = LoopItems ? MaxItems : 0;
-            if (ItemIdInt > MaxItems) ItemIdInt = LoopItems ? 0 : MaxItems;
+            if (ItemIdInt < 0) ItemIdInt = MaxItems;
+            if (ItemIdInt > MaxItems) ItemIdInt = 0;
 
 
             if (ItemIdInt != ChangeItemInt)
@@ -61,11 +45,12 @@ namespace EvolveGames
             }
         }
 
-        public void Hide(bool Hide)
+        public void ChangeItem()
         {
-            DefiniteHide = Hide;
-            ani.SetBool("Hide", Hide);
+            ItemIdInt++;
+
         }
+
 
         IEnumerator ItemChangeObject()
         {
@@ -106,6 +91,7 @@ namespace EvolveGames
                 ItemCanvasLogo.color = OpacityColor;
             }
         }
+
     }
 
 }

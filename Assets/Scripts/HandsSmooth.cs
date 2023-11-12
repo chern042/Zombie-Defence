@@ -17,15 +17,9 @@ namespace EvolveGames
         [SerializeField, Range(0.1f, 10)] float MaxRotationAmount = 5.0f;
         [SerializeField, Range(0.1f, 10)] float RotationMovementMultipler = 1.0f;
 
-        [Header("CroughRotation")]
-        [SerializeField] bool EnabledCroughRotation = false;
-        [SerializeField, Range(0.1f, 20)] float RotationCroughSmooth = 15.0f;
-        [SerializeField, Range(5f, 50)] float RotationCroughMultipler = 18.0f;
 
-        [Header("Input")]
-        [SerializeField] KeyCode CroughKey = KeyCode.LeftControl;
 
-        float CroughRotation;
+
         Vector3 InstallPosition;
         Quaternion InstallRotation;
         

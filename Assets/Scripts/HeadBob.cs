@@ -40,11 +40,10 @@ namespace EvolveGames
 
         private void CheckMotion()
         {
-            float speed = new Vector3(player.velocity.x, 0, player.velocity.z).magnitude;
-
 
             if (!GetComponentInParent<PlayerMotor>().moving) return;
             if (!player.isGrounded) return;
+
             PlayMotion(HeadBobMotion());
         }
 

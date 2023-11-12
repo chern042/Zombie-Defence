@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using EvolveGames;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -11,6 +12,8 @@ public class InputManager : MonoBehaviour
 
     private PlayerMotor motor;
     private PlayerLook look;
+    private ItemChange itemChange;
+    private PlayerShoot playerShoot;
 
     void Awake()
     {
@@ -19,8 +22,16 @@ public class InputManager : MonoBehaviour
 
         motor = GetComponent<PlayerMotor>();
         look = GetComponent<PlayerLook>();
+        itemChange = GetComponent<ItemChange>();
+        playerShoot = GetComponent<PlayerShoot>();
 
-        //onFoot.Jump.performed += ctx => motor.Jump();
+        onFoot.Jump.performed += ctx => motor.Jump();
+        onFoot.Switch.performed += ctx => itemChange.ChangeItem();
+        //onFoot.Shoot.performed += ctx => playerShoot.EjectCasing();
+        onFoot.Shoot.performed += ctx => playerShoot.Shooting();
+        
+
+
     }
 
 
