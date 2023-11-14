@@ -29,9 +29,9 @@ public class Projectile : MonoBehaviour
     {
         //Grab the game mode service, we need it to access the player character!
         //var gameModeService = PlayerMotor.Get<CharacterController>();
-        var gameModeService = ServiceLocator.Current.Get<IGameModeService>();
-        Debug.Log("TEST: " + gameModeService.GetPlayerCharacter().GetComponent<Collider>());
-        Debug.Log("TEST: " + gameModeService.GetPlayerCharacter());
+        //var gameModeService = ServiceLocator.Current.Get<IGameModeService>();
+        //Debug.Log("TEST: " + gameModeService.GetPlayerCharacter().GetComponent<Collider>());
+       // Debug.Log("TEST: " + gameModeService.GetPlayerCharacter());
 
         //Ignore the main player character's collision. A little hacky, but it should work.
         //Physics.IgnoreCollision(gameModeService.GetPlayerCharacter().GetComponent<Collider>(), GetComponent<Collider>());
@@ -43,29 +43,12 @@ public class Projectile : MonoBehaviour
     //If the bullet collides with anything
     private void OnCollisionEnter(Collision collision)
     {
-        Debug.Log("Collision enter");
-        Debug.Log(collision.gameObject.GetComponent<Projectile>());
-        Debug.Log(collision.collider.name);
-        Debug.Log(collision.gameObject.CompareTag("GameController"));
         //Ignore collisions with other projectiles.
         if (collision.gameObject.GetComponent<Projectile>() != null)
             return;
 
-        Debug.Log("dddddddd"+collision.collider.name);
-        //Debug.Log(collision.gameObject.CompareTag("GameController"));
-        //if (collision.gameObject.CompareTag("GameController"))
-        //{
-        //    //Physics.IgnoreCollision (collision.collider);
-        //    Debug.LogWarning("Collides with player");
-        //    //Physics.IgnoreCollision(GetComponent<Collider>(), GetComponent<Collider>());
 
-        //    //Ignore player character collision, otherwise this moves it, which is quite odd, and other weird stuff happens!
-        //    Physics.IgnoreCollision(collision.collider, GetComponent<Collider>());
 
-        //    //Return, otherwise we will destroy with this hit, which we don't want!
-        //    return;
-        //}
-        //
         //If destroy on impact is false, start 
         //coroutine with random destroy timer
         if (!destroyOnImpact)

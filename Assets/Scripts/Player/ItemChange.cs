@@ -13,6 +13,9 @@ namespace EvolveGames
         [SerializeField, Tooltip("You can add your new item here.")] GameObject[] Items;
         [SerializeField, Tooltip("These logos must have the same order as the items.")] Sprite[] ItemLogos;
         [SerializeField] int ItemIdInt;
+        [SerializeField] private AudioSource holsteringSounds;
+
+        private WeaponBehaviour weapon;
         int MaxItems;
         int ChangeItemInt;
         [HideInInspector] public bool DefiniteHide;
@@ -29,6 +32,8 @@ namespace EvolveGames
             ChangeItemInt = ItemIdInt;
             ItemCanvasLogo.sprite = ItemLogos[ItemIdInt];
             MaxItems = Items.Length - 1;
+            weapon = GetComponentInChildren<WeaponBehaviour>();
+            Debug.Log("Weapon behaviour test: " + weapon.name + " " + weapon.isActiveAndEnabled);
             StartCoroutine(ItemChangeObject());
         }
         private void Update()
@@ -50,6 +55,20 @@ namespace EvolveGames
             ItemIdInt++;
 
         }
+        private void HolsteringSounds(bool holster)
+        {
+            AudioClip holsterClip;
+            AudioClip unholsterClip;
+            if(weapon!= null && weapon.name == Items[ItemIdInt].name)
+            {
+                holsterClip = weapon.GetAudioClipHolster();
+                unholsterClip = weapon.GetAudioClipUnholster();
+                Debug.Log("Test: " + holsterClip.name + " " + unholsterClip.name);
+                holsteringSounds.clip = holster ? holsterClip : unholsterClip;
+                holsteringSounds.Play();
+
+            }
+        }
 
 
         IEnumerator ItemChangeObject()
@@ -59,8 +78,10 @@ namespace EvolveGames
             for (int i = 0; i < (MaxItems + 1); i++)
             {
                 Items[i].SetActive(false);
+                HolsteringSounds(false);
             }
             Items[ItemIdInt].SetActive(true);
+            HolsteringSounds(true);
             if (!ItemChangeLogo) StartCoroutine(ItemLogoChange());
 
             if (!DefiniteHide) ani.SetBool("Hide", false);

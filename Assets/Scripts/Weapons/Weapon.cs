@@ -35,8 +35,18 @@ using UnityEngine;
         [SerializeField]
         private int ammunitionTotal = 10;
 
+        [Tooltip("Fire Spread.")]
+        [SerializeField]
+        private Vector3 spread = new Vector3(0.01f,0.01f,0.01f);
 
-        [Header("Animation")]
+        [Tooltip("Fire Spread Max Time.")]
+        [SerializeField]
+        private float spreadTime = 5f;
+
+
+
+
+    [Header("Animation")]
 
         [Tooltip("Transform that represents the weapon's ejection port, meaning the part of the weapon that casings shoot from.")]
         [SerializeField]
@@ -88,6 +98,9 @@ using UnityEngine;
         private AudioClip audioClipFireEmpty;
         private bool isFiring;
         private float lastFired;
+        private PlayerLook playerLook;
+    private float shootTime;
+    private float shootStartTime;
 
         /// <summary>
         /// Weapon Animator.
@@ -127,6 +140,8 @@ using UnityEngine;
         {
             //Get Animator.
             animator = GetComponent<Animator>();
+        playerLook = GetComponentInParent<PlayerLook>();
+        shootStartTime = 0;
         //Get Attachment Manager.
 
         //Cache the game mode service. We only need this right here, but we'll cache it in case we ever need it again.
@@ -186,10 +201,14 @@ using UnityEngine;
     {
         if (automatic && isFiring)
         {
+            if(shootStartTime == 0)
+            {
+                shootStartTime = Time.time;
+            }
             if (Time.time - lastFired > 1 / roundsPerSecond)
             {
                 lastFired = Time.time;
-                Fire();
+                Fire(3f);
             }
         }
     }
@@ -201,7 +220,7 @@ using UnityEngine;
         }
         else
         {
-            Fire();
+            Fire(3f);
         }
 
     }
@@ -209,6 +228,8 @@ using UnityEngine;
     public override void CancelShoot()
     {
         isFiring = false;
+        shootTime = 0;
+        shootStartTime = 0;
     }
 
     public override void Reload()
@@ -226,17 +247,29 @@ using UnityEngine;
         if (playerCamera == null)
                 return;
 
+
+
+
         //Get Muzzle Socket. This is the point we fire from.
         Transform muzzleSocket = muzzleBehaviour.GetSocket();
 
-
+        shootTime = Time.time - shootStartTime;
         //Determine the rotation that we want to shoot our projectile in.
         Quaternion rotation = Quaternion.LookRotation(playerCamera.forward * 1000.0f - muzzleSocket.position);
+
+
+
+
+           Vector3 shootDirection = playerCamera.forward + new Vector3(Random.Range(-spread.x,spread.x)*Mathf.Clamp(shootTime,1f,spreadTime), Random.Range(-spread.y, spread.y)* Mathf.Clamp(shootTime, 1f, spreadTime), Random.Range(-spread.z, spread.z)* Mathf.Clamp(shootTime, 1f, spreadTime));
+        //Vector3 shootDirection = playerCamera.forward;
+
+        shootDirection.Normalize();
 
         //If there's something blocking, then we can aim directly at that thing, which will result in more accurate shooting.
         if (Physics.Raycast(new Ray(playerCamera.position, playerCamera.forward),out RaycastHit hit, maximumDistance, mask))
             rotation = Quaternion.LookRotation(hit.point - muzzleSocket.position);
 
+        playerLook.ApplyRecoil(new Vector2(Random.Range(-spread.x, spread.x), Random.Range(-spread.y, spread.y)) * (spreadMultiplier*10) * Mathf.Clamp01(shootTime/spreadTime));
 
 
         //Try to play the fire particles from the muzzle!
@@ -245,15 +278,13 @@ using UnityEngine;
         //Spawn projectile from the projectile spawn point.
         GameObject projectile = Instantiate(prefabProjectile, muzzleSocket.position, rotation);
         //Add velocity to the projectile.
-        projectile.GetComponent<Rigidbody>().velocity =(projectile.transform.forward * projectileImpulse);
+        projectile.GetComponent<Rigidbody>().velocity =((projectile.transform.forward+shootDirection) * projectileImpulse);
 
+        EjectCasing();
     }
 
-    private void StopMuzzleFlash()
-    {
-        //muzzlePrefab.GetComponent<ParticleSystem>().Stop();
 
-    }
+
 public override void FillAmmunition(int amount)
         {
             //Update the value by a certain amount.
@@ -267,5 +298,9 @@ public override void FillAmmunition(int amount)
             if (prefabCasing != null && socketEjection != null)
                 Instantiate(prefabCasing, socketEjection.position, socketEjection.rotation);
         }
+
+
+
+
 
 }
