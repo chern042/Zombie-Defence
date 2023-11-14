@@ -12,7 +12,7 @@ namespace EvolveGames
         [Space, SerializeField] Camera cam;
         [SerializeField] GameObject PlayerController;
         [SerializeField] Image ImagePrefab;
-        [Space ,SerializeField, Range(0.1f, 20)] float MaxViewRange = 8;
+        [Space, SerializeField, Range(0.1f, 20)] float MaxViewRange = 8;
         [SerializeField, Range(0.1f, 20)] float MaxTextViewRange = 3;
         float Distance;
         Text ImageText;
@@ -28,7 +28,7 @@ namespace EvolveGames
             ImageUI.transform.position = cam.WorldToScreenPoint(calculateWorldPosition(transform.position, cam));
             Distance = Vector3.Distance(PlayerController.transform.position, transform.position);
 
-            if(Distance < MaxTextViewRange)
+            if (Distance < MaxTextViewRange)
             {
                 Color OpacityColor = ImageText.color;
                 OpacityColor.a = Mathf.Lerp(OpacityColor.a, 1, 10 * Time.deltaTime);

@@ -28,9 +28,9 @@ public class CasingScript : MonoBehaviour
     [Tooltip("How long after spawning that the casing is destroyed")]
     public float despawnTime;
 
-    //[Header("Audio")]
-   // public AudioClip[] casingSounds;
-    //public AudioSource audioSource;
+    [Header("Audio")]
+    public AudioClip[] casingSounds;
+    public AudioSource audioSource;
 
     [Header("Spin Settings")]
     //How fast the casing spins
@@ -51,7 +51,7 @@ public class CasingScript : MonoBehaviour
         GetComponent<Rigidbody>().AddRelativeForce(
             Random.Range(minimumXForce, maximumXForce),  //X Axis
             Random.Range(minimumYForce, maximumYForce),  //Y Axis
-            Random.Range(minimumZForce, maximumZForce)); //Z Axis		     
+            Random.Range(minimumZForce, maximumZForce)); //Z Axis	     
     }
 
     private void Start()
@@ -61,7 +61,7 @@ public class CasingScript : MonoBehaviour
         //Set random rotation at start
         transform.rotation = Random.rotation;
         //Start play sound coroutine
-        //StartCoroutine(PlaySound());
+        StartCoroutine(PlaySound());
     }
 
     private void FixedUpdate()
@@ -71,16 +71,16 @@ public class CasingScript : MonoBehaviour
         transform.Rotate(Vector3.down, speed * Time.deltaTime);
     }
 
-    //private IEnumerator PlaySound()
-    //{
-    //    //Wait for random time before playing sound clip
-    //    yield return new WaitForSeconds(Random.Range(0.25f, 0.85f));
-    //    //Get a random casing sound from the array 
-    //    audioSource.clip = casingSounds
-    //        [Random.Range(0, casingSounds.Length)];
-    //    //Play the random casing sound
-    //    audioSource.Play();
-    //}
+    private IEnumerator PlaySound()
+    {
+        //Wait for random time before playing sound clip
+        yield return new WaitForSeconds(Random.Range(0.25f, 0.85f));
+        //Get a random casing sound from the array 
+        audioSource.clip = casingSounds
+            [Random.Range(0, casingSounds.Length)];
+        //Play the random casing sound
+        audioSource.Play();
+    }
 
     private IEnumerator RemoveCasing()
     {

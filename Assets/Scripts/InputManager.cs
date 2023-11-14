@@ -14,6 +14,7 @@ public class InputManager : MonoBehaviour
     private PlayerLook look;
     private ItemChange itemChange;
     private PlayerShoot playerShoot;
+    private WeaponBehaviour weapon;
 
     void Awake()
     {
@@ -24,12 +25,17 @@ public class InputManager : MonoBehaviour
         look = GetComponent<PlayerLook>();
         itemChange = GetComponent<ItemChange>();
         playerShoot = GetComponent<PlayerShoot>();
+        weapon = GetComponentInChildren<Weapon>();
 
         onFoot.Jump.performed += ctx => motor.Jump();
         onFoot.Switch.performed += ctx => itemChange.ChangeItem();
-        //onFoot.Shoot.performed += ctx => playerShoot.EjectCasing();
-        onFoot.Shoot.performed += ctx => playerShoot.Shooting();
-        
+        onFoot.Shoot.performed += ctx => weapon.Shoot();
+        onFoot.Shoot.canceled += ctx => weapon.CancelShoot();
+        //onFoot.Shoot.performed += ctx => weapon.Fire();
+
+
+
+
 
 
     }
@@ -40,10 +46,10 @@ public class InputManager : MonoBehaviour
         onFoot.Enable();
     }
 
+
     void FixedUpdate()
     {
         motor.ProcessMove(onFoot.Movement.ReadValue<Vector2>());
-        //Debug.Log("Value: " + onFoot.Look.ReadValue<Vector2>());
 
     }
 
