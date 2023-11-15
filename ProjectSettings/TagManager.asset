@@ -11,6 +11,7 @@ TagManager:
   - Dummie
   - Wall
   - Concrete
+  - Zombie
   layers:
   - Default
   - TransparentFX

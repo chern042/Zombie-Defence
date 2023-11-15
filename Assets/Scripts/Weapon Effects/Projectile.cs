@@ -83,11 +83,11 @@ public class Projectile : MonoBehaviour
             Destroy(gameObject);
         }
 
-        //If bullet collides with "Dirt" tag
-        if (collision.transform.tag == "Dirt")
+        //If bullet collides with "Zombie" tag
+        if (collision.transform.tag == "Zombie")
         {
             //Instantiate random impact prefab from array
-            Instantiate(dirtImpactPrefabs[Random.Range
+            Instantiate(bloodImpactPrefabs[Random.Range
                 (0, bloodImpactPrefabs.Length)], transform.position,
                 Quaternion.LookRotation(collision.contacts[0].normal));
             //Destroy bullet object
@@ -100,8 +100,8 @@ public class Projectile : MonoBehaviour
             Debug.Log("DDDERRR");
             //Instantiate random impact prefab from array
             Instantiate(concreteImpactPrefabs[Random.Range
-                (0, bloodImpactPrefabs.Length)], transform.position,
-                Quaternion.LookRotation(collision.contacts[0].normal));
+                (0, concreteImpactPrefabs.Length)], transform.position,
+                Quaternion.LookRotation(collision.GetContact(0).normal));
             //Destroy bullet object
             Destroy(gameObject);
         }

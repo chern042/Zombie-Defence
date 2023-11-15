@@ -21,14 +21,11 @@ public class PlayerLook : MonoBehaviour
 
     public void ProcessLook(Vector2 input)
     {
-        float mouseX = input.x +xRecoil;
+        float mouseX = input.x + xRecoil;
         float mouseY = input.y + yRecoil;
 
-        Debug.Log("Mouse X: " + mouseX);
-        Debug.Log("Mouse Y: " + mouseY);
-        Debug.Log("Mouse X: " + xRecoil);
-        Debug.Log("Mouse Y: " + yRecoil);
 
+        Debug.Log("X " +mouseX);
         xRotation -= (mouseY * Time.deltaTime) * ySensitivity;
         xRotation = Mathf.Clamp(xRotation, -80f, 80f);
 
@@ -44,7 +41,7 @@ public class PlayerLook : MonoBehaviour
 
     public void ApplyRecoil(Vector2 recoil)
     {
-        xRecoil += recoil.x *1.5f;
+        xRecoil += recoil.x;
         yRecoil += recoil.y;
     }
 

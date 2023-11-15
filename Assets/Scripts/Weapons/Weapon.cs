@@ -268,10 +268,9 @@ using UnityEngine;
         //If there's something blocking, then we can aim directly at that thing, which will result in more accurate shooting.
         if (Physics.Raycast(new Ray(playerCamera.position, playerCamera.forward),out RaycastHit hit, maximumDistance, mask))
             rotation = Quaternion.LookRotation(hit.point - muzzleSocket.position);
-
+        playerCamera.GetComponent<Camera>().fieldOfView = 64;
         playerLook.ApplyRecoil(new Vector2(Random.Range(-spread.x, spread.x), Random.Range(-spread.y, spread.y)) * (spreadMultiplier*10) * Mathf.Clamp01(shootTime/spreadTime));
-
-
+        animator.SetTrigger("Shooting");
         //Try to play the fire particles from the muzzle!
         muzzleBehaviour.Effect();
 
@@ -281,6 +280,7 @@ using UnityEngine;
         projectile.GetComponent<Rigidbody>().velocity =((projectile.transform.forward+shootDirection) * projectileImpulse);
 
         EjectCasing();
+        Invoke("ResetFOV",0.05f);
     }
 
 
@@ -298,6 +298,12 @@ public override void FillAmmunition(int amount)
             if (prefabCasing != null && socketEjection != null)
                 Instantiate(prefabCasing, socketEjection.position, socketEjection.rotation);
         }
+
+    private void ResetFOV()
+    {
+        playerCamera.GetComponent<Camera>().fieldOfView = 65;
+    }
+
 
 
 
