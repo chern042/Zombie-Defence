@@ -189,8 +189,8 @@ using UnityEngine;
         //characterBehaviour = gameModeService.GetPlayerCharacter();
         //Cache the world camera. We use this in line traces.
         //playerCamera = characterBehaviour.GetCameraWorld().transform;
-        playerCamera = Camera.main.transform;
-        }
+        playerCamera =  playerLook.cam.transform;
+    }
 
         protected override void Start()
         {
@@ -310,19 +310,20 @@ using UnityEngine;
 
 
 
-           Vector3 shootDirection = playerCamera.forward + new Vector3(Random.Range(-spread.x,spread.x)*Mathf.Clamp(shootTime,1f,spreadTime), Random.Range(-spread.y, spread.y)* Mathf.Clamp(shootTime, 1f, spreadTime), Random.Range(-spread.z, spread.z)* Mathf.Clamp(shootTime, 1f, spreadTime));
-
+        Vector3 shootDirection = playerCamera.forward + new Vector3(Random.Range(-spread.x,spread.x)*Mathf.Clamp(shootTime,1f,spreadTime), Random.Range(-spread.y, spread.y)* Mathf.Clamp(shootTime, 1f, spreadTime), Random.Range(-spread.z, spread.z)* Mathf.Clamp(shootTime, 1f, spreadTime))*spreadMultiplier;
+        //Vector3 shootDirection = playerCamera.forward;
         shootDirection.Normalize();
         Ray ray;
         //If there's something blocking, then we can aim directly at that thing, which will result in more accurate shooting.
-        if (Physics.Raycast(ray = new Ray(playerCamera.position, playerCamera.forward),out RaycastHit hit, maximumDistance, mask))
+        if (Physics.Raycast(ray = new Ray(playerCamera.position, playerCamera.forward), out RaycastHit hit, maximumDistance, mask))
         {
             Debug.DrawRay(ray.origin, ray.direction * maximumDistance);
             rotation = Quaternion.LookRotation(hit.point - muzzleSocket.position);
         }
+        Debug.DrawRay(ray.origin, ray.direction * maximumDistance);
 
-        playerCamera.GetComponent<Camera>().fieldOfView = 64;
-        playerLook.ApplyRecoil(new Vector2(Random.Range(-spread.x, spread.x), Random.Range(-spread.y, spread.y)) * (spreadMultiplier*10) * Mathf.Clamp01(shootTime/spreadTime));
+        playerLook.cam.fieldOfView = 64;
+        playerLook.ApplyRecoil(new Vector2(Random.Range(-spread.x, spread.x), Random.Range(-spread.y, spread.y)) * (spreadMultiplier) * Mathf.Clamp01(shootTime/spreadTime));
         animator.SetTrigger("Shooting");
         //Try to play the fire particles from the muzzle!
         muzzleBehaviour.Effect();
@@ -407,7 +408,7 @@ using UnityEngine;
 
     private void ResetFOV()
     {
-        playerCamera.GetComponent<Camera>().fieldOfView = 65;
+        playerLook.cam.fieldOfView = 65;
     }
 
 

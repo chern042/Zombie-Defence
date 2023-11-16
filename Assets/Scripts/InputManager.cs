@@ -57,15 +57,10 @@ public class InputManager : MonoBehaviour
         {
             if (itemChange.GetActiveWeapon().name != lastWeapon)
             {
-                Debug.Log("wep change: " + itemChange.GetActiveWeapon().name);
                 weapon = GetComponentInChildren<WeaponBehaviour>();
                 lastWeapon = itemChange.GetActiveWeapon().name;
-
-
             }
         }
-
-        //Debug.Log("active wep: " + itemChange.GetActiveWeapon().name);
 
         motor.ProcessMove(onFoot.Movement.ReadValue<Vector2>());
 
@@ -74,11 +69,7 @@ public class InputManager : MonoBehaviour
 
     void LateUpdate()
     {
-       // if(onFoot.Look.ReadValue<Vector2>().x > 0.01f)
-       // {
-            look.ProcessLook(onFoot.Look.ReadValue<Vector2>());
-
-       // }
+        look.ProcessLook(onFoot.Look.ReadValue<Vector2>());
     }
 
     private void OnDisable()
