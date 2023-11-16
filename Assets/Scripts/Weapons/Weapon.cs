@@ -1,6 +1,7 @@
 ﻿// Copyright 2021, Infima Games. All Rights Reserved.
 
 using Unity.VisualScripting;
+using UnityEditor.PackageManager;
 using UnityEngine;
 
     /// <summary>
@@ -16,18 +17,23 @@ using UnityEngine;
 
         [Tooltip("Weapon Damage.")]
         [SerializeField, HideInInspector]
-        private float damage = 1;
+        private float damage = 1f;
 
-        [Tooltip("How long does the weapon take to hit?")]
+        [Tooltip("Attack Speed(How long the attack lasts.")]
         [SerializeField, HideInInspector]
-        private float meleeAttackLength = 2f;
+        private float attackSpeed = 2f;
 
         [Tooltip("How far can the weapon reach?")]
         [SerializeField, HideInInspector]
         private float meleeReach = 2.0f;
 
+        [Tooltip("Impact Blood Effect Prefabs.")]
+        [SerializeField, HideInInspector]
+        public Transform[] bloodImpactPrefabs;
 
-        [Header("Firing")]
+
+
+    [Header("Firing")]
 
         [Tooltip("Is this weapon automatic? If yes, then holding down the firing button will continuously fire.")]
         [SerializeField, HideInInspector]
@@ -89,7 +95,7 @@ using UnityEngine;
         //private Sprite spriteBody;
 
 
-        [Header("Audio Clips Holster")]
+        [Header("Audio Clips.")]
 
         [Tooltip("Holster Audio Clip.")]
         [SerializeField, HideInInspector]
@@ -109,16 +115,31 @@ using UnityEngine;
         [SerializeField, HideInInspector]
         private AudioClip audioClipReloadEmpty;
 
-        [Header("Audio Clips Other")]
-
         [Tooltip("AudioClip played when this weapon is fired without any ammunition.")]
         [SerializeField, HideInInspector]
         private AudioClip audioClipFireEmpty;
+
+
+        [Tooltip("Melee attack swing Audio Clip.")]
+        [SerializeField, HideInInspector]
+        private AudioClip meleeSwingSound;
+
+        [Tooltip("Melee attack hit Audio Clip.")]
+        [SerializeField, HideInInspector]
+        private AudioClip meleeHitSound;
+
+        [Tooltip("Melee Weapon Audio Source.")]
+        [SerializeField, HideInInspector]
+        private AudioSource audioSource;
+
+
+    private bool meleeIsAttacking = false;
+        private bool meleeReadyToAttack = true;
         private bool isFiring;
         private float lastFired;
         private PlayerLook playerLook;
-    private float shootTime;
-    private float shootStartTime;
+        private float shootTime;
+        private float shootStartTime;
 
         /// <summary>
         /// Weapon Animator.
@@ -235,19 +256,28 @@ using UnityEngine;
     }
     public override void Shoot()
     {
-        if (automatic)
+        Debug.Log("Fire Test is melee: " + isMelee+" name: "+gameObject.name);
+        if (isMelee)
         {
-            isFiring = true;
+            Attack();
         }
         else
         {
-            Fire(3f);
+            if (automatic)
+            {
+                isFiring = true;
+            }
+            else
+            {
+                Fire();
+            }
         }
 
     }
 
     public override void CancelShoot()
     {
+        if (isMelee) return;
         isFiring = false;
         shootTime = 0;
         shootStartTime = 0;
@@ -312,20 +342,50 @@ using UnityEngine;
     {
         //Make sure that we have a camera cached, otherwise we don't really have the ability to perform traces.
         Debug.Log("Test attk");
-        if (playerCamera == null)
-            return;
+        if (playerCamera == null) return;
+        if (!meleeReadyToAttack || meleeIsAttacking) return;
         Debug.Log("got through player camera check");
 
+
+
+        Invoke(nameof(ResetAttack), attackSpeed);
+        AttackRayCast();
+
+
+    }
+
+    public void ResetAttack()
+    {
+        meleeIsAttacking = false;
+        meleeReadyToAttack = true;
+    }
+    public void AttackRayCast()
+    {
         Ray ray = new Ray(playerCamera.position, playerCamera.forward);
         Debug.DrawRay(ray.origin, ray.direction * meleeReach);
         RaycastHit hitInfo;
+        animator.SetTrigger("Hit");
+        meleeIsAttacking = true;
+        meleeReadyToAttack = false;
+
+
+        audioSource.pitch = Random.Range(0.9f, 1.1f);
+        audioSource.PlayOneShot(meleeSwingSound);
         if (Physics.Raycast(ray, out hitInfo, meleeReach, mask))
         {
-            if (hitInfo.collider.CompareTag("Zombie"))
-            {
-                Debug.Log("HIT ZOMBIE");
-                animator.SetTrigger("Hit");
-            }
+            HitTarget(hitInfo);
+        }
+    }
+
+    private void HitTarget(RaycastHit hitInfo)
+    {
+        audioSource.pitch = 1;
+        audioSource.PlayOneShot(meleeHitSound);
+
+        if (hitInfo.collider.CompareTag("Zombie"))
+        {
+            Debug.Log("HIT ZOMBIE");
+            Instantiate(bloodImpactPrefabs[Random.Range(0, bloodImpactPrefabs.Length)], hitInfo.point,Quaternion.LookRotation(hitInfo.normal));
         }
     }
 

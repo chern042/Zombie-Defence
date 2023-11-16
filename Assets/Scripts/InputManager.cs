@@ -13,9 +13,8 @@ public class InputManager : MonoBehaviour
     private PlayerMotor motor;
     private PlayerLook look;
     private ItemChange itemChange;
-    private PlayerShoot playerShoot;
+    private string lastWeapon;
     private WeaponBehaviour weapon;
-    private int lastItemId;
 
     void Awake()
     {
@@ -25,25 +24,12 @@ public class InputManager : MonoBehaviour
         motor = GetComponent<PlayerMotor>();
         look = GetComponent<PlayerLook>();
         itemChange = GetComponent<ItemChange>();
-        playerShoot = GetComponent<PlayerShoot>();
-        weapon = GetComponentInChildren<Weapon>();
-        lastItemId = itemChange.ItemIdInt;
-        Debug.Log("WEP: " + weapon.IsMelee());
-        if (weapon.IsMelee())
-        {
-            Debug.Log("atttk");
-            onFoot.Shoot.performed += ctx => weapon.Attack();
+        weapon = GetComponentInChildren<WeaponBehaviour>();
 
-        }
-        else
-        {
-            onFoot.Shoot.performed += ctx => weapon.Shoot();
-            onFoot.Shoot.canceled += ctx => weapon.CancelShoot();
-        }
+        onFoot.Shoot.performed += ctx => weapon.Shoot();
+        onFoot.Shoot.canceled += ctx => weapon.CancelShoot();
         onFoot.Jump.performed += ctx => motor.Jump();
-        onFoot.Switch.performed += ctx => itemChange.ChangeItem();
-
-
+        onFoot.Switch.performed += ctx => ItemChange();
 
 
 
@@ -58,32 +44,41 @@ public class InputManager : MonoBehaviour
         onFoot.Enable();
     }
 
+    private void ItemChange()
+    {
+        itemChange.ChangeItem();
+        lastWeapon = itemChange.GetActiveWeapon().name;
+
+    }
 
     void FixedUpdate()
     {
-        if(itemChange.ItemIdInt != lastItemId)
+        if (lastWeapon != null)
         {
-            weapon = GetComponentInChildren<Weapon>();
-
-            if (weapon.IsMelee())
+            if (itemChange.GetActiveWeapon().name != lastWeapon)
             {
-                onFoot.Shoot.performed += ctx => weapon.Attack();
+                Debug.Log("wep change: " + itemChange.GetActiveWeapon().name);
+                weapon = GetComponentInChildren<WeaponBehaviour>();
+                lastWeapon = itemChange.GetActiveWeapon().name;
+
 
             }
-            else
-            {
-                onFoot.Shoot.performed += ctx => weapon.Shoot();
-                onFoot.Shoot.canceled += ctx => weapon.CancelShoot();
-            }
-            lastItemId = itemChange.ItemIdInt;
         }
+
+        //Debug.Log("active wep: " + itemChange.GetActiveWeapon().name);
+
         motor.ProcessMove(onFoot.Movement.ReadValue<Vector2>());
+
 
     }
 
     void LateUpdate()
     {
-        look.ProcessLook(onFoot.Look.ReadValue<Vector2>());
+       // if(onFoot.Look.ReadValue<Vector2>().x > 0.01f)
+       // {
+            look.ProcessLook(onFoot.Look.ReadValue<Vector2>());
+
+       // }
     }
 
     private void OnDisable()

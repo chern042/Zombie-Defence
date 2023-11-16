@@ -63,7 +63,6 @@ namespace EvolveGames
             {
                 holsterClip = weapon.GetAudioClipHolster();
                 unholsterClip = weapon.GetAudioClipUnholster();
-                Debug.Log("Test: " + holsterClip.name + " " + unholsterClip.name);
                 holsteringSounds.clip = holster ? holsterClip : unholsterClip;
                 holsteringSounds.Play();
 
@@ -81,6 +80,8 @@ namespace EvolveGames
                 HolsteringSounds(false);
             }
             Items[ItemIdInt].SetActive(true);
+            weapon = Items[ItemIdInt].GetComponent<WeaponBehaviour>();
+
             HolsteringSounds(true);
             if (!ItemChangeLogo) StartCoroutine(ItemLogoChange());
 
@@ -112,6 +113,9 @@ namespace EvolveGames
                 ItemCanvasLogo.color = OpacityColor;
             }
         }
+
+        public  WeaponBehaviour GetActiveWeapon() => weapon;
+
 
     }
 

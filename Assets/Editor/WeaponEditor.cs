@@ -8,8 +8,9 @@ public class WeaponEditor : Editor
 
     SerializedProperty isMelee;
     SerializedProperty damage;
-    SerializedProperty meleeAttackLength;
+    SerializedProperty attackSpeed;
     SerializedProperty meleeReach;
+    SerializedProperty bloodImpactPrefabs;
 
     SerializedProperty automatic;
     SerializedProperty projectileImpulse;
@@ -29,6 +30,10 @@ public class WeaponEditor : Editor
     SerializedProperty audioClipReloadEmpty;
     SerializedProperty audioClipFireEmpty;
 
+    SerializedProperty meleeSwingSound;
+    SerializedProperty meleeHitSound;
+    SerializedProperty audioSource;
+
 
 
 
@@ -36,8 +41,9 @@ public class WeaponEditor : Editor
     {
         isMelee = serializedObject.FindProperty("isMelee");
         damage = serializedObject.FindProperty("damage");
-        meleeAttackLength = serializedObject.FindProperty("meleeAttackLength");
+        attackSpeed = serializedObject.FindProperty("attackSpeed");
         meleeReach = serializedObject.FindProperty("meleeReach");
+        bloodImpactPrefabs = serializedObject.FindProperty("bloodImpactPrefabs");
 
         automatic = serializedObject.FindProperty("automatic");
         projectileImpulse = serializedObject.FindProperty("projectileImpulse");
@@ -57,6 +63,10 @@ public class WeaponEditor : Editor
         audioClipReloadEmpty = serializedObject.FindProperty("audioClipReloadEmpty");
         audioClipFireEmpty = serializedObject.FindProperty("audioClipFireEmpty");
 
+        meleeSwingSound = serializedObject.FindProperty("meleeSwingSound");
+        meleeHitSound = serializedObject.FindProperty("meleeHitSound");
+        audioSource = serializedObject.FindProperty("audioSource");
+
 
     }
 
@@ -70,12 +80,17 @@ public class WeaponEditor : Editor
         if (isMelee.boolValue)
         {
             EditorGUILayout.PropertyField(damage);
-            EditorGUILayout.PropertyField(meleeAttackLength);
+            EditorGUILayout.PropertyField(attackSpeed);
             EditorGUILayout.PropertyField(meleeReach);
+            EditorGUILayout.PropertyField(bloodImpactPrefabs);
+
             EditorGUILayout.PropertyField(mask);
             EditorGUILayout.PropertyField(audioClipHolster);
             EditorGUILayout.PropertyField(audioClipUnholster);
 
+            EditorGUILayout.PropertyField(meleeSwingSound);
+            EditorGUILayout.PropertyField(meleeHitSound);
+            EditorGUILayout.PropertyField(audioSource);
         }
         else
         {
