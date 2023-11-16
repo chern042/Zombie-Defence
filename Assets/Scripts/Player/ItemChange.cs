@@ -12,9 +12,9 @@ namespace EvolveGames
         [SerializeField] Image ItemCanvasLogo;
         [SerializeField, Tooltip("You can add your new item here.")] GameObject[] Items;
         [SerializeField, Tooltip("These logos must have the same order as the items.")] Sprite[] ItemLogos;
-        [SerializeField] int ItemIdInt;
+        [SerializeField] public int ItemIdInt;
         [SerializeField] private AudioSource holsteringSounds;
-
+        
         private WeaponBehaviour weapon;
         int MaxItems;
         int ChangeItemInt;

@@ -15,6 +15,7 @@ public class InputManager : MonoBehaviour
     private ItemChange itemChange;
     private PlayerShoot playerShoot;
     private WeaponBehaviour weapon;
+    private int lastItemId;
 
     void Awake()
     {
@@ -26,12 +27,23 @@ public class InputManager : MonoBehaviour
         itemChange = GetComponent<ItemChange>();
         playerShoot = GetComponent<PlayerShoot>();
         weapon = GetComponentInChildren<Weapon>();
+        lastItemId = itemChange.ItemIdInt;
+        Debug.Log("WEP: " + weapon.IsMelee());
+        if (weapon.IsMelee())
+        {
+            Debug.Log("atttk");
+            onFoot.Shoot.performed += ctx => weapon.Attack();
 
+        }
+        else
+        {
+            onFoot.Shoot.performed += ctx => weapon.Shoot();
+            onFoot.Shoot.canceled += ctx => weapon.CancelShoot();
+        }
         onFoot.Jump.performed += ctx => motor.Jump();
         onFoot.Switch.performed += ctx => itemChange.ChangeItem();
-        onFoot.Shoot.performed += ctx => weapon.Shoot();
-        onFoot.Shoot.canceled += ctx => weapon.CancelShoot();
-        //onFoot.Shoot.performed += ctx => weapon.Fire();
+
+
 
 
 
@@ -49,6 +61,22 @@ public class InputManager : MonoBehaviour
 
     void FixedUpdate()
     {
+        if(itemChange.ItemIdInt != lastItemId)
+        {
+            weapon = GetComponentInChildren<Weapon>();
+
+            if (weapon.IsMelee())
+            {
+                onFoot.Shoot.performed += ctx => weapon.Attack();
+
+            }
+            else
+            {
+                onFoot.Shoot.performed += ctx => weapon.Shoot();
+                onFoot.Shoot.canceled += ctx => weapon.CancelShoot();
+            }
+            lastItemId = itemChange.ItemIdInt;
+        }
         motor.ProcessMove(onFoot.Movement.ReadValue<Vector2>());
 
     }

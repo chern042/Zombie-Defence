@@ -1,9 +1,11 @@
 ﻿// Copyright 2021, Infima Games. All Rights Reserved.
 
+using System;
 using UnityEngine;
 
     public abstract class WeaponBehaviour : MonoBehaviour
     {
+
 
         /// <summary>
         /// Awake.
@@ -31,7 +33,7 @@ using UnityEngine;
         /// Returns the sprite to use when displaying the weapon's body.
         /// </summary>
         /// <returns></returns>
-        public abstract Sprite GetSpriteBody();
+        //public abstract Sprite GetSpriteBody();
 
         /// <summary>
         /// Returns the holster audio clip.
@@ -93,10 +95,13 @@ using UnityEngine;
         /// </summary>
         public abstract float GetRateOfFire();
 
+    public abstract bool IsMelee();
+
+
         /// <summary>
         /// Returns the RuntimeAnimationController the Character needs to use when this Weapon is equipped!
         /// </summary>
-        public abstract RuntimeAnimatorController GetAnimatorController();
+        //public abstract RuntimeAnimatorController GetAnimatorController();
 
 
         /// <summary>
@@ -123,6 +128,5 @@ using UnityEngine;
         /// </summary>
         public abstract void EjectCasing();
 
-
-
+        public abstract void Attack();
 }

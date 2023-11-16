@@ -1,5 +1,6 @@
 ﻿// Copyright 2021, Infima Games. All Rights Reserved.
 
+using Unity.VisualScripting;
 using UnityEngine;
 
     /// <summary>
@@ -8,39 +9,56 @@ using UnityEngine;
     public class Weapon : WeaponBehaviour
     {
 
+        [SerializeField, HideInInspector]
+        private bool isMelee;
+
+        [Header("Melee Weapon Stats")]
+
+        [Tooltip("Weapon Damage.")]
+        [SerializeField, HideInInspector]
+        private float damage = 1;
+
+        [Tooltip("How long does the weapon take to hit?")]
+        [SerializeField, HideInInspector]
+        private float meleeAttackLength = 2f;
+
+        [Tooltip("How far can the weapon reach?")]
+        [SerializeField, HideInInspector]
+        private float meleeReach = 2.0f;
+
 
         [Header("Firing")]
 
         [Tooltip("Is this weapon automatic? If yes, then holding down the firing button will continuously fire.")]
-        [SerializeField]
+        [SerializeField, HideInInspector]
         private bool automatic;
 
         [Tooltip("How fast the projectiles are.")]
-        [SerializeField]
+        [SerializeField, HideInInspector]
         private float projectileImpulse = 400.0f;
 
         [Tooltip("Amount of shots this weapon can shoot in a minute. It determines how fast the weapon shoots.")]
-        [SerializeField]
+        [SerializeField, HideInInspector]
         private float roundsPerSecond = 4f;
 
         [Tooltip("Mask of things recognized when firing.")]
-        [SerializeField]
+        [SerializeField, HideInInspector]
         private LayerMask mask;
 
         [Tooltip("Maximum distance at which this weapon can fire accurately. Shots beyond this distance will not use linetracing for accuracy.")]
-        [SerializeField]
+        [SerializeField, HideInInspector]
         private float maximumDistance = 500.0f;
 
         [Tooltip("Total Ammunition.")]
-        [SerializeField]
+        [SerializeField, HideInInspector]
         private int ammunitionTotal = 10;
 
         [Tooltip("Fire Spread.")]
-        [SerializeField]
+        [SerializeField, HideInInspector]
         private Vector3 spread = new Vector3(0.01f,0.01f,0.01f);
 
         [Tooltip("Fire Spread Max Time.")]
-        [SerializeField]
+        [SerializeField, HideInInspector]
         private float spreadTime = 5f;
 
 
@@ -49,52 +67,52 @@ using UnityEngine;
     [Header("Animation")]
 
         [Tooltip("Transform that represents the weapon's ejection port, meaning the part of the weapon that casings shoot from.")]
-        [SerializeField]
+        [SerializeField, HideInInspector]
         private Transform socketEjection;
 
         [Header("Resources")]
 
         [Tooltip("Casing Prefab.")]
-        [SerializeField]
+        [SerializeField, HideInInspector]
         private GameObject prefabCasing;
 
         [Tooltip("Projectile Prefab. This is the prefab spawned when the weapon shoots.")]
-        [SerializeField]
+        [SerializeField, HideInInspector]
         private GameObject prefabProjectile;
 
-        [Tooltip("The AnimatorController a player character needs to use while wielding this weapon.")]
-        [SerializeField]
-        public RuntimeAnimatorController controller;
+        //[Tooltip("The AnimatorController a player character needs to use while wielding this weapon.")]
+        //[SerializeField]
+        //public RuntimeAnimatorController controller;
 
-        [Tooltip("Weapon Body Texture.")]
-        [SerializeField]
-        private Sprite spriteBody;
+        //[Tooltip("Weapon Body Texture.")]
+        //[SerializeField]
+        //private Sprite spriteBody;
 
 
         [Header("Audio Clips Holster")]
 
         [Tooltip("Holster Audio Clip.")]
-        [SerializeField]
+        [SerializeField, HideInInspector]
         private AudioClip audioClipHolster;
 
         [Tooltip("Unholster Audio Clip.")]
-        [SerializeField]
+        [SerializeField, HideInInspector]
         private AudioClip audioClipUnholster;
 
         [Header("Audio Clips Reloads")]
 
         [Tooltip("Reload Audio Clip.")]
-        [SerializeField]
+        [SerializeField, HideInInspector]
         private AudioClip audioClipReload;
 
         [Tooltip("Reload Empty Audio Clip.")]
-        [SerializeField]
+        [SerializeField, HideInInspector]
         private AudioClip audioClipReloadEmpty;
 
         [Header("Audio Clips Other")]
 
         [Tooltip("AudioClip played when this weapon is fired without any ammunition.")]
-        [SerializeField]
+        [SerializeField, HideInInspector]
         private AudioClip audioClipFireEmpty;
         private bool isFiring;
         private float lastFired;
@@ -171,7 +189,7 @@ using UnityEngine;
 
         public override Animator GetAnimator() => animator;
 
-        public override Sprite GetSpriteBody() => spriteBody;
+        //public override Sprite GetSpriteBody() => spriteBody;
 
         public override AudioClip GetAudioClipHolster() => audioClipHolster;
         public override AudioClip GetAudioClipUnholster() => audioClipUnholster;
@@ -193,7 +211,10 @@ using UnityEngine;
         public override bool IsFull() => ammunitionCurrent == ammunitionTotal;
         public override bool HasAmmunition() => ammunitionCurrent > 0;
 
-        public override RuntimeAnimatorController GetAnimatorController() => controller;
+        public override bool IsMelee() => isMelee;
+
+
+    //public override RuntimeAnimatorController GetAnimatorController() => controller;
 
 
 
@@ -259,15 +280,17 @@ using UnityEngine;
 
 
 
-
            Vector3 shootDirection = playerCamera.forward + new Vector3(Random.Range(-spread.x,spread.x)*Mathf.Clamp(shootTime,1f,spreadTime), Random.Range(-spread.y, spread.y)* Mathf.Clamp(shootTime, 1f, spreadTime), Random.Range(-spread.z, spread.z)* Mathf.Clamp(shootTime, 1f, spreadTime));
-        //Vector3 shootDirection = playerCamera.forward;
 
         shootDirection.Normalize();
-
+        Ray ray;
         //If there's something blocking, then we can aim directly at that thing, which will result in more accurate shooting.
-        if (Physics.Raycast(new Ray(playerCamera.position, playerCamera.forward),out RaycastHit hit, maximumDistance, mask))
+        if (Physics.Raycast(ray = new Ray(playerCamera.position, playerCamera.forward),out RaycastHit hit, maximumDistance, mask))
+        {
+            Debug.DrawRay(ray.origin, ray.direction * maximumDistance);
             rotation = Quaternion.LookRotation(hit.point - muzzleSocket.position);
+        }
+
         playerCamera.GetComponent<Camera>().fieldOfView = 64;
         playerLook.ApplyRecoil(new Vector2(Random.Range(-spread.x, spread.x), Random.Range(-spread.y, spread.y)) * (spreadMultiplier*10) * Mathf.Clamp01(shootTime/spreadTime));
         animator.SetTrigger("Shooting");
@@ -278,14 +301,37 @@ using UnityEngine;
         GameObject projectile = Instantiate(prefabProjectile, muzzleSocket.position, rotation);
         //Add velocity to the projectile.
         projectile.GetComponent<Rigidbody>().velocity =((projectile.transform.forward+shootDirection) * projectileImpulse);
+        Debug.Log("Rotation 2: " + rotation);
 
         EjectCasing();
         Invoke("ResetFOV",0.05f);
     }
 
 
+    public override void Attack()
+    {
+        //Make sure that we have a camera cached, otherwise we don't really have the ability to perform traces.
+        Debug.Log("Test attk");
+        if (playerCamera == null)
+            return;
+        Debug.Log("got through player camera check");
 
-public override void FillAmmunition(int amount)
+        Ray ray = new Ray(playerCamera.position, playerCamera.forward);
+        Debug.DrawRay(ray.origin, ray.direction * meleeReach);
+        RaycastHit hitInfo;
+        if (Physics.Raycast(ray, out hitInfo, meleeReach, mask))
+        {
+            if (hitInfo.collider.CompareTag("Zombie"))
+            {
+                Debug.Log("HIT ZOMBIE");
+                animator.SetTrigger("Hit");
+            }
+        }
+    }
+
+
+
+    public override void FillAmmunition(int amount)
         {
             //Update the value by a certain amount.
             ammunitionCurrent = amount != 0 ? Mathf.Clamp(ammunitionCurrent + amount,

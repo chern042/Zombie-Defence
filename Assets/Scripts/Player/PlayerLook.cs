@@ -25,7 +25,6 @@ public class PlayerLook : MonoBehaviour
         float mouseY = input.y + yRecoil;
 
 
-        Debug.Log("X " +mouseX);
         xRotation -= (mouseY * Time.deltaTime) * ySensitivity;
         xRotation = Mathf.Clamp(xRotation, -80f, 80f);
 

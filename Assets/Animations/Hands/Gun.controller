@@ -58,7 +58,7 @@ AnimatorController:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Italian machine guns
+  m_Name: Gun
   serializedVersion: 5
   m_AnimatorParameters:
   - m_Name: Shooting
