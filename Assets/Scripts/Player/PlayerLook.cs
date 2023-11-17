@@ -36,15 +36,16 @@ public class PlayerLook : MonoBehaviour
 
 
         cam.transform.rotation = Quaternion.Euler(xRotation, yRotation, 0f);
-        GetComponent<Rigidbody>().transform.rotation = Quaternion.Euler(xRotation, yRotation, 0f);
+        //GetComponent<Rigidbody>().transform.rotation = Quaternion.Euler(xRotation, yRotation, 0f);
+        transform.rotation = Quaternion.Euler(xRotation, yRotation, 0f);
 
 
-       //cam.transform.Rotate(Vector3.left, (mouseY*Time.deltaTime)*ySensitivity);
+        //cam.transform.Rotate(Vector3.left, (mouseY*Time.deltaTime)*ySensitivity);
 
         //GetComponent<Rigidbody>().transform.Rotate(Vector3.up, (mouseX * Time.deltaTime) * xSensitivity);
 
         // Apply recoil reset
-         xRecoil = Mathf.Lerp(xRecoil, 0f, Time.deltaTime * recoilSpeed);
+        xRecoil = Mathf.Lerp(xRecoil, 0f, Time.deltaTime * recoilSpeed);
          yRecoil = Mathf.Lerp(yRecoil, 0f, Time.deltaTime * recoilSpeed);
 
     }

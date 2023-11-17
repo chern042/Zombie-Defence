@@ -140,6 +140,7 @@ using UnityEngine;
         private PlayerLook playerLook;
         private float shootTime;
         private float shootStartTime;
+    private float timePassed;
 
         /// <summary>
         /// Weapon Animator.
@@ -234,7 +235,6 @@ using UnityEngine;
 
         public override bool IsMelee() => isMelee;
 
-
     //public override RuntimeAnimatorController GetAnimatorController() => controller;
 
 
@@ -247,10 +247,13 @@ using UnityEngine;
             {
                 shootStartTime = Time.time;
             }
-            if (Time.time - lastFired > 1 / roundsPerSecond)
+            timePassed += Time.deltaTime;
+            //if (Time.time - lastFired >= 1 / roundsPerSecond)
+            if(timePassed >= 1 / roundsPerSecond)
             {
-                lastFired = Time.time;
-                Fire(3f);
+                //lastFired = Time.time;
+                Fire(spreadTime);
+                timePassed = 0;
             }
         }
     }

@@ -80,6 +80,7 @@ namespace EvolveGames
                 HolsteringSounds(false);
             }
             Items[ItemIdInt].SetActive(true);
+
             weapon = Items[ItemIdInt].GetComponent<WeaponBehaviour>();
 
             HolsteringSounds(true);

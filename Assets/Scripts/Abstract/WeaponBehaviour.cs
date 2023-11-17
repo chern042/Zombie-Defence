@@ -98,6 +98,7 @@ using UnityEngine;
     public abstract bool IsMelee();
 
 
+
         /// <summary>
         /// Returns the RuntimeAnimationController the Character needs to use when this Weapon is equipped!
         /// </summary>
