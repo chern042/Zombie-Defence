@@ -142,6 +142,8 @@ using UnityEngine;
         private float shootStartTime;
     private float timePassed;
 
+
+
         /// <summary>
         /// Weapon Animator.
         /// </summary>

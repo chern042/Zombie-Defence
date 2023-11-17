@@ -24,7 +24,7 @@ public class DestroyBarrierState : BaseState
     public void DestroyBarrier()
     {
 
-        Debug.Log("Enemy has reached: " + enemy.HasReachedBarrier());
+        //Debug.Log("Enemy has reached: " + enemy.HasReachedBarrier());
         //attack barrier
     }
 }

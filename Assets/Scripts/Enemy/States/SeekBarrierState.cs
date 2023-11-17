@@ -30,7 +30,7 @@ public class SeekBarrierState : BaseState
     public void SeekBarrier()
     {
 
-        Debug.Log("Enemy has reached: " + enemy.HasReachedBarrier());
+        //Debug.Log("Enemy has reached: " + enemy.HasReachedBarrier());
         if (enemy.Agent.remainingDistance < 0.2f && !enemy.HasReachedBarrier()) {
 
             enemy.Agent.SetDestination(barrierPoint);
@@ -38,7 +38,7 @@ public class SeekBarrierState : BaseState
 
         if (enemy.HasReachedBarrier())
         {
-            Debug.Log("Enemy has reached: " + enemy.HasReachedBarrier());
+            //Debug.Log("Enemy has reached: " + enemy.HasReachedBarrier());
             stateMachine.ChangeState(new DestroyBarrierState());
         }
     }

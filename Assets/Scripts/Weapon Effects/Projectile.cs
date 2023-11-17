@@ -23,6 +23,10 @@ public class Projectile : MonoBehaviour
     public Transform[] concreteImpactPrefabs;
 
 
+
+    private BarrierController barrier;
+
+
     //[SerializeField] private Collider player;
 
     private void Start()
@@ -104,6 +108,28 @@ public class Projectile : MonoBehaviour
                 Quaternion.LookRotation(collision.GetContact(0).normal));
             //Destroy bullet object
             Destroy(gameObject);
+        }
+
+        if (collision.transform.tag == "Barrier")
+        {
+            Debug.Log("DDDERRR");
+            //Instantiate random impact prefab from array
+            Instantiate(concreteImpactPrefabs[Random.Range
+                (0, concreteImpactPrefabs.Length)], transform.position,
+                Quaternion.LookRotation(collision.GetContact(0).normal));
+            //Destroy bullet object
+            barrier = collision.gameObject.GetComponentInParent<BarrierController>();
+
+            if (barrier != null)
+            {
+                barrier.TakeDamage(1f);
+            }
+            else
+            {
+                Debug.Log("Barrier is null.");
+            }
+            Destroy(gameObject);
+
         }
 
         ////If bullet collides with "Target" tag
