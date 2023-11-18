@@ -22,19 +22,22 @@ public class EnemyAnimationController : MonoBehaviour
     // Update is called once per frame
     void Update()
 	{
-			
+        UpdateAnimationState();
 	}
 
     private void UpdateAnimationState()
     {
         MovementState state;
 
-        if (agent.velocity.x > 2f || agent.velocity.z > 2f)
+        Debug.Log("Enemy velocty: " + agent.velocity);
+
+
+        if (Mathf.Abs(agent.velocity.x) > 2f || Mathf.Abs(agent.velocity.z) > 2f)
         {
             //playerAnim.SetBool("running", true);
             state = MovementState.running;
         }
-        else if (agent.velocity.x > 0.1f || agent.velocity.z > 0.1f)
+        else if (Mathf.Abs(agent.velocity.x) > 0.1f || Mathf.Abs(agent.velocity.z) > 0.1f)
         {
             //playerAnim.SetBool("running", true);
             state = MovementState.walking;

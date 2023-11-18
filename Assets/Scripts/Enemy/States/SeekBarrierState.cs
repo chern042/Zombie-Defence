@@ -34,6 +34,8 @@ public class SeekBarrierState : BaseState
         if (enemy.Agent.remainingDistance < 0.2f && !enemy.HasReachedBarrier()) {
 
             enemy.Agent.SetDestination(barrierPoint);
+            enemy.Agent.obstacleAvoidanceType = UnityEngine.AI.ObstacleAvoidanceType.LowQualityObstacleAvoidance;
+            Debug.Log("Enemy velocity walking: " + enemy.Agent.velocity);
         }
 
         if (enemy.HasReachedBarrier())
