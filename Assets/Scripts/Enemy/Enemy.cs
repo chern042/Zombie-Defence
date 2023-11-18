@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UI;
 
 public class Enemy : MonoBehaviour
 {
@@ -20,7 +22,20 @@ public class Enemy : MonoBehaviour
     public float sightDistance = 20f;
     public float fieldOfView = 85f;
     public float eyeHeight;
-    // Start is called before the first frame update
+    public float meleeReach = 3f;
+    public float attackSpeed = 2f;
+    public float attackDelaySpeed = 1f;
+    public float damage = 5f;
+    public LayerMask mask;
+
+    private bool meleeIsAttacking = false;
+    private bool meleeReadyToAttack = true;
+
+
+    public Transform[] concreteImpactPrefabs;
+
+
+
     void Start()
     {
         stateMachine = GetComponent<StateMachine>();
@@ -71,7 +86,7 @@ public class Enemy : MonoBehaviour
     {
         if(barrierPath != null)
         {
-            if (Mathf.Abs(barrierPath.barrierWaypoints[0].position.z - transform.position.z) <= 0.5f && (barrierPath.barrierWaypoints[1].position.x >= transform.position.x) && (transform.position.x >= barrierPath.barrierWaypoints[0].position.x ))
+            if (Mathf.Abs(barrierPath.barrierWaypoints[0].position.z - transform.position.z) <= 5f && (barrierPath.barrierWaypoints[1].position.x >= transform.position.x) && (transform.position.x >= barrierPath.barrierWaypoints[0].position.x ))
             {
                 return true;
             }
@@ -85,4 +100,70 @@ public class Enemy : MonoBehaviour
         agent.SetDestination(player.transform.position);
 
     }
+
+
+
+    public void Attack()
+    {
+        //Make sure that we have a camera cached, otherwise we don't really have the ability to perform traces.
+        Debug.Log("Test attk");
+        if (!meleeReadyToAttack || meleeIsAttacking) return;
+        Debug.Log("got through player camera check");
+
+
+
+        Invoke(nameof(ResetAttack), attackSpeed);
+        Invoke(nameof(AttackRayCast), attackDelaySpeed);
+
+
+    }
+
+    public void ResetAttack()
+    {
+        meleeIsAttacking = false;
+        meleeReadyToAttack = true;
+    }
+    public void AttackRayCast()
+    {
+        Ray ray = new Ray(transform.position+(Vector3.up * eyeHeight), transform.forward );
+        Debug.DrawRay(ray.origin, ray.direction * meleeReach);
+        RaycastHit hitInfo;
+        //animator.SetTrigger("Hit");
+        meleeIsAttacking = true;
+        meleeReadyToAttack = false;
+        Debug.DrawRay(ray.origin, ray.direction * meleeReach);
+
+
+        //audioSource.pitch = Random.Range(0.9f, 1.1f);
+        //audioSource.PlayOneShot(meleeSwingSound);
+        Debug.Log("******HIT???????");
+        if (Physics.Raycast(ray, out hitInfo, meleeReach, mask))
+        {
+            Debug.Log("******HIT!!!!!!!!!!!!!!!!!!!!");
+
+            HitTarget(hitInfo);
+        }
+    }
+
+    private void HitTarget(RaycastHit hitInfo)
+    {
+       // audioSource.pitch = 1;
+        //audioSource.PlayOneShot(meleeHitSound);
+
+        if (hitInfo.collider.CompareTag("Barrier"))
+        {
+            Debug.Log("HIT ZOMBIE");
+            BarrierController barrier = hitInfo.collider.gameObject.GetComponentInParent<BarrierController>();
+            if (barrier != null)
+            {
+                barrier.TakeDamage(damage);
+            }
+            else
+            {
+                Debug.Log("Barrier is null.");
+            }
+            Instantiate(concreteImpactPrefabs[Random.Range(0, concreteImpactPrefabs.Length)], hitInfo.point, Quaternion.LookRotation(hitInfo.normal));
+        }
+    }
+
 }

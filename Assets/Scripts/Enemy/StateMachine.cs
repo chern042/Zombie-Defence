@@ -5,11 +5,9 @@ using UnityEngine;
 public class StateMachine : MonoBehaviour
 {
     public BaseState activeState;
-    //public SeekAndDestroyState seekAndDestroyState;
 
     public void Initialize()
     {
-       // seekAndDestroyState = new SeekAndDestroyState();
         ChangeState(new SeekBarrierState());
     }
     // Start is called before the first frame update

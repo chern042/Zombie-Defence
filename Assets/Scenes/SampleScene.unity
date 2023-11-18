@@ -5778,7 +5778,16 @@ MonoBehaviour:
   barrierPath: {fileID: 1062635120}
   sightDistance: 20
   fieldOfView: 85
-  eyeHeight: 0
+  eyeHeight: 1.8
+  meleeReach: 3
+  attackSpeed: 2
+  attackDelaySpeed: 1
+  damage: 5
+  mask:
+    serializedVersion: 2
+    m_Bits: 64
+  concreteImpactPrefabs:
+  - {fileID: 4587651611338842, guid: 2a77aba03cf9e430a8c7d70c5ee25a96, type: 3}
 --- !u!114 &1350709441
 MonoBehaviour:
   m_ObjectHideFlags: 0
