@@ -17,13 +17,13 @@ TagManager:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Terrain
   - Water
   - UI
   - Interactable
   - Concrete
   - Projectile
-  - 
+  - Map Walls
   - 
   - 
   - 

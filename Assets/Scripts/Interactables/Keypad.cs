@@ -26,3 +26,4 @@ public class Keypad : Interactable
         Debug.Log("Interacted with " + gameObject.name);
     }
 }
+//87,0.3,3.25
