@@ -4,23 +4,25 @@ using UnityEngine;
 
 public class BarrierController : MonoBehaviour
 {
-    public List<GameObject> barrierPieces = new List<GameObject>();
+    public List<GameObject> barrierPiecesLeft = new List<GameObject>();
+    public List<GameObject> barrierPiecesRight = new List<GameObject>();
 
 
     [SerializeField]
-    private float barrierTotalHealth = 100f;
+    public float barrierTotalHealth = 100f;
 
     private float healthPerPiece;
 
     private float pieceHealth;
 
-    private int piecesRemoved;
+    [HideInInspector]
+    public int piecesRemoved;
 
     // Start is called before the first frame update
     void Start()
     {
-        healthPerPiece = barrierTotalHealth / barrierPieces.Count;
-        pieceHealth = barrierTotalHealth / barrierPieces.Count;
+        healthPerPiece = barrierTotalHealth / barrierPiecesLeft.Count;
+        pieceHealth = barrierTotalHealth / barrierPiecesLeft.Count;
         piecesRemoved = 0;
     }
 
@@ -33,23 +35,27 @@ public class BarrierController : MonoBehaviour
     public void TakeDamage(float damage)
     {
         pieceHealth -= damage;
-        if(pieceHealth < 0f && barrierPieces.Count != 0)
+        if(pieceHealth < 0f && piecesRemoved != barrierPiecesLeft.Count && piecesRemoved != barrierPiecesRight.Count)
         {
-            DestroyPiece(barrierPieces[piecesRemoved]);
+            DestroyPiece(barrierPiecesLeft[piecesRemoved]);
+            DestroyPiece(barrierPiecesRight[piecesRemoved]);
+
             pieceHealth = healthPerPiece - (-1f * pieceHealth);
             piecesRemoved++;
 
         }
-        else if(pieceHealth == 0f && barrierPieces.Count != 0)
+        else if(pieceHealth == 0f && piecesRemoved != barrierPiecesLeft.Count && piecesRemoved != barrierPiecesRight.Count)
         {
-            DestroyPiece(barrierPieces[piecesRemoved]);
+            DestroyPiece(barrierPiecesLeft[piecesRemoved]);
+            DestroyPiece(barrierPiecesRight[piecesRemoved]);
             pieceHealth = healthPerPiece;
             piecesRemoved++;
         }
 
-        if(barrierPieces.Count == 0)
+        else if(pieceHealth == 0 || (piecesRemoved == barrierPiecesLeft.Count && piecesRemoved == barrierPiecesRight.Count))
         {
             //ZOMBIES GET THROUGH
+            Debug.Log("Zombies GOT THRU*********");
         }
 
     }
@@ -65,14 +71,14 @@ public class BarrierController : MonoBehaviour
     private void DestroyPiece(GameObject piece)
     {
 
-        piece.GetComponent<BoxCollider>().enabled = false;
+        piece.GetComponent<Collider>().enabled = false;
         piece.GetComponent<MeshRenderer>().enabled = false;
     }
 
     private void RepairPiece(GameObject piece)
     {
 
-        piece.GetComponent<BoxCollider>().enabled = true;
+        piece.GetComponent<Collider>().enabled = true;
         piece.GetComponent<MeshRenderer>().enabled = true;
     }
 }

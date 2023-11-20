@@ -13,6 +13,7 @@ TagManager:
   - Concrete
   - Zombie
   - Barrier
+  - Main Barrier
   layers:
   - Default
   - TransparentFX

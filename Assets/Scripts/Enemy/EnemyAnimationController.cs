@@ -29,7 +29,7 @@ public class EnemyAnimationController : MonoBehaviour
     {
         MovementState state;
 
-        Debug.Log("Enemy velocty: " + agent.velocity);
+        //Debug.Log("Enemy velocty: " + agent.velocity);
 
 
         if (Mathf.Abs(agent.velocity.x) > 2f || Mathf.Abs(agent.velocity.z) > 2f)

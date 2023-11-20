@@ -348,10 +348,17 @@ using UnityEngine;
     {
         //Make sure that we have a camera cached, otherwise we don't really have the ability to perform traces.
         Debug.Log("Test attk");
-        if (playerCamera == null) return;
-        if (!meleeReadyToAttack || meleeIsAttacking) return;
+        if (playerCamera == null)
+        {
+            return;
+        }
+        if (!meleeReadyToAttack || meleeIsAttacking)
+        {
+            return;
+        }
         Debug.Log("got through player camera check");
-
+        meleeIsAttacking = true;
+        meleeReadyToAttack = false;
 
 
         Invoke(nameof(ResetAttack), attackSpeed);
@@ -371,8 +378,8 @@ using UnityEngine;
         Debug.DrawRay(ray.origin, ray.direction * meleeReach);
         RaycastHit hitInfo;
         animator.SetTrigger("Hit");
-        meleeIsAttacking = true;
-        meleeReadyToAttack = false;
+       // meleeIsAttacking = true;
+       // meleeReadyToAttack = false;
 
 
         audioSource.pitch = Random.Range(0.9f, 1.1f);
