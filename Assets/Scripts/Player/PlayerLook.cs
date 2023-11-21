@@ -45,10 +45,11 @@ public class PlayerLook : MonoBehaviour
         //GetComponent<Rigidbody>().transform.Rotate(Vector3.up, (mouseX * Time.deltaTime) * xSensitivity);
 
         // Apply recoil reset
-        xRecoil = Mathf.Lerp(xRecoil, 0f, Time.deltaTime * recoilSpeed);
-         yRecoil = Mathf.Lerp(yRecoil, 0f, Time.deltaTime * recoilSpeed);
+        xRecoil = Mathf.Lerp(xRecoil, 0f,  Time.deltaTime*recoilSpeed);
+        yRecoil = Mathf.Lerp(yRecoil, 0f, Time.deltaTime*recoilSpeed);
 
     }
+
 
     public void ApplyRecoil(Vector2 recoil)
     {

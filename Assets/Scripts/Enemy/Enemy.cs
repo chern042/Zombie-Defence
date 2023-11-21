@@ -30,6 +30,7 @@ public class Enemy : MonoBehaviour
     public float attackSpeed = 2f;
     public float attackDelaySpeed = 3f;
     public float damage = 5f;
+    public float enemyHealth = 10f;
     public LayerMask mask;
 
     private bool meleeIsAttacking = false;
@@ -143,10 +144,10 @@ public class Enemy : MonoBehaviour
     }
     IEnumerator AttackRayCast(Vector3 barrierpoint)
     {
-        Debug.Log("3333333Derp*******: " + meleeIsAttacking + " ****" + meleeReadyToAttack);
+        //Debug.Log("3333333Derp*******: " + meleeIsAttacking + " ****" + meleeReadyToAttack);
 
         yield return new WaitForSeconds(attackSpeed);
-        Debug.Log("44444444Derp*******: " + meleeIsAttacking + " ****" + meleeReadyToAttack);
+        //Debug.Log("44444444Derp*******: " + meleeIsAttacking + " ****" + meleeReadyToAttack);
 
         // Ray ray = new Ray(transform.position+(Vector3.up * eyeHeight), transform.forward );
         // Debug.DrawRay(ray.origin, ray.direction * meleeReach);
@@ -157,15 +158,15 @@ public class Enemy : MonoBehaviour
         // Debug.DrawRay(ray.origin, ray.direction * meleeReach);
 
 
-        Debug.Log("555555Derp*******: " + Vector3.Distance(transform.position, barrierpoint) + " ****" + meleeReach);
+        //Debug.Log("555555Derp*******: " + Vector3.Distance(transform.position, barrierpoint) + " ****" + meleeReach);
 
         //is barrier close enough to be seen
         if (Vector3.Distance(transform.position, barrierpoint) < meleeBarrierReach)
         {
-            Debug.Log("666666Derp*******: " + Vector3.Distance(transform.position, barrierpoint) + " ****" + meleeReach);
+            //Debug.Log("666666Derp*******: " + Vector3.Distance(transform.position, barrierpoint) + " ****" + meleeReach);
 
             BarrierController barrier = mainBarrier.GetComponent<BarrierController>();
-            Debug.Log("barrier controller founds in enemy attack?: " + barrier);
+            //Debug.Log("barrier controller founds in enemy attack?: " + barrier);
 
             if (barrier != null)
             {
@@ -207,6 +208,15 @@ public class Enemy : MonoBehaviour
                 Debug.Log("Barrier is null.");
             }
             Instantiate(concreteImpactPrefabs[Random.Range(0, concreteImpactPrefabs.Length)], hitInfo.point, Quaternion.LookRotation(hitInfo.normal));
+        }
+    }
+
+    public void DamageEnemy(float damage)
+    {
+        enemyHealth -= damage;
+        if(enemyHealth <= 0)
+        {
+            Destroy(gameObject);
         }
     }
 

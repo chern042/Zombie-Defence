@@ -14,7 +14,7 @@ public class WeaponEditor : Editor
 
     SerializedProperty automatic;
     SerializedProperty projectileImpulse;
-    SerializedProperty roundsPerSecond;
+    SerializedProperty roundsPerMinute;
     SerializedProperty mask;
     SerializedProperty maximumDistance;
     SerializedProperty ammunitionTotal;
@@ -47,7 +47,7 @@ public class WeaponEditor : Editor
 
         automatic = serializedObject.FindProperty("automatic");
         projectileImpulse = serializedObject.FindProperty("projectileImpulse");
-        roundsPerSecond = serializedObject.FindProperty("roundsPerSecond");
+        roundsPerMinute = serializedObject.FindProperty("roundsPerMinute");
         mask = serializedObject.FindProperty("mask");
         maximumDistance = serializedObject.FindProperty("maximumDistance");
         ammunitionTotal = serializedObject.FindProperty("ammunitionTotal");
@@ -76,17 +76,17 @@ public class WeaponEditor : Editor
 
         serializedObject.Update();
         EditorGUILayout.PropertyField(isMelee);
+        EditorGUILayout.PropertyField(damage);
+        EditorGUILayout.PropertyField(mask);
+        EditorGUILayout.PropertyField(bloodImpactPrefabs);
+
 
         if (isMelee.boolValue)
         {
-            EditorGUILayout.PropertyField(damage);
             EditorGUILayout.PropertyField(attackSpeed);
             EditorGUILayout.PropertyField(meleeReach);
-            EditorGUILayout.PropertyField(bloodImpactPrefabs);
 
-            EditorGUILayout.PropertyField(mask);
-            EditorGUILayout.PropertyField(audioClipHolster);
-            EditorGUILayout.PropertyField(audioClipUnholster);
+
 
             EditorGUILayout.PropertyField(meleeSwingSound);
             EditorGUILayout.PropertyField(meleeHitSound);
@@ -96,8 +96,8 @@ public class WeaponEditor : Editor
         {
             EditorGUILayout.PropertyField(automatic);
             EditorGUILayout.PropertyField(projectileImpulse);
-            EditorGUILayout.PropertyField(roundsPerSecond);
-            EditorGUILayout.PropertyField(mask);
+            EditorGUILayout.PropertyField(roundsPerMinute);
+
             EditorGUILayout.PropertyField(maximumDistance);
             EditorGUILayout.PropertyField(ammunitionTotal);
             EditorGUILayout.PropertyField(spread);
@@ -106,14 +106,15 @@ public class WeaponEditor : Editor
             EditorGUILayout.PropertyField(socketEjection);
             EditorGUILayout.PropertyField(prefabCasing);
             EditorGUILayout.PropertyField(prefabProjectile);
-            EditorGUILayout.PropertyField(audioClipHolster);
-            EditorGUILayout.PropertyField(audioClipUnholster);
+
             EditorGUILayout.PropertyField(audioClipReload);
             EditorGUILayout.PropertyField(audioClipReloadEmpty);
             EditorGUILayout.PropertyField(audioClipFireEmpty);
 
 
         }
+        EditorGUILayout.PropertyField(audioClipHolster);
+        EditorGUILayout.PropertyField(audioClipUnholster);
         serializedObject.ApplyModifiedProperties();
 
 

@@ -104,7 +104,7 @@ public class Projectile : MonoBehaviour
             Debug.Log("DDDERRR");
             //Instantiate random impact prefab from array
             Instantiate(concreteImpactPrefabs[Random.Range
-                (0, concreteImpactPrefabs.Length)], transform.position,
+                (0, concreteImpactPrefabs.Length)], collision.GetContact(0).point,
                 Quaternion.LookRotation(collision.GetContact(0).normal));
             //Destroy bullet object
             Destroy(gameObject);
