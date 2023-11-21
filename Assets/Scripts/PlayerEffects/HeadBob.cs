@@ -35,7 +35,11 @@ namespace EvolveGames
             if (!Enabled) return;
             CheckMotion();
             ResetPos();
-            if (EnabledRoationMovement) transform.localRotation = Quaternion.Lerp(transform.localRotation, Quaternion.Euler(FinalRot), RoationMovementSmooth * Time.deltaTime);
+            if (EnabledRoationMovement)
+            {
+                transform.localRotation = Quaternion.Lerp(transform.localRotation, Quaternion.Euler(FinalRot), RoationMovementSmooth * Time.deltaTime);
+
+            }
         }
 
         private void CheckMotion()
@@ -66,6 +70,7 @@ namespace EvolveGames
             transform.localPosition = Vector3.Lerp(transform.localPosition, StartPos, 1 * Time.deltaTime);
             FinalRot = Vector3.Lerp(FinalRot, StartRot, 1 * Time.deltaTime);
         }
+
     }
 
 }

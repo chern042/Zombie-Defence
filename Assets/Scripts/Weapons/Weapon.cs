@@ -188,12 +188,7 @@ public class Weapon : WeaponBehaviour
 
         //Get Attachment Manager.
 
-        //Cache the game mode service. We only need this right here, but we'll cache it in case we ever need it again.
-        // gameModeService = ServiceLocator.Current.Get<IGameModeService>();
-        //Cache the player character.
-        //characterBehaviour = gameModeService.GetPlayerCharacter();
-        //Cache the world camera. We use this in line traces.
-        //playerCamera = characterBehaviour.GetCameraWorld().transform;
+        //Cache the camera
         playerCamera = playerLook.cam.transform;
     }
 
@@ -336,11 +331,12 @@ public class Weapon : WeaponBehaviour
 
 
             }
+
             rotation = Quaternion.LookRotation(hit.point - muzzleSocket.position);
-
-
         }
-        shootDirection = (hit.point - muzzleSocket.position);
+            shootDirection = (hit.point - muzzleSocket.position);
+
+        
         shootDirection.x += Random.Range(-spread.x, spread.x) * Mathf.Clamp01(shootTime / spreadTime);
         shootDirection.y += Random.Range(-spread.y, spread.y) * Mathf.Clamp01(shootTime / spreadTime);
         shootDirection.z += Random.Range(-spread.z, spread.z) * Mathf.Clamp01(shootTime / spreadTime);
@@ -357,7 +353,7 @@ public class Weapon : WeaponBehaviour
         GameObject projectile = Instantiate(prefabProjectile, muzzleSocket.position, rotation);
 
 
-        //Add velocity to the projectile.
+        ////Add velocity to the projectile.
         projectile.GetComponent<Rigidbody>().velocity = ((shootDirection) * projectileImpulse);
 
 
@@ -365,8 +361,8 @@ public class Weapon : WeaponBehaviour
         EjectCasing();
         animator.SetTrigger("Shooting");
 
-    }
 
+    }
 
 
 

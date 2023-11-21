@@ -33,12 +33,12 @@ public class Projectile : MonoBehaviour
     {
         //Grab the game mode service, we need it to access the player character!
         //var gameModeService = PlayerMotor.Get<CharacterController>();
-        //var gameModeService = ServiceLocator.Current.Get<IGameModeService>();
+        var gameModeService = ServiceLocator.Current.Get<IGameModeService>();
         //Debug.Log("TEST: " + gameModeService.GetPlayerCharacter().GetComponent<Collider>());
-       // Debug.Log("TEST: " + gameModeService.GetPlayerCharacter());
+        // Debug.Log("TEST: " + gameModeService.GetPlayerCharacter());
 
         //Ignore the main player character's collision. A little hacky, but it should work.
-        //Physics.IgnoreCollision(gameModeService.GetPlayerCharacter().GetComponent<Collider>(), GetComponent<Collider>());
+        Physics.IgnoreCollision(gameModeService.GetPlayerCharacter().GetComponent<Collider>(), GetComponent<Collider>());
 
         //Start destroy timer
         StartCoroutine(DestroyAfter());
@@ -50,8 +50,10 @@ public class Projectile : MonoBehaviour
         //Ignore collisions with other projectiles.
         if (collision.gameObject.GetComponent<Projectile>() != null)
             return;
+        var gameModeService = ServiceLocator.Current.Get<IGameModeService>();
 
-
+        //Physics.IgnoreCollision(bulletHolePrefab.gameObject.GetComponent<Collider>(), GetComponent<Collider>());
+        Physics.IgnoreCollision(gameModeService.GetPlayerCharacter().GetComponent<Collider>(), GetComponent<Collider>());
 
         //If destroy on impact is false, start 
         //coroutine with random destroy timer
@@ -106,6 +108,7 @@ public class Projectile : MonoBehaviour
             Instantiate(concreteImpactPrefabs[Random.Range
                 (0, concreteImpactPrefabs.Length)], collision.GetContact(0).point,
                 Quaternion.LookRotation(collision.GetContact(0).normal));
+
             //Destroy bullet object
             Destroy(gameObject);
         }

@@ -40,6 +40,8 @@ public class Enemy : MonoBehaviour
 
     private Transform playerLocation;
 
+    private Animator enemyAnimator;
+
 
     public Transform[] concreteImpactPrefabs;
 
@@ -53,7 +55,7 @@ public class Enemy : MonoBehaviour
         stateMachine.Initialize();
         player = GameObject.FindGameObjectWithTag("GameController");
         //mainBarrier = GameObject.FindGameObjectWithTag("Main Barrier");
-
+        enemyAnimator = GetComponent<Animator>();
         playerLocation = player.transform;
 
     }
@@ -214,6 +216,7 @@ public class Enemy : MonoBehaviour
     public void DamageEnemy(float damage)
     {
         enemyHealth -= damage;
+        enemyAnimator.SetTrigger("Hit");
         if(enemyHealth <= 0)
         {
             Destroy(gameObject);
