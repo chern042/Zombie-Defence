@@ -15,7 +15,6 @@ public class AttackPlayerState : BaseState
 
     public override void Exit()
     {
-
     }
 
     public override void Perform()

@@ -101,8 +101,20 @@ public class Enemy : MonoBehaviour
     {
         if(barrierPath != null)
         {
-            if (Vector3.Distance(transform.position, barrierPoint) < meleeReach)
+            if (Vector3.Distance(transform.position, barrierPoint) < sightDistance)
             {
+                Vector3 targetDirection = transform.forward - (Vector3.up * eyeHeight);
+
+                Ray ray = new Ray(transform.position + (Vector3.up * eyeHeight), targetDirection);
+                RaycastHit hitInfo = new RaycastHit();
+                if (Physics.Raycast(ray, out hitInfo, meleeReach))
+                {
+                    if (hitInfo.transform.gameObject == mainBarrier)
+                    {
+                        Debug.DrawRay(ray.origin, ray.direction * sightDistance);
+                        return true;
+                    }
+                }
                 return true;
             }
         }
@@ -192,26 +204,26 @@ public class Enemy : MonoBehaviour
         //}
     }
 
-    private void HitTarget(RaycastHit hitInfo)
-    {
-       // audioSource.pitch = 1;
-        //audioSource.PlayOneShot(meleeHitSound);
+    //private void HitTarget(RaycastHit hitInfo)
+    //{
+    //   // audioSource.pitch = 1;
+    //    //audioSource.PlayOneShot(meleeHitSound);
 
-        if (hitInfo.collider.CompareTag("Barrier"))
-        {
-            Debug.Log("HIT ZOMBIE");
-            BarrierController barrier = hitInfo.collider.gameObject.GetComponentInParent<BarrierController>();
-            if (barrier != null)
-            {
-                barrier.TakeDamage(damage);
-            }
-            else
-            {
-                Debug.Log("Barrier is null.");
-            }
-            Instantiate(concreteImpactPrefabs[Random.Range(0, concreteImpactPrefabs.Length)], hitInfo.point, Quaternion.LookRotation(hitInfo.normal));
-        }
-    }
+    //    if (hitInfo.collider.CompareTag("Barrier"))
+    //    {
+    //        Debug.Log("HIT ZOMBIE");
+    //        BarrierController barrier = hitInfo.collider.gameObject.GetComponentInParent<BarrierController>();
+    //        if (barrier != null)
+    //        {
+    //            barrier.TakeDamage(damage);
+    //        }
+    //        else
+    //        {
+    //            Debug.Log("Barrier is null.");
+    //        }
+    //        Instantiate(concreteImpactPrefabs[Random.Range(0, concreteImpactPrefabs.Length)], hitInfo.point, Quaternion.LookRotation(hitInfo.normal));
+    //    }
+    //}
 
     public void DamageEnemy(float damage)
     {

@@ -6,14 +6,26 @@ public class StateMachine : MonoBehaviour
 {
     public BaseState activeState;
 
+    [SerializeField]
+    public BarrierPath barrierPath;
+
     public void Initialize()
     {
-        ChangeState(new SeekBarrierState());
+        Vector3 barrierWaypointOne = barrierPath.barrierWaypoints[0].position;
+        Vector3 barrierWaypointTwo = barrierPath.barrierWaypoints[1].position;
+        Vector3 barrierPoint = new Vector3(Random.Range(barrierWaypointOne.x, barrierWaypointTwo.x),
+                           Random.Range(barrierWaypointOne.y, barrierWaypointTwo.y),
+                           Random.Range(barrierWaypointOne.z, barrierWaypointTwo.z)
+                           );
+        SeekBarrierState state = new SeekBarrierState();
+        ChangeState(state);
+        state.SetBarrierPoint(barrierPoint);
+
+
     }
     // Start is called before the first frame update
     void Start()
     {
-        
     }
 
     // Update is called once per frame
@@ -22,6 +34,7 @@ public class StateMachine : MonoBehaviour
         if(activeState != null)
         {
             activeState.Perform();
+
         }
     }
 
