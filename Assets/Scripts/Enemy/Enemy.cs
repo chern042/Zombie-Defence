@@ -24,14 +24,16 @@ public class Enemy : MonoBehaviour
     public GameObject mainBarrier;
     public float sightDistance = 20f;
     public float fieldOfView = 85f;
-    public float eyeHeight;
-    public float meleeReach = 3f;
+    private float eyeHeight;
+    public float meleeReach = 1f;
     public float meleeBarrierReach = 4f;
     public float attackSpeed = 2f;
     public float attackDelaySpeed = 3f;
     public float damage = 5f;
     public float enemyHealth = 10f;
     public LayerMask mask;
+
+    private bool barrierDestroyed;
 
     private bool meleeIsAttacking = false;
     private bool meleeReadyToAttack = true;
@@ -57,7 +59,8 @@ public class Enemy : MonoBehaviour
         //mainBarrier = GameObject.FindGameObjectWithTag("Main Barrier");
         enemyAnimator = GetComponent<Animator>();
         playerLocation = player.transform;
-
+        eyeHeight = 0.1f;
+        barrierDestroyed = false;
     }
 
     // Update is called once per frame
@@ -99,26 +102,40 @@ public class Enemy : MonoBehaviour
 
     public bool HasReachedBarrier(Vector3 barrierPoint)
     {
-        if(barrierPath != null)
+        if (!barrierDestroyed)
         {
-            if (Vector3.Distance(transform.position, barrierPoint) < sightDistance)
-            {
-                Vector3 targetDirection = transform.forward - (Vector3.up * eyeHeight);
 
-                Ray ray = new Ray(transform.position + (Vector3.up * eyeHeight), targetDirection);
-                RaycastHit hitInfo = new RaycastHit();
-                if (Physics.Raycast(ray, out hitInfo, meleeReach))
+            if (barrierPath != null)
+            {
+                if (Vector3.Distance(transform.position, barrierPoint) < sightDistance)
                 {
-                    if (hitInfo.transform.gameObject == mainBarrier)
+                    Vector3 targetDirection = transform.forward - (Vector3.up * eyeHeight);
+                    if (eyeHeight >= 1.8f)
                     {
-                        Debug.DrawRay(ray.origin, ray.direction * sightDistance);
-                        return true;
+                        eyeHeight = 0.1f;
                     }
+                    Ray ray = new Ray(transform.position + (Vector3.up * eyeHeight), targetDirection);
+                    RaycastHit hitInfo = new RaycastHit();
+                    if (Physics.Raycast(ray, out hitInfo, meleeReach))
+                    {
+                        Debug.DrawRay(ray.origin, ray.direction * meleeReach);
+
+                        if (hitInfo.transform.gameObject.CompareTag("Barrier"))
+                        {
+                            Debug.DrawRay(ray.origin, ray.direction * meleeReach);
+                            return true;
+                        }
+                    }
+                    eyeHeight += 0.1f * Time.deltaTime;
+
                 }
-                return true;
             }
+            return false;
         }
-        return false;
+        else
+        {
+            return true;
+        }
     }
 
 
@@ -159,7 +176,7 @@ public class Enemy : MonoBehaviour
     IEnumerator AttackRayCast(Vector3 barrierpoint)
     {
         //Debug.Log("3333333Derp*******: " + meleeIsAttacking + " ****" + meleeReadyToAttack);
-
+        bool barrierReached = HasReachedBarrier(barrierpoint);
         yield return new WaitForSeconds(attackSpeed);
         //Debug.Log("44444444Derp*******: " + meleeIsAttacking + " ****" + meleeReadyToAttack);
 
@@ -175,21 +192,12 @@ public class Enemy : MonoBehaviour
         //Debug.Log("555555Derp*******: " + Vector3.Distance(transform.position, barrierpoint) + " ****" + meleeReach);
 
         //is barrier close enough to be seen
-        if (Vector3.Distance(transform.position, barrierpoint) < meleeBarrierReach)
+        //if (Vector3.Distance(transform.position, barrierpoint) < meleeBarrierReach)
+        if(barrierReached)
         {
             //Debug.Log("666666Derp*******: " + Vector3.Distance(transform.position, barrierpoint) + " ****" + meleeReach);
 
-            BarrierController barrier = mainBarrier.GetComponent<BarrierController>();
-            //Debug.Log("barrier controller founds in enemy attack?: " + barrier);
-
-            if (barrier != null)
-            {
-                barrier.TakeDamage(damage);
-            }
-            else
-            {
-                Debug.Log("Barrier is null.");
-            }
+            enemyAnimator.SetTrigger("Hit");
         }
 
 
@@ -202,6 +210,21 @@ public class Enemy : MonoBehaviour
 
         // HitTarget(hitInfo);
         //}
+    }
+
+    public void DamageBarrier()
+    {
+        BarrierController barrier = mainBarrier.GetComponent<BarrierController>();
+        //Debug.Log("barrier controller founds in enemy attack?: " + barrier);
+
+        if (barrier != null)
+        {
+            barrier.TakeDamage(damage);
+        }
+        else
+        {
+            Debug.Log("Barrier is null.");
+        }
     }
 
     //private void HitTarget(RaycastHit hitInfo)
@@ -228,11 +251,17 @@ public class Enemy : MonoBehaviour
     public void DamageEnemy(float damage)
     {
         enemyHealth -= damage;
-        enemyAnimator.SetTrigger("Hit");
+        enemyAnimator.SetTrigger("GetHit");
         if(enemyHealth <= 0)
         {
             Destroy(gameObject);
         }
     }
+
+    public void SetBarrierDestroyed(bool destroyed)
+    {
+        barrierDestroyed = destroyed;
+    }
+
 
 }
