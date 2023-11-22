@@ -18,11 +18,11 @@ public class OneWayWall : MonoBehaviour
     [SerializeField]
     public string cantGoThroughWall = "GameController";
 
-    private BoxCollider collider;
+    private Collider collider;
 
     private void Awake()
     {
-        collider = gameObject.GetComponent<BoxCollider>();
+        collider = gameObject.GetComponent<Collider>();
     }
 
 

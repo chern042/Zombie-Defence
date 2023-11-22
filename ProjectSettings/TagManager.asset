@@ -14,6 +14,7 @@ TagManager:
   - Zombie
   - Barrier
   - Main Barrier
+  - Zombie Head
   layers:
   - Default
   - TransparentFX

@@ -325,12 +325,18 @@ public class Weapon : WeaponBehaviour
         if (Physics.Raycast(ray = new Ray(playerCamera.position, playerCamera.forward), out RaycastHit hit, maximumDistance, mask))
         {
             // Debug.DrawRay(ray.origin, ray.direction * maximumDistance);
-            if (hit.collider.CompareTag("Zombie"))
+            if (hit.collider.CompareTag("Zombie Head"))
             {
-                hit.collider.gameObject.GetComponent<Enemy>().DamageEnemy(damage);
-
+                Debug.Log("*****ZOMBIE HEAD HIT*******");
+                hit.collider.gameObject.GetComponentInParent<Enemy>().DamageEnemy(damage * 2f);
 
             }
+            else if (hit.collider.CompareTag("Zombie"))
+            {
+                Debug.Log("*****ZOMBIE BODY HIT*******");
+                hit.collider.gameObject.GetComponent<Enemy>().DamageEnemy(damage);
+            }
+
 
             rotation = Quaternion.LookRotation(hit.point - muzzleSocket.position);
         }

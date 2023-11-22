@@ -23,7 +23,7 @@ public class Projectile : MonoBehaviour
     public Transform[] concreteImpactPrefabs;
 
 
-    public Collider[] invisibleWallColliders;
+    public GameObject[] invisibleWalls;
 
     private BarrierController barrier;
 
@@ -41,9 +41,9 @@ public class Projectile : MonoBehaviour
         //Ignore the main player character's collision. A little hacky, but it should work.
         Physics.IgnoreCollision(gameModeService.GetPlayerCharacter().GetComponent<Collider>(), GetComponent<Collider>());
 
-        foreach(Collider invisibleWall in invisibleWallColliders)
+        foreach(GameObject invisibleWall in invisibleWalls)
         {
-            Physics.IgnoreCollision(invisibleWall, GetComponent<Collider>());
+            Physics.IgnoreCollision(invisibleWall.GetComponent<Collider>(), GetComponent<Collider>());
 
         }
 

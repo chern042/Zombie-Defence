@@ -30,7 +30,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.01, y: 0.01, z: 0.0025}
+  m_LocalScale: {x: 0.001, y: 0.001, z: 0.0025}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 4931387532149536}
@@ -224,7 +224,9 @@ MonoBehaviour:
   - {fileID: 4587651611338842, guid: 2a77aba03cf9e430a8c7d70c5ee25a96, type: 3}
   concreteImpactPrefabs:
   - {fileID: 4587651611338842, guid: 2a77aba03cf9e430a8c7d70c5ee25a96, type: 3}
-  bulletHolePrefab: {fileID: 479280, guid: b2ac1383a96f94a50b7ed458be173bbd, type: 3}
+  invisibleWalls:
+  - {fileID: 8347068863078880265, guid: 94660364adb8c41c6a84cbb9f360ea60, type: 3}
+  - {fileID: 9103888906093912966, guid: 0074855239c4c427cb498e2482237c3d, type: 3}
 --- !u!1 &1231345400216816
 GameObject:
   m_ObjectHideFlags: 0
