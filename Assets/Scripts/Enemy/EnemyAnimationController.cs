@@ -32,7 +32,7 @@ public class EnemyAnimationController : MonoBehaviour
         //Debug.Log("Enemy velocty: " + agent.velocity);
 
 
-        if (Mathf.Abs(agent.velocity.x) > 2f || Mathf.Abs(agent.velocity.z) > 2f)
+        if (Mathf.Abs(agent.velocity.x) > 1.9f || Mathf.Abs(agent.velocity.z) > 1.9f)
         {
             //playerAnim.SetBool("running", true);
             state = MovementState.running;

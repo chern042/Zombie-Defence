@@ -36,6 +36,7 @@ public class SeekBarrierState : BaseState
                 Debug.Log("Enemy has not reached: " + enemy.HasReachedBarrier(barrierPoint));
 
                 enemy.Agent.SetDestination(barrierPoint);
+                enemy.Agent.speed = 0.5f;
                 //Debug.Log("Enemy velocity walking: " + enemy.Agent.velocity);
             }
 

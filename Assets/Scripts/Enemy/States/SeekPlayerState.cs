@@ -26,7 +26,7 @@ public class SeekPlayerState : BaseState
             if(seekPlayerTimer > Random.Range(3, 7)) //last point updated every between 3 and 6 seconds (inclusive)
             {
                 enemy.FollowPlayer();
-                enemy.Agent.velocity = enemy.Agent.velocity * 0.5f;
+                enemy.Agent.speed = 2f;
                 seekPlayerTimer = 0;
             }
         }
