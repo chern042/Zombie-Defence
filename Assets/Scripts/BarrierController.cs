@@ -18,12 +18,15 @@ public class BarrierController : MonoBehaviour
     [HideInInspector]
     public int piecesRemoved;
 
+    private DestroyBarrierAnimation destroyBarrierAnimation;
+
     // Start is called before the first frame update
     void Start()
     {
         healthPerPiece = barrierTotalHealth / barrierPiecesLeft.Count;
         pieceHealth = barrierTotalHealth / barrierPiecesLeft.Count;
         piecesRemoved = 0;
+        destroyBarrierAnimation = GetComponent<DestroyBarrierAnimation>();
     }
 
     // Update is called once per frame
@@ -37,8 +40,8 @@ public class BarrierController : MonoBehaviour
         pieceHealth -= damage;
         if(pieceHealth < 0f && piecesRemoved != barrierPiecesLeft.Count && piecesRemoved != barrierPiecesRight.Count)
         {
-            DestroyPiece(barrierPiecesLeft[piecesRemoved]);
-            DestroyPiece(barrierPiecesRight[piecesRemoved]);
+            DestroyPiece(piecesRemoved);
+            DestroyPiece(piecesRemoved);
 
             pieceHealth = healthPerPiece - (-1f * pieceHealth);
             piecesRemoved++;
@@ -46,8 +49,8 @@ public class BarrierController : MonoBehaviour
         }
         else if(pieceHealth == 0f && piecesRemoved != barrierPiecesLeft.Count && piecesRemoved != barrierPiecesRight.Count)
         {
-            DestroyPiece(barrierPiecesLeft[piecesRemoved]);
-            DestroyPiece(barrierPiecesRight[piecesRemoved]);
+            DestroyPiece(piecesRemoved);
+            DestroyPiece(piecesRemoved);
             pieceHealth = healthPerPiece;
             piecesRemoved++;
         }
@@ -68,11 +71,12 @@ public class BarrierController : MonoBehaviour
 
 
 
-    private void DestroyPiece(GameObject piece)
+    private void DestroyPiece(int pieceIndex)
     {
 
-        piece.GetComponent<Collider>().enabled = false;
-        piece.GetComponent<MeshRenderer>().enabled = false;
+        //piece.GetComponent<Collider>().enabled = false;
+        //piece.GetComponent<MeshRenderer>().enabled = false;
+        destroyBarrierAnimation.ThrowLogs(pieceIndex);
     }
 
     private void RepairPiece(GameObject piece)

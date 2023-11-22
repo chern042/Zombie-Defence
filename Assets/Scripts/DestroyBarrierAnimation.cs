@@ -8,7 +8,7 @@ public class DestroyBarrierAnimation : MonoBehaviour
     public Rigidbody[] barrierLeft;
     public Rigidbody[] barrierRight;
 
-    public float throwStrength = 20f;
+    public float throwStrength = 2f;
 
 
     private Vector3[] originalPosLeft;
@@ -22,12 +22,10 @@ public class DestroyBarrierAnimation : MonoBehaviour
     private Collider[] barrierRightCollider;
 
     private int barrierCount;
-    private int logToThrow;
 
     // Start is called before the first frame update
     void Awake()
     {
-        logToThrow = 0;
         barrierCount = (barrierLeft.Length == barrierRight.Length) ? barrierLeft.Length : 0;
         if (barrierCount == 0) return;
         originalPosLeft = new Vector3[barrierCount];
@@ -59,52 +57,98 @@ public class DestroyBarrierAnimation : MonoBehaviour
 
 
 
-    public void ThrowLogs()
+    public void ThrowLogs(int logToThrowIndex)
     {
-        barrierLeft[logToThrow].velocity = Vector3.right * throwStrength;
-        barrierRight[logToThrow].velocity = Vector3.right * throwStrength;
-        logToThrow++;
-        if(logToThrow+1 == barrierCount)
+        if (logToThrowIndex > 1)
         {
-            logToThrow = 0;
+            barrierLeftCollider[logToThrowIndex].isTrigger = true;
+            barrierRightCollider[logToThrowIndex].isTrigger = true;
+            barrierLeft[logToThrowIndex].isKinematic = false;
+            barrierRight[logToThrowIndex].isKinematic = false;
+            barrierLeft[logToThrowIndex].velocity = (Vector3.right * throwStrength);
+            barrierRight[logToThrowIndex].velocity = (Vector3.right * throwStrength);
+            barrierLeft[logToThrowIndex].AddForceAtPosition((Vector3.right * (throwStrength/16)),transform.position- (Vector3.forward * 3f),ForceMode.Force);
+            barrierRight[logToThrowIndex].AddForceAtPosition((Vector3.left * (throwStrength/16)), transform.position - (Vector3.forward * 3f), ForceMode.Force);
+
+        }else if(logToThrowIndex == 1)
+        {
+            barrierLeftCollider[logToThrowIndex].isTrigger = true;
+            barrierRightCollider[logToThrowIndex].isTrigger = true;
+            barrierLeft[logToThrowIndex].isKinematic = false;
+            barrierRight[logToThrowIndex].isKinematic = false;
+            barrierLeft[logToThrowIndex].velocity = (Vector3.right * throwStrength);
+            barrierRight[logToThrowIndex].velocity = (Vector3.right * throwStrength);
+            barrierLeft[logToThrowIndex].AddForceAtPosition((Vector3.right * (throwStrength / 8)), transform.position - (Vector3.forward * 3f), ForceMode.Force);
+            barrierRight[logToThrowIndex].AddForceAtPosition((Vector3.left * (throwStrength / 8)), transform.position + (Vector3.forward * 3f), ForceMode.Force);
         }
+        else if(logToThrowIndex == 0)
+        {
+            barrierLeftCollider[logToThrowIndex].isTrigger = true;
+            barrierRightCollider[logToThrowIndex].isTrigger = true;
+            barrierLeft[logToThrowIndex].isKinematic = false;
+            barrierRight[logToThrowIndex].isKinematic = false;
+        }
+
+        
+        //Invoke("MakeLogsInvisible", 5f);
+        StartCoroutine(MakeLogsInvisible(logToThrowIndex));
+
     }
 
-    public void ReturnLogs()
+
+
+
+
+
+    IEnumerator MakeLogsInvisible(int index)
+{
+        yield return new WaitForSeconds(5f);
+
+        barrierLeft[index].gameObject.GetComponent<MeshRenderer>().enabled = false;
+        barrierRight[index].gameObject.GetComponent<MeshRenderer>().enabled = false;
+        barrierLeftCollider[index].enabled = false;
+        barrierRightCollider[index].enabled = false;
+        barrierLeft[index].isKinematic = true;
+        barrierRight[index].isKinematic = true;
+    }
+
+    public void ReturnLogs(int logToReturn)
     {
-        if (logToThrow != 0)
-        {
+
+            barrierLeft[logToReturn].gameObject.GetComponent<MeshRenderer>().enabled = true;
+            barrierRight[logToReturn].gameObject.GetComponent<MeshRenderer>().enabled = true;
+            barrierLeftCollider[logToReturn].enabled = true;
+            barrierRightCollider[logToReturn].enabled = true;
+
+            barrierLeftCollider[logToReturn].isTrigger = true;
+            barrierRightCollider[logToReturn].isTrigger = true;
+
+            barrierLeft[logToReturn].isKinematic = true;
+            barrierRight[logToReturn].isKinematic = true;
+            barrierLeft[logToReturn].velocity = Vector3.zero;
+            barrierRight[logToReturn].velocity = Vector3.zero;
+
+            barrierLeft[logToReturn].transform.position = originalPosLeft[logToReturn];
+            barrierRight[logToReturn].transform.position = originalPosRight[logToReturn];
 
 
-            barrierLeftCollider[logToThrow].isTrigger = true;
-            barrierRightCollider[logToThrow].isTrigger = true;
-            barrierLeft[logToThrow].isKinematic = true;
-            barrierRight[logToThrow].isKinematic = true;
-            barrierLeft[logToThrow].velocity = Vector3.zero;
-            barrierRight[logToThrow].velocity = Vector3.zero;
+            barrierRight[logToReturn].transform.rotation = originalRotLeft[logToReturn];
+            barrierRight[logToReturn].transform.rotation = originalRotRight[logToReturn];
 
-            barrierLeft[logToThrow].transform.position = originalPosLeft[logToThrow];
-            barrierRight[logToThrow].transform.position = originalPosRight[logToThrow];
-
-
-            barrierRight[logToThrow].transform.rotation = originalRotLeft[logToThrow];
-            barrierRight[logToThrow].transform.rotation = originalRotRight[logToThrow];
-
-            while (barrierLeft[logToThrow].transform.rotation != originalRotLeft[logToThrow])
+            while (barrierLeft[logToReturn].transform.rotation != originalRotLeft[logToReturn])
             {
-                barrierLeft[logToThrow].transform.rotation = originalRotLeft[logToThrow];
+                barrierLeft[logToReturn].transform.rotation = originalRotLeft[logToReturn];
             }
 
 
-            while (barrierRight[logToThrow].transform.rotation != originalRotRight[logToThrow])
+            while (barrierRight[logToReturn].transform.rotation != originalRotRight[logToReturn])
             {
-                barrierRight[logToThrow].transform.rotation = originalRotRight[logToThrow];
+                barrierRight[logToReturn].transform.rotation = originalRotRight[logToReturn];
             }
 
-            barrierLeftCollider[logToThrow].isTrigger = false;
-            barrierRightCollider[logToThrow].isTrigger = false;
-            logToThrow--;
-        }
+            barrierLeftCollider[logToReturn].isTrigger = false;
+            barrierRightCollider[logToReturn].isTrigger = false;
+
 
     }
 
