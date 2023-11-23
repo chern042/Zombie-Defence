@@ -8,7 +8,7 @@ public class DestroyBarrierAnimation : MonoBehaviour
     public Rigidbody[] barrierLeft;
     public Rigidbody[] barrierRight;
 
-    public float throwStrength = 2f;
+    public float throwStrength = 0.5f;
 
 
     private Vector3[] originalPosLeft;
@@ -23,6 +23,8 @@ public class DestroyBarrierAnimation : MonoBehaviour
 
     private int barrierCount;
 
+    private IGameModeService gameModeService;
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -36,6 +38,8 @@ public class DestroyBarrierAnimation : MonoBehaviour
 
         barrierLeftCollider = new Collider[barrierCount];
         barrierRightCollider = new Collider[barrierCount];
+        gameModeService = ServiceLocator.Current.Get<IGameModeService>();
+
 
     }
 
@@ -59,27 +63,28 @@ public class DestroyBarrierAnimation : MonoBehaviour
 
     public void ThrowLogs(int logToThrowIndex)
     {
+        Physics.IgnoreCollision(gameModeService.GetPlayerCharacter().GetComponent<Collider>(), barrierLeftCollider[logToThrowIndex]);
+        Physics.IgnoreCollision(gameModeService.GetPlayerCharacter().GetComponent<Collider>(), barrierRightCollider[logToThrowIndex]);
+
         if (logToThrowIndex > 1)
         {
-            barrierLeftCollider[logToThrowIndex].isTrigger = true;
-            barrierRightCollider[logToThrowIndex].isTrigger = true;
+            Physics.IgnoreCollision(barrierLeftCollider[logToThrowIndex], barrierRightCollider[logToThrowIndex]);
+
             barrierLeft[logToThrowIndex].isKinematic = false;
             barrierRight[logToThrowIndex].isKinematic = false;
-            barrierLeft[logToThrowIndex].velocity = (Vector3.right * throwStrength);
-            barrierRight[logToThrowIndex].velocity = (Vector3.right * throwStrength);
-            barrierLeft[logToThrowIndex].AddForceAtPosition((Vector3.right * (throwStrength/16)),transform.position- (Vector3.forward * 3f),ForceMode.Force);
-            barrierRight[logToThrowIndex].AddForceAtPosition((Vector3.left * (throwStrength/16)), transform.position - (Vector3.forward * 3f), ForceMode.Force);
-
+            barrierLeft[logToThrowIndex].AddForceAtPosition((Vector3.right * (throwStrength * 1.95f)), transform.position - (Vector3.forward * (barrierLeftCollider[logToThrowIndex].bounds.size.z * 0.25f)), ForceMode.Force);
+            barrierRight[logToThrowIndex].AddForceAtPosition((Vector3.left * (throwStrength * 1.95f)), transform.position - (Vector3.forward * (barrierRightCollider[logToThrowIndex].bounds.size.z * 0.25f)), ForceMode.Force);
+            barrierLeft[logToThrowIndex].velocity = (Vector3.right * throwStrength*0.35f);
+            barrierRight[logToThrowIndex].velocity = (Vector3.right * throwStrength*0.35f);
         }else if(logToThrowIndex == 1)
         {
-            barrierLeftCollider[logToThrowIndex].isTrigger = true;
-            barrierRightCollider[logToThrowIndex].isTrigger = true;
             barrierLeft[logToThrowIndex].isKinematic = false;
             barrierRight[logToThrowIndex].isKinematic = false;
-            barrierLeft[logToThrowIndex].velocity = (Vector3.right * throwStrength);
-            barrierRight[logToThrowIndex].velocity = (Vector3.right * throwStrength);
-            barrierLeft[logToThrowIndex].AddForceAtPosition((Vector3.right * (throwStrength / 8)), transform.position - (Vector3.forward * 3f), ForceMode.Force);
-            barrierRight[logToThrowIndex].AddForceAtPosition((Vector3.left * (throwStrength / 8)), transform.position + (Vector3.forward * 3f), ForceMode.Force);
+            barrierLeft[logToThrowIndex].velocity = (Vector3.right * throwStrength*3f);
+            barrierRight[logToThrowIndex].velocity = (Vector3.right * throwStrength*3f);
+            barrierLeft[logToThrowIndex].AddForceAtPosition((Vector3.right * (throwStrength*2f )), transform.position - (Vector3.forward * 3.5f), ForceMode.Force);
+            barrierRight[logToThrowIndex].AddForceAtPosition((Vector3.left * (throwStrength *2f)), transform.position + (Vector3.forward * 3.5f), ForceMode.Force);
+
         }
         else if(logToThrowIndex == 0)
         {
@@ -90,7 +95,6 @@ public class DestroyBarrierAnimation : MonoBehaviour
         }
 
         
-        //Invoke("MakeLogsInvisible", 5f);
         StartCoroutine(MakeLogsInvisible(logToThrowIndex));
 
     }
@@ -114,6 +118,8 @@ public class DestroyBarrierAnimation : MonoBehaviour
 
     public void ReturnLogs(int logToReturn)
     {
+            Physics.IgnoreCollision(gameModeService.GetPlayerCharacter().GetComponent<Collider>(), barrierLeftCollider[logToReturn], false);
+            Physics.IgnoreCollision(gameModeService.GetPlayerCharacter().GetComponent<Collider>(), barrierRightCollider[logToReturn], false);
 
             barrierLeft[logToReturn].gameObject.GetComponent<MeshRenderer>().enabled = true;
             barrierRight[logToReturn].gameObject.GetComponent<MeshRenderer>().enabled = true;
