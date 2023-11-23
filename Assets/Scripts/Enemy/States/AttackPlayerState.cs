@@ -7,10 +7,15 @@ public class AttackPlayerState : BaseState
 
     private float moveTimer;
     private float losePlayerTimer;
+    private Vector3 locationAroundPlayer;
 
     public override void Enter()
     {
-
+        locationAroundPlayer = enemy.PlayerLocation.position + (Random.insideUnitSphere * 1f);
+        if (enemy.CanSeePlayer())
+        {
+            enemy.Agent.SetDestination(locationAroundPlayer);
+        }
     }
 
     public override void Exit()
@@ -25,16 +30,16 @@ public class AttackPlayerState : BaseState
             moveTimer += Time.deltaTime;
             if(moveTimer > Random.Range(3, 7))
             {
-                enemy.Agent.SetDestination(enemy.PlayerLocation.position + (Random.insideUnitSphere * 5));
                 moveTimer = 0;
-                ///attack player
+                enemy.AttackPlayer();
             }
         }
         else
         {
             //wait before search
             losePlayerTimer += Time.deltaTime;
-            if(losePlayerTimer > 8)
+
+            if (losePlayerTimer > 3)
             {
                 //change back to search state
                 stateMachine.ChangeState(new SeekPlayerState());

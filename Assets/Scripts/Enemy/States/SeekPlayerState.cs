@@ -19,19 +19,19 @@ public class SeekPlayerState : BaseState
 
     public override void Perform()
     {
-        //if the enemy cant see the player, follow them to there last point
         if (!enemy.CanSeePlayer())
         {
             seekPlayerTimer += Time.deltaTime;
             if(seekPlayerTimer > Random.Range(3, 7)) //last point updated every between 3 and 6 seconds (inclusive)
             {
                 enemy.FollowPlayer();
-                enemy.Agent.speed = 2f;
+                enemy.Agent.speed = 1f;
                 seekPlayerTimer = 0;
             }
         }
-        else
+        else if(!enemy.CanReachPlayer())
         {
+            enemy.Agent.speed = 2f;
             stateMachine.ChangeState(new AttackPlayerState());
         }
     }

@@ -99,6 +99,28 @@ public class Enemy : MonoBehaviour
         return false;
     }
 
+    public bool CanReachPlayer()
+    {
+        if (player != null)
+        {
+
+            Vector3 targetDirection = player.transform.position - transform.position - (Vector3.up * eyeHeight);
+
+                    Ray ray = new Ray(transform.position + (Vector3.up * eyeHeight), targetDirection);
+                    RaycastHit hitInfo = new RaycastHit();
+                    if (Physics.Raycast(ray, out hitInfo, meleeReach))
+                    {
+                        if (hitInfo.transform.gameObject == player)
+                        {
+                            Debug.DrawRay(ray.origin, ray.direction * meleeReach);
+                            return true;
+                        }
+                    }
+
+                }
+        return false;
+    }
+
 
     public bool HasReachedBarrier(Vector3 barrierPoint)
     {
@@ -141,13 +163,13 @@ public class Enemy : MonoBehaviour
 
     public void FollowPlayer()
     {
-        agent.SetDestination(player.transform.position);
+        agent.SetDestination(player.transform.position + (Random.insideUnitSphere * 1f));
 
     }
 
 
 
-    public void Attack(Vector3 barrierPoint)
+    public void AttackBarrier(Vector3 barrierPoint)
     {
         //Make sure that we have a camera cached, otherwise we don't really have the ability to perform traces.
         //Debug.Log("Test attk");
@@ -162,8 +184,30 @@ public class Enemy : MonoBehaviour
 
 
         Invoke(nameof(ResetAttack), attackDelaySpeed);
-        //Invoke(nameof(AttackRayCast(barrierPoint)), attackSpeed);
-        StartCoroutine(AttackRayCast(barrierPoint));
+
+        if (!barrierDestroyed)
+        {
+            StartCoroutine(AttackBarrierDelay(barrierPoint));
+        }
+    }
+
+
+    public void AttackPlayer()
+    {
+        if (!meleeReadyToAttack || meleeIsAttacking)
+        {
+            return;
+        }
+        //Debug.Log("got through player camera check");
+        meleeReadyToAttack = false;
+        meleeIsAttacking = true;
+
+        Invoke(nameof(ResetAttack), attackDelaySpeed);
+
+         if(player.GetComponent<PlayerLife>().PlayerAlive)
+        {
+            StartCoroutine(AttackPlayerDelay());
+        }
 
 
     }
@@ -173,43 +217,46 @@ public class Enemy : MonoBehaviour
         meleeIsAttacking = false;
         meleeReadyToAttack = true;
     }
-    IEnumerator AttackRayCast(Vector3 barrierpoint)
+    IEnumerator AttackBarrierDelay(Vector3 barrierpoint)
     {
-        //Debug.Log("3333333Derp*******: " + meleeIsAttacking + " ****" + meleeReadyToAttack);
         bool barrierReached = HasReachedBarrier(barrierpoint);
         yield return new WaitForSeconds(attackSpeed);
-        //Debug.Log("44444444Derp*******: " + meleeIsAttacking + " ****" + meleeReadyToAttack);
 
-        // Ray ray = new Ray(transform.position+(Vector3.up * eyeHeight), transform.forward );
-        // Debug.DrawRay(ray.origin, ray.direction * meleeReach);
-        //RaycastHit hitInfo;
-        //animator.SetTrigger("Hit");
-        //meleeIsAttacking = true;
-        //meleeReadyToAttack = false;
-        // Debug.DrawRay(ray.origin, ray.direction * meleeReach);
-
-
-        //Debug.Log("555555Derp*******: " + Vector3.Distance(transform.position, barrierpoint) + " ****" + meleeReach);
-
-        //is barrier close enough to be seen
-        //if (Vector3.Distance(transform.position, barrierpoint) < meleeBarrierReach)
         if(barrierReached)
         {
-            //Debug.Log("666666Derp*******: " + Vector3.Distance(transform.position, barrierpoint) + " ****" + meleeReach);
 
-            enemyAnimator.SetTrigger("Hit");
+            enemyAnimator.SetTrigger("HitBarrier");
         }
 
 
-        //audioSource.pitch = Random.Range(0.9f, 1.1f);
-        //audioSource.PlayOneShot(meleeSwingSound);
-        //Debug.Log("******HIT???????");
-        //if (Physics.Raycast(ray, out hitInfo, meleeReach, mask))
-        //{
-        //Debug.Log("******HIT!!!!!!!!!!!!!!!!!!!!");
+    }
 
-        // HitTarget(hitInfo);
-        //}
+
+
+    IEnumerator AttackPlayerDelay()
+    {
+        
+        yield return new WaitForSeconds(attackSpeed);
+
+        if (CanSeePlayer())
+        {
+
+            enemyAnimator.SetTrigger("HitPlayer");
+        }
+
+
+    }
+
+    public void DamagePlayer()
+    {
+        PlayerLife playerHealth = player.GetComponent<PlayerLife>();
+        if (player != null && playerHealth.PlayerAlive)
+        {
+            if (CanReachPlayer())
+            {
+                playerHealth.DamagePlayer(damage);
+            }
+        }
     }
 
     public void DamageBarrier()
@@ -219,7 +266,23 @@ public class Enemy : MonoBehaviour
 
         if (barrier != null)
         {
-            barrier.TakeDamage(damage);
+            Vector3 targetDirection = transform.forward - (Vector3.up * eyeHeight);
+            Ray ray = new Ray(transform.position + (Vector3.up * eyeHeight), targetDirection);
+            RaycastHit hit = new RaycastHit();
+            if (Physics.Raycast(ray, out hit, meleeReach))
+            {
+                Debug.DrawRay(ray.origin, ray.direction * meleeReach);
+
+                if (hit.transform.gameObject.CompareTag("Barrier"))
+                {
+                    Debug.DrawRay(ray.origin, ray.direction * meleeReach);
+                    barrier.TakeDamage(damage);
+                }
+            }
+            else
+            {
+                Debug.Log("Zombie missed barrier.");
+            }
         }
         else
         {
