@@ -113,9 +113,10 @@ public class Projectile : MonoBehaviour
         {
             Debug.Log("DDDERRR");
             //Instantiate random impact prefab from array
-            Instantiate(concreteImpactPrefabs[Random.Range
+            Transform impact = Instantiate(concreteImpactPrefabs[Random.Range
                 (0, concreteImpactPrefabs.Length)], collision.GetContact(0).point,
                 Quaternion.LookRotation(collision.GetContact(0).normal));
+            impact.SetParent(collision.transform);
 
             //Destroy bullet object
             Destroy(gameObject);
@@ -125,9 +126,11 @@ public class Projectile : MonoBehaviour
         {
             Debug.Log("DDDERRR");
             //Instantiate random impact prefab from array
-            Instantiate(concreteImpactPrefabs[Random.Range
+            Transform impact = Instantiate(concreteImpactPrefabs[Random.Range
                 (0, concreteImpactPrefabs.Length)], transform.position,
                 Quaternion.LookRotation(collision.GetContact(0).normal));
+            impact.SetParent(collision.transform);
+
             //Destroy bullet object
             barrier = collision.gameObject.GetComponentInParent<BarrierController>();
 
