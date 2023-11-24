@@ -24,6 +24,17 @@ public class PlayerLife : MonoBehaviour
     [SerializeField]
     private TextMeshProUGUI healthText;
 
+    [SerializeField]
+    private Image overlay;
+
+    [SerializeField]
+    private float duration = 2f;
+
+    [SerializeField]
+    private float fadeSpeed = 1.5f;
+
+
+    private float durationTimer;
     private float playerCurrentHealth;
     private float lerpTimer;
 
@@ -34,6 +45,7 @@ public class PlayerLife : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        overlay.color = new Color(overlay.color.r, overlay.color.g, overlay.color.b, 0);
         playerCurrentHealth = playerMaxHealth;
         playerAlive = true;
     }
@@ -43,6 +55,16 @@ public class PlayerLife : MonoBehaviour
     {
         playerCurrentHealth = Mathf.Clamp(playerCurrentHealth, 0, playerMaxHealth);
         UpdateHealthUI();
+        if(overlay.color.a > 0)
+        {
+            durationTimer += Time.deltaTime;
+            if(durationTimer > duration)
+            {
+                float tempAlpha = overlay.color.a;
+                tempAlpha -= Time.deltaTime * fadeSpeed;
+                overlay.color = new Color(overlay.color.r, overlay.color.g, overlay.color.b, tempAlpha);
+            }
+        }
     }
 
     public void UpdateHealthUI()
@@ -80,7 +102,9 @@ public class PlayerLife : MonoBehaviour
     {
         playerCurrentHealth -= damage;
         healthText.text = Mathf.RoundToInt(playerCurrentHealth).ToString() + "/100";
+        overlay.color = new Color(overlay.color.r, overlay.color.g, overlay.color.b, 1);
         lerpTimer = 0f;
+        durationTimer = 0f;
         if(playerCurrentHealth <= 0)
         {
             healthText.transform.position = Vector3.zero;
