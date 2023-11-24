@@ -29,8 +29,9 @@ public class SeekPlayerState : BaseState
                 seekPlayerTimer = 0;
             }
         }
-        else if(!enemy.CanReachPlayer())
+        else if(!enemy.CanReachPlayer() && enemy.CanSeePlayer())
         {
+            enemy.FollowPlayer();
             enemy.Agent.speed = 2f;
             stateMachine.ChangeState(new AttackPlayerState());
         }

@@ -11751,7 +11751,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4932267959246028, guid: 43b3bfc3c2f2ff146a8d85e63d0a4e26, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 8.58
+      value: 32.37
       objectReference: {fileID: 0}
     - target: {fileID: 4932267959246028, guid: 43b3bfc3c2f2ff146a8d85e63d0a4e26, type: 3}
       propertyPath: m_LocalPosition.y
@@ -11759,7 +11759,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4932267959246028, guid: 43b3bfc3c2f2ff146a8d85e63d0a4e26, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -19.56
+      value: -19.76
       objectReference: {fileID: 0}
     - target: {fileID: 4932267959246028, guid: 43b3bfc3c2f2ff146a8d85e63d0a4e26, type: 3}
       propertyPath: m_LocalRotation.w
@@ -20762,11 +20762,11 @@ Canvas:
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
-  m_VertexColorAlwaysGammaSpace: 0
+  m_VertexColorAlwaysGammaSpace: 1
   m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_TargetDisplay: 0
 --- !u!1 &936458268
 GameObject:
@@ -41846,7 +41846,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerMaxHealth: 100
-  chipSpeed: 2
+  chipSpeed: 1
   currentHealthBar: {fileID: 430168430}
   dynamicDamageHealthBar: {fileID: 187916781}
   healthText: {fileID: 803411143}

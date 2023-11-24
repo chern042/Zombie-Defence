@@ -48,7 +48,7 @@ public class Enemy : MonoBehaviour
     public Transform[] concreteImpactPrefabs;
 
 
-
+    BaseState state;
     void Start()
     {
         barrierMiddlePoint = new Vector3(barrierPath.barrierWaypoints[0].position.x, barrierPath.barrierWaypoints[0].position.y, (barrierPath.barrierWaypoints[0].position.z + barrierPath.barrierWaypoints[1].position.z) / 2);
@@ -61,12 +61,18 @@ public class Enemy : MonoBehaviour
         playerLocation = player.transform;
         eyeHeight = 0.1f;
         barrierDestroyed = false;
+        state = stateMachine.activeState;
     }
 
     // Update is called once per frame
     void Update()
     {
         CanSeePlayer();
+        if(stateMachine.activeState != state)
+        {
+            Debug.Log("State changed to: "+stateMachine.activeState);
+            state = stateMachine.activeState;
+        }
     }
 
     public bool CanSeePlayer()

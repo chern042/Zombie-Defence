@@ -12,7 +12,7 @@ public class PlayerLife : MonoBehaviour
     private float playerMaxHealth = 100f;
 
     [SerializeField]
-    private float chipSpeed = 2f;
+    private float chipSpeed = 4f;
 
 
     [SerializeField]
@@ -49,6 +49,7 @@ public class PlayerLife : MonoBehaviour
         playerCurrentHealth = playerMaxHealth;
         playerAlive = true;
     }
+
 
     // Update is called once per frame
     void Update()
@@ -107,7 +108,9 @@ public class PlayerLife : MonoBehaviour
         durationTimer = 0f;
         if(playerCurrentHealth <= 0)
         {
-            healthText.transform.position = Vector3.zero;
+            healthText.transform.localPosition = Vector3.zero;
+            healthText.outlineColor = Color.red;
+            healthText.color = Color.red;
             healthText.text = "YOU ARE DEAD";
             Debug.Log("PLAYER DEAD");
             playerAlive = false;
