@@ -317,7 +317,7 @@ public class Enemy : MonoBehaviour
         enemyAnimator.SetTrigger("GetHit");
         if(enemyHealth <= 0)
         {
-            Destroy(gameObject);
+            GetComponent<EnemyDeathAnimation>().KillZombie();
         }
     }
 

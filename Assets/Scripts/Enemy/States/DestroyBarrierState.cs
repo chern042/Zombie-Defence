@@ -28,11 +28,16 @@ public class DestroyBarrierState : BaseState
 
     public void DestroyBarrier()
     {
+        bool barrierDestroyed = (barrierController.piecesRemoved == barrierController.barrierPiecesLeft.Count && barrierController.piecesRemoved == barrierController.barrierPiecesRight.Count);
 
+        if (barrierDestroyed)
+        {
+
+            stateMachine.ChangeState(new SeekPlayerState());
+        }
         //attack barrier
         if (barrierPoint != null)
         {
-            bool barrierDestroyed = (barrierController.piecesRemoved == barrierController.barrierPiecesLeft.Count && barrierController.piecesRemoved == barrierController.barrierPiecesRight.Count);
             enemy.SetBarrierDestroyed(barrierDestroyed);
             if (enemy.HasReachedBarrier(barrierPoint))
             {
@@ -47,19 +52,14 @@ public class DestroyBarrierState : BaseState
                 // Debug.Log("enemy barrier found?: " + enemy.mainBarrier.GetComponent<BarrierController>());
 
 
-                if (barrierDestroyed)
-                {
 
-
-                    stateMachine.ChangeState(new SeekPlayerState());
-                }
             }
             else if(!enemy.HasReachedBarrier(barrierPoint))
             {
-                state = new SeekBarrierState();
-                stateMachine.ChangeState(state);
+                stateMachine.ChangeState(new SeekBarrierState());
 
             }
+
 
         }
     }

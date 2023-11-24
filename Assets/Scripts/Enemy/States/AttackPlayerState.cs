@@ -11,7 +11,6 @@ public class AttackPlayerState : BaseState
 
     public override void Enter()
     {
-        locationAroundPlayer = enemy.PlayerLocation.position + (Random.insideUnitSphere * 1f);
         if (enemy.CanSeePlayer())
         {
             enemy.Agent.SetDestination(locationAroundPlayer);
@@ -31,7 +30,14 @@ public class AttackPlayerState : BaseState
             if(moveTimer > Random.Range(3, 7))
             {
                 moveTimer = 0;
-                enemy.AttackPlayer();
+                if (enemy.CanReachPlayer())
+                {
+                    enemy.AttackPlayer();
+                }
+                else
+                {
+                    enemy.FollowPlayer();
+                }
             }
         }
         else
