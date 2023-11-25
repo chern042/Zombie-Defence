@@ -7,7 +7,6 @@ public class AttackPlayerState : BaseState
 
     private float moveTimer;
     private float losePlayerTimer;
-    private Vector3 locationAroundPlayer;
 
     public override void Enter()
     {

@@ -57,11 +57,20 @@ public class Projectile : MonoBehaviour
     {
         //Ignore collisions with other projectiles.
         if (collision.gameObject.GetComponent<Projectile>() != null)
+        {
             return;
-        var gameModeService = ServiceLocator.Current.Get<IGameModeService>();
+
+        }
+        //var gameModeService = ServiceLocator.Current.Get<IGameModeService>();
 
         //Physics.IgnoreCollision(bulletHolePrefab.gameObject.GetComponent<Collider>(), GetComponent<Collider>());
         //Physics.IgnoreCollision(gameModeService.GetPlayerCharacter().GetComponent<Collider>(), GetComponent<Collider>());
+        if (collision.collider.CompareTag("PlayerLimit"))
+        {
+            Physics.IgnoreCollision(collision.collider, GetComponent<Collider>());
+            return;
+        }
+
 
         //If destroy on impact is false, start 
         //coroutine with random destroy timer

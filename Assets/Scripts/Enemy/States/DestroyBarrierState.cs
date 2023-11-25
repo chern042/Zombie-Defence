@@ -56,7 +56,8 @@ public class DestroyBarrierState : BaseState
             }
             else if(!enemy.HasReachedBarrier(barrierPoint))
             {
-                stateMachine.ChangeState(new SeekBarrierState());
+                state = new SeekBarrierState();
+                stateMachine.ChangeState(state);
 
             }
 

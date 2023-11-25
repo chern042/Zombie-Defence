@@ -15,6 +15,7 @@ TagManager:
   - Barrier
   - Main Barrier
   - Zombie Head
+  - PlayerLimit
   layers:
   - Default
   - TransparentFX

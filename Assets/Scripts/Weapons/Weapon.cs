@@ -315,14 +315,17 @@ public class Weapon : WeaponBehaviour
 
         shootTime = Time.time - shootStartTime;
         //Determine the rotation that we want to shoot our projectile in.
-        Quaternion rotation = Quaternion.LookRotation(playerCamera.forward * 1000.0f);// - muzzleSocket.position);
+        Quaternion rotation = Quaternion.LookRotation((playerCamera.forward * 1000.0f));//- muzzleSocket.position);
 
         playerLook.ApplyRecoil(new Vector2(Random.Range(-spread.x, spread.x) * (spreadMultiplier) * Mathf.Clamp01(shootTime / spreadTime), Random.Range(-spread.y, spread.y)) * (spreadMultiplier) * Mathf.Clamp01(shootTime / spreadTime));
 
-        Vector3 shootDirection;
+        Vector3 shootDirection;// = (playerCamera.forward * 1000f);// - muzzleSocket.position);
         Ray ray;
         //If there's something blocking, then we can aim directly at that thing, which will result in more accurate shooting.
-        if (Physics.Raycast(ray = new Ray(playerCamera.position, playerCamera.forward), out RaycastHit hit, maximumDistance, mask))
+        //if (Physics.Raycast(ray = new Ray(playerCamera.position, playerCamera.forward), out RaycastHit hit, maximumDistance, mask))
+        RaycastHit[] hits = Physics.RaycastAll(ray = new Ray(playerCamera.position, playerCamera.forward), maximumDistance, mask);
+        //bool shot = false;
+        foreach(RaycastHit hit in hits)
         {
             // Debug.DrawRay(ray.origin, ray.direction * maximumDistance);
             if (hit.collider.CompareTag("Zombie Head"))
@@ -337,30 +340,34 @@ public class Weapon : WeaponBehaviour
                 hit.collider.gameObject.GetComponent<Enemy>().DamageEnemy(damage);
             }
 
+            if (!hit.collider.CompareTag("PlayerLimit"))
+            {
+                rotation = Quaternion.LookRotation(hit.point - muzzleSocket.position);
+                shootDirection = (hit.point - muzzleSocket.position);
+                shootDirection.x += Random.Range(-spread.x, spread.x) * Mathf.Clamp01(shootTime / spreadTime);
+                shootDirection.y += Random.Range(-spread.y, spread.y) * Mathf.Clamp01(shootTime / spreadTime);
+                shootDirection.z += Random.Range(-spread.z, spread.z) * Mathf.Clamp01(shootTime / spreadTime);
 
-            rotation = Quaternion.LookRotation(hit.point - muzzleSocket.position);
+                shootDirection.Normalize();
+                Debug.DrawRay(ray.origin, ray.direction * maximumDistance);
+
+                playerLook.cam.fieldOfView = 65 - Mathf.Clamp(shootTime / (spreadTime / 4), 0f, 4f);
+
+                //Try to play the fire particles from the muzzle!
+                muzzleBehaviour.Effect();
+
+                //Spawn projectile from the projectile spawn point.
+                GameObject projectile = Instantiate(prefabProjectile, muzzleSocket.position, rotation);
+
+
+                ////Add velocity to the projectile.
+                projectile.GetComponent<Rigidbody>().velocity = ((shootDirection) * projectileImpulse);
+                break;
+            }
+
         }
-            shootDirection = (hit.point - muzzleSocket.position);
-
-        
-        shootDirection.x += Random.Range(-spread.x, spread.x) * Mathf.Clamp01(shootTime / spreadTime);
-        shootDirection.y += Random.Range(-spread.y, spread.y) * Mathf.Clamp01(shootTime / spreadTime);
-        shootDirection.z += Random.Range(-spread.z, spread.z) * Mathf.Clamp01(shootTime / spreadTime);
-
-        shootDirection.Normalize();
-        Debug.DrawRay(ray.origin, ray.direction * maximumDistance);
-
-        playerLook.cam.fieldOfView = 65 - Mathf.Clamp(shootTime / (spreadTime / 4), 0f, 4f);
-
-        //Try to play the fire particles from the muzzle!
-        muzzleBehaviour.Effect();
-
-        //Spawn projectile from the projectile spawn point.
-        GameObject projectile = Instantiate(prefabProjectile, muzzleSocket.position, rotation);
 
 
-        ////Add velocity to the projectile.
-        projectile.GetComponent<Rigidbody>().velocity = ((shootDirection) * projectileImpulse);
 
 
 
