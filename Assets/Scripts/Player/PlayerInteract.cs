@@ -19,13 +19,15 @@ public class PlayerInteract : MonoBehaviour
 
     private bool canCancel;
 
+    private Interactable interactable;
+
     // Start is called before the first frame update
     void Start()
     {
         cam = GetComponent<PlayerLook>().cam;
         playerUI = GetComponent<PlayerUI>();
         inputManager = GetComponent<InputManager>();
-        canCancel = false;
+        canCancel = true;
     }
 
     // Update is called once per frame
@@ -40,15 +42,13 @@ public class PlayerInteract : MonoBehaviour
         {
             if(hitInfo.collider.GetComponent<Interactable>() != null)
             {
-                Interactable interactable = hitInfo.collider.GetComponent<Interactable>();
+                interactable = hitInfo.collider.GetComponent<Interactable>();
                 playerUI.UpdateText(interactable.OnLook());
-                Debug.Log("TEST: " + inputManager.onFoot.Interact.inProgress);
                 if (inputManager.onFoot.Interact.inProgress)
                 {
 
 
                     interactable.BaseInteract();
-                    canCancel = true;
                 }
                 if (canCancel)
                 {
@@ -57,6 +57,14 @@ public class PlayerInteract : MonoBehaviour
                 }
 
 
+            }
+
+        }
+        else
+        {
+            if(interactable != null)
+            {
+                interactable.OnLookOff();
             }
         }
     }

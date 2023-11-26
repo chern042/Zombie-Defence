@@ -12,7 +12,7 @@ public class Barrier : Interactable
 
 
 	[SerializeField]
-	public float barrierRepairAmount = 5f;
+	public float barrierRepairAmount = 14.28572f;
 
 
     [SerializeField]
@@ -42,38 +42,28 @@ public class Barrier : Interactable
     public void ResetInteract()
     {
         readyToInteract = true;
+        promptMessage = "Repair.";
     }
 
     protected override void Interact()
     {
-        Debug.Log("****bEGUN INTERACT");
 
         if (!readyToInteract )
         {
             return;
         }
 
-        Debug.Log("****READY INTERACT");
 
         interactTime += Time.deltaTime;
-        Debug.Log("IS REPAIRING: " + interactTime);
-
-        //readyToInteract = false;
-        if (interactTime % 1 == 0)
-        {
-            Debug.Log("IS REPAIRING: "+interactTime);
-            Debug.Log("IS REPAIRING: " + interactSpeed);
 
 
-        }
 
-
-        promptMessage = "Repairing...: "+interactTime;
+        int repairPercent = Mathf.RoundToInt((interactTime / interactSpeed) * 100f);
+        promptMessage = "Repairing...: "+repairPercent+"%";
         if (interactTime >= interactSpeed)
         {
-            promptMessage = "Repaired Piece...";
+            promptMessage = "Repaired!";
 
-            Debug.Log("*********************REPAIR TIME REACHED");
             interactTime = 0;
             readyToInteract = false;
             barrierController.RepairDamage(barrierRepairAmount);
@@ -88,8 +78,14 @@ public class Barrier : Interactable
     public override void CancelInteract()
     {
         interactTime = 0;
-        promptMessage = "Repair";
-        Debug.Log("****CANCELLED INTERACT");
+        if (readyToInteract)
+        {
+            promptMessage = "Repair.";
+        }
+        else
+        {
+            promptMessage = "Please Rest.";
+        }
     }
 }
 

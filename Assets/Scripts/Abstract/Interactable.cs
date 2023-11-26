@@ -17,13 +17,8 @@ public abstract class Interactable : MonoBehaviour
 
     public string OnLook()
     {
-        Debug.Log("teeest");
-
-        if (interactButton != null)
+        if (interactButton != null && promptMessage.Substring(0,6)== "Repair")
         {
-
-            Debug.Log("WTF: " + interactButton.GetComponentInChildren<TextMeshProUGUI>().text);
-            Debug.Log("WTF: " + interactButton.GetComponent<Image>().name);
 
             interactButton.GetComponentInChildren<TextMeshProUGUI>().text = "REPAIR";
             interactButton.GetComponentInChildren<TextMeshProUGUI>().enabled = true;
@@ -31,6 +26,18 @@ public abstract class Interactable : MonoBehaviour
             interactButton.GetComponent<OnScreenButton>().enabled = true;
         }
         return promptMessage;
+    }
+
+    public void OnLookOff()
+    {
+        if (interactButton != null)
+        {
+
+            interactButton.GetComponentInChildren<TextMeshProUGUI>().text = "INTERACT";
+            interactButton.GetComponentInChildren<TextMeshProUGUI>().enabled = false;
+            interactButton.GetComponent<Image>().enabled = false;
+            interactButton.GetComponent<OnScreenButton>().enabled = false;
+        }
     }
 
     public void BaseInteract()
@@ -56,6 +63,7 @@ public abstract class Interactable : MonoBehaviour
         {
             GetComponent<InteractionEvent>().OnCancelInteract.Invoke();
         }
+
         CancelInteract();
     }
 
