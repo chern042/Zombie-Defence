@@ -38,7 +38,6 @@ public class DestroyBarrierState : BaseState
         //attack barrier
         if (barrierPoint != null)
         {
-            enemy.SetBarrierDestroyed(barrierDestroyed);
             if (enemy.HasReachedBarrier(barrierPoint))
             {
                 //Debug.Log("Enemy is destroying barrier");

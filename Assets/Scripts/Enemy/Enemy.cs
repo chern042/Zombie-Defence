@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
+using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
@@ -33,7 +34,7 @@ public class Enemy : MonoBehaviour
     public float enemyHealth = 10f;
     public LayerMask mask;
 
-    private bool barrierDestroyed;
+    private BarrierController barrier;
 
     private bool meleeIsAttacking = false;
     private bool meleeReadyToAttack = true;
@@ -56,12 +57,12 @@ public class Enemy : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         stateMachine.Initialize();
         player = GameObject.FindGameObjectWithTag("GameController");
-        //mainBarrier = GameObject.FindGameObjectWithTag("Main Barrier");
         enemyAnimator = GetComponent<Animator>();
         playerLocation = player.transform;
         eyeHeight = 0.1f;
-        barrierDestroyed = false;
         state = stateMachine.activeState;
+        barrier = mainBarrier.GetComponent<BarrierController>();
+
     }
 
     // Update is called once per frame
@@ -130,7 +131,7 @@ public class Enemy : MonoBehaviour
 
     public bool HasReachedBarrier(Vector3 barrierPoint)
     {
-        if (!barrierDestroyed)
+        if (!barrier.BarrierDestroyed)
         {
 
             if (barrierPath != null)
@@ -191,7 +192,7 @@ public class Enemy : MonoBehaviour
 
         Invoke(nameof(ResetAttack), attackDelaySpeed);
 
-        if (!barrierDestroyed)
+        if (!barrier.BarrierDestroyed)
         {
             StartCoroutine(AttackBarrierDelay(barrierPoint));
         }
@@ -267,7 +268,6 @@ public class Enemy : MonoBehaviour
 
     public void DamageBarrier()
     {
-        BarrierController barrier = mainBarrier.GetComponent<BarrierController>();
         //Debug.Log("barrier controller founds in enemy attack?: " + barrier);
 
         if (barrier != null)
@@ -325,11 +325,6 @@ public class Enemy : MonoBehaviour
         {
             GetComponent<EnemyDeathAnimation>().KillZombie();
         }
-    }
-
-    public void SetBarrierDestroyed(bool destroyed)
-    {
-        barrierDestroyed = destroyed;
     }
 
 

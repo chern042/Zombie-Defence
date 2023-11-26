@@ -1,6 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem.OnScreen;
+using UnityEngine.UI;
 
 public abstract class Interactable : MonoBehaviour
 {
@@ -9,8 +12,24 @@ public abstract class Interactable : MonoBehaviour
     [SerializeField]
     public string promptMessage;
 
-    public virtual string OnLook()
+    [SerializeField]
+    private GameObject interactButton;
+
+    public string OnLook()
     {
+        Debug.Log("teeest");
+
+        if (interactButton != null)
+        {
+
+            Debug.Log("WTF: " + interactButton.GetComponentInChildren<TextMeshProUGUI>().text);
+            Debug.Log("WTF: " + interactButton.GetComponent<Image>().name);
+
+            interactButton.GetComponentInChildren<TextMeshProUGUI>().text = "REPAIR";
+            interactButton.GetComponentInChildren<TextMeshProUGUI>().enabled = true;
+            interactButton.GetComponent<Image>().enabled = true;
+            interactButton.GetComponent<OnScreenButton>().enabled = true;
+        }
         return promptMessage;
     }
 
@@ -24,7 +43,23 @@ public abstract class Interactable : MonoBehaviour
     }
 
 
+
     protected virtual void Interact()
+    {
+
+    }
+
+
+    public void BaseCancelInteract()
+    {
+        if (useEvents)
+        {
+            GetComponent<InteractionEvent>().OnCancelInteract.Invoke();
+        }
+        CancelInteract();
+    }
+
+    public virtual void CancelInteract()
     {
 
     }

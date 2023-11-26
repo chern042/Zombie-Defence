@@ -5,4 +5,6 @@ public class InteractionEvent : MonoBehaviour
 {
     public UnityEvent OnInteract;
 
+    public UnityEvent OnCancelInteract;
+
 }

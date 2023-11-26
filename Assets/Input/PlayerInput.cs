@@ -229,7 +229,7 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                 {
                     ""name"": """",
                     ""id"": ""3b3af958-472a-4da0-af5a-089dc79397be"",
-                    ""path"": ""<Touchscreen>/touch*/Press"",
+                    ""path"": ""<Gamepad>/buttonWest"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",

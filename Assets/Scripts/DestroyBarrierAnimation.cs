@@ -116,6 +116,18 @@ public class DestroyBarrierAnimation : MonoBehaviour
         barrierRight[index].isKinematic = true;
     }
 
+
+
+    IEnumerator MakeLogsVisible(int index)
+    {
+        yield return new WaitForSeconds(0.1f);
+
+        barrierLeft[index].gameObject.GetComponent<MeshRenderer>().enabled = true;
+        barrierRight[index].gameObject.GetComponent<MeshRenderer>().enabled = true;
+        barrierLeftCollider[index].enabled = true;
+        barrierRightCollider[index].enabled = true;
+    }
+
     public void ReturnLogs(int logToReturn)
     {
             Physics.IgnoreCollision(gameModeService.GetPlayerCharacter().GetComponent<Collider>(), barrierLeftCollider[logToReturn], false);
@@ -155,6 +167,7 @@ public class DestroyBarrierAnimation : MonoBehaviour
             barrierLeftCollider[logToReturn].isTrigger = false;
             barrierRightCollider[logToReturn].isTrigger = false;
 
+        StartCoroutine(MakeLogsVisible(logToReturn));
 
     }
 
