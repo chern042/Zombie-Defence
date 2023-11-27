@@ -323,7 +323,14 @@ public class Enemy : MonoBehaviour
         enemyAnimator.SetTrigger("GetHit");
         if(enemyHealth <= 0)
         {
-            GetComponent<EnemyDeathAnimation>().KillZombie();
+            if (Random.Range(0, 2) == 0)
+            {
+                enemyAnimator.SetTrigger("Death1");
+            }
+            else
+            {
+                enemyAnimator.SetTrigger("Death2");
+            }
         }
     }
 
