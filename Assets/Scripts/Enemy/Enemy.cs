@@ -48,6 +48,8 @@ public class Enemy : MonoBehaviour
 
     public Transform[] concreteImpactPrefabs;
 
+    private Collider[] enemyColliders;
+
 
     BaseState state;
     void Start()
@@ -62,6 +64,19 @@ public class Enemy : MonoBehaviour
         eyeHeight = 0.1f;
         state = stateMachine.activeState;
         barrier = mainBarrier.GetComponent<BarrierController>();
+        enemyColliders = GetComponentsInChildren<Collider>();
+        if(enemyColliders.Length != 0)
+        {
+            foreach(Collider collider in enemyColliders)
+            {
+                foreach(Collider collider2 in enemyColliders)
+                {
+                    Physics.IgnoreCollision(collider, collider2);
+
+                }
+
+            }
+        }
 
     }
 
@@ -90,10 +105,14 @@ public class Enemy : MonoBehaviour
                 if(angleToPlayer >= -fieldOfView && angleToPlayer <= fieldOfView)
                 {
                     Ray ray = new Ray(transform.position + (Vector3.up * eyeHeight), targetDirection);
-                    RaycastHit hitInfo = new RaycastHit();
-                    if(Physics.Raycast(ray, out hitInfo, sightDistance))
+                    //RaycastHit hitInfo = new RaycastHit();
+
+                    RaycastHit[] hits = Physics.RaycastAll(ray, sightDistance, mask);
+
+                    //if (Physics.RaycastAll(ray, out hitInfo, sightDistance))
+                    foreach(RaycastHit hit in hits)
                     {
-                        if(hitInfo.transform.gameObject == player)
+                        if(hit.transform.gameObject == player)
                         {
                             Debug.DrawRay(ray.origin, ray.direction * sightDistance);
                             return true;
@@ -144,12 +163,14 @@ public class Enemy : MonoBehaviour
                         eyeHeight = 0.1f;
                     }
                     Ray ray = new Ray(transform.position + (Vector3.up * eyeHeight), targetDirection);
-                    RaycastHit hitInfo = new RaycastHit();
-                    if (Physics.Raycast(ray, out hitInfo, meleeReach))
+                    RaycastHit[] hits = Physics.RaycastAll(ray, meleeReach, mask);
+                    //RaycastHit hitInfo = new RaycastHit();
+                    //if (Physics.Raycast(ray, out hitInfo, meleeReach))
+                    foreach(RaycastHit hit in hits)
                     {
                         Debug.DrawRay(ray.origin, ray.direction * meleeReach);
 
-                        if (hitInfo.transform.gameObject.CompareTag("Barrier"))
+                        if (hit.transform.gameObject.CompareTag("Barrier"))
                         {
                             Debug.DrawRay(ray.origin, ray.direction * meleeReach);
                             return true;

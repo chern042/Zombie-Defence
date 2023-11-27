@@ -56,9 +56,13 @@ public class Weapon : WeaponBehaviour
     [SerializeField, HideInInspector]
     private float maximumDistance = 500.0f;
 
-    [Tooltip("Total Ammunition.")]
+    [Tooltip("Total(Maximum) Ammunition.")]
     [SerializeField, HideInInspector]
-    private int ammunitionTotal = 10;
+    private int ammunitionTotal = 300;
+
+    [Tooltip("Ammunition in clip.")]
+    [SerializeField, HideInInspector]
+    private int ammunitionClip = 30;
 
     [Tooltip("Fire Spread.")]
     [SerializeField, HideInInspector]
@@ -156,6 +160,8 @@ public class Weapon : WeaponBehaviour
     /// </summary>
     private int ammunitionCurrent;
 
+    private int shotsFired;
+
 
     /// <summary>
     /// Equipped Muzzle Reference.
@@ -229,6 +235,9 @@ public class Weapon : WeaponBehaviour
     public override AudioClip GetAudioClipFire() => muzzleBehaviour.GetAudioClipFire();
 
     public override int GetAmmunitionCurrent() => ammunitionCurrent;
+
+    public int GetAmmunitionClip() => ammunitionClip;
+
 
     public override int GetAmmunitionTotal() => ammunitionTotal;
 
@@ -309,71 +318,82 @@ public class Weapon : WeaponBehaviour
 
 
 
-
-        //Get Muzzle Socket. This is the point we fire from.
-        Transform muzzleSocket = muzzleBehaviour.GetSocket();
-
-        shootTime = Time.time - shootStartTime;
-        //Determine the rotation that we want to shoot our projectile in.
-        Quaternion rotation = Quaternion.LookRotation((playerCamera.forward * 1000.0f));//- muzzleSocket.position);
-
-        playerLook.ApplyRecoil(new Vector2(Random.Range(-spread.x, spread.x) * (spreadMultiplier) * Mathf.Clamp01(shootTime / spreadTime), Random.Range(-spread.y, spread.y)) * (spreadMultiplier) * Mathf.Clamp01(shootTime / spreadTime));
-
-        Vector3 shootDirection;// = (playerCamera.forward * 1000f);// - muzzleSocket.position);
-        Ray ray;
-        //If there's something blocking, then we can aim directly at that thing, which will result in more accurate shooting.
-        //if (Physics.Raycast(ray = new Ray(playerCamera.position, playerCamera.forward), out RaycastHit hit, maximumDistance, mask))
-        RaycastHit[] hits = Physics.RaycastAll(ray = new Ray(playerCamera.position, playerCamera.forward), maximumDistance, mask);
-        //bool shot = false;
-        foreach(RaycastHit hit in hits)
+        if (shotsFired != ammunitionClip && ammunitionCurrent != 0)
         {
-            // Debug.DrawRay(ray.origin, ray.direction * maximumDistance);
-            if (hit.collider.CompareTag("Zombie Head"))
+            //Get Muzzle Socket. This is the point we fire from.
+            Transform muzzleSocket = muzzleBehaviour.GetSocket();
+
+            shootTime = Time.time - shootStartTime;
+            //Determine the rotation that we want to shoot our projectile in.
+            Quaternion rotation = Quaternion.LookRotation((playerCamera.forward * 1000.0f));//- muzzleSocket.position);
+
+            playerLook.ApplyRecoil(new Vector2(Random.Range(-spread.x, spread.x) * (spreadMultiplier) * Mathf.Clamp01(shootTime / spreadTime), Random.Range(-spread.y, spread.y)) * (spreadMultiplier) * Mathf.Clamp01(shootTime / spreadTime));
+
+            Vector3 shootDirection;// = (playerCamera.forward * 1000f);// - muzzleSocket.position);
+            Ray ray;
+            //If there's something blocking, then we can aim directly at that thing, which will result in more accurate shooting.
+            //if (Physics.Raycast(ray = new Ray(playerCamera.position, playerCamera.forward), out RaycastHit hit, maximumDistance, mask))
+            RaycastHit[] hits = Physics.RaycastAll(ray = new Ray(playerCamera.position, playerCamera.forward), maximumDistance, mask);
+            //bool shot = false;
+            foreach (RaycastHit hit in hits)
             {
-                Debug.Log("*****ZOMBIE HEAD HIT*******");
-                hit.collider.gameObject.GetComponentInParent<Enemy>().DamageEnemy(damage * 2f);
+                // Debug.DrawRay(ray.origin, ray.direction * maximumDistance);
+                if (hit.collider.CompareTag("Zombie Head"))
+                {
+                    Debug.Log("*****ZOMBIE HEAD HIT*******");
+                    hit.collider.gameObject.GetComponentInParent<Enemy>().DamageEnemy(damage * 2f);
+
+                }
+                else if (hit.collider.CompareTag("Zombie"))
+                {
+                    Debug.Log("*****ZOMBIE BODY HIT*******");
+                    hit.collider.gameObject.GetComponent<Enemy>().DamageEnemy(damage);
+                }
+
+                if (!hit.collider.CompareTag("PlayerLimit"))
+                {
+                    rotation = Quaternion.LookRotation(hit.point - muzzleSocket.position);
+                    shootDirection = (hit.point - muzzleSocket.position);
+                    shootDirection.x += Random.Range(-spread.x, spread.x) * Mathf.Clamp01(shootTime / spreadTime);
+                    shootDirection.y += Random.Range(-spread.y, spread.y) * Mathf.Clamp01(shootTime / spreadTime);
+                    shootDirection.z += Random.Range(-spread.z, spread.z) * Mathf.Clamp01(shootTime / spreadTime);
+
+                    shootDirection.Normalize();
+                    Debug.DrawRay(ray.origin, ray.direction * maximumDistance);
+
+                    playerLook.cam.fieldOfView = 65 - Mathf.Clamp(shootTime / (spreadTime / 4), 0f, 4f);
+
+                    //Try to play the fire particles from the muzzle!
+                    muzzleBehaviour.Effect();
+
+                    //Spawn projectile from the projectile spawn point.
+                    GameObject projectile = Instantiate(prefabProjectile, muzzleSocket.position, rotation);
+
+
+                    ////Add velocity to the projectile.
+                    projectile.GetComponent<Rigidbody>().velocity = ((shootDirection) * projectileImpulse);
+                    break;
+                }
 
             }
-            else if (hit.collider.CompareTag("Zombie"))
-            {
-                Debug.Log("*****ZOMBIE BODY HIT*******");
-                hit.collider.gameObject.GetComponent<Enemy>().DamageEnemy(damage);
-            }
-
-            if (!hit.collider.CompareTag("PlayerLimit"))
-            {
-                rotation = Quaternion.LookRotation(hit.point - muzzleSocket.position);
-                shootDirection = (hit.point - muzzleSocket.position);
-                shootDirection.x += Random.Range(-spread.x, spread.x) * Mathf.Clamp01(shootTime / spreadTime);
-                shootDirection.y += Random.Range(-spread.y, spread.y) * Mathf.Clamp01(shootTime / spreadTime);
-                shootDirection.z += Random.Range(-spread.z, spread.z) * Mathf.Clamp01(shootTime / spreadTime);
-
-                shootDirection.Normalize();
-                Debug.DrawRay(ray.origin, ray.direction * maximumDistance);
-
-                playerLook.cam.fieldOfView = 65 - Mathf.Clamp(shootTime / (spreadTime / 4), 0f, 4f);
-
-                //Try to play the fire particles from the muzzle!
-                muzzleBehaviour.Effect();
-
-                //Spawn projectile from the projectile spawn point.
-                GameObject projectile = Instantiate(prefabProjectile, muzzleSocket.position, rotation);
 
 
-                ////Add velocity to the projectile.
-                projectile.GetComponent<Rigidbody>().velocity = ((shootDirection) * projectileImpulse);
-                break;
-            }
 
+
+
+            EjectCasing();
+            animator.SetTrigger("Shooting");
+            ammunitionCurrent--;
+            shotsFired++;
+        }else if(shotsFired == ammunitionClip && ammunitionCurrent != 0)
+        {
+            Reload();
+            shotsFired = 0;
+
+        }else if(ammunitionCurrent == 0)
+        {
+            //reload empty
         }
-
-
-
-
-
-        EjectCasing();
-        animator.SetTrigger("Shooting");
-
 
     }
 
