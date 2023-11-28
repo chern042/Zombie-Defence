@@ -29,18 +29,17 @@ public class EnemyAnimationController : MonoBehaviour
     {
         MovementState state;
 
-
-        if (Mathf.Abs(agent.speed) > 1.8f)
+        if (Mathf.Abs(agent.velocity.magnitude) > 1.8f)
         {
             //playerAnim.SetBool("running", true);
             state = MovementState.running;
         }
-        else if (Mathf.Abs(agent.speed) > 0.1f )
+        else if (Mathf.Abs(agent.velocity.magnitude) > 0.1f )
         {
             //playerAnim.SetBool("running", true);
             state = MovementState.walking;
 
-            if (Mathf.Abs(agent.speed) > 0.6f )
+            if (Mathf.Abs(agent.velocity.magnitude) > 0.6f )
             {
                 enemyAnimator.speed = 2f;
             }

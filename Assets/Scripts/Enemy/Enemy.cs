@@ -25,18 +25,15 @@ public class Enemy : MonoBehaviour
     public GameObject mainBarrier;
     public float sightDistance = 20f;
     public float fieldOfView = 85f;
-    private float eyeHeight;
+    private float eyeHeight = 1f;
     public float meleeReach = 1f;
-    public float meleeBarrierReach = 4f;
-    public float attackSpeed = 2f;
-    public float attackDelaySpeed = 3f;
+    public float attackDelaySpeed = 1f;
     public float damage = 5f;
     public float enemyHealth = 10f;
     public LayerMask mask;
 
     private BarrierController barrier;
 
-    private bool meleeIsAttacking = false;
     private bool meleeReadyToAttack = true;
 
     private Vector3 barrierMiddlePoint;
@@ -49,6 +46,8 @@ public class Enemy : MonoBehaviour
     public Transform[] concreteImpactPrefabs;
 
     private Collider[] enemyColliders;
+
+    private bool barrierReached;
 
 
     BaseState state;
@@ -65,18 +64,8 @@ public class Enemy : MonoBehaviour
         state = stateMachine.activeState;
         barrier = mainBarrier.GetComponent<BarrierController>();
         enemyColliders = GetComponentsInChildren<Collider>();
-        if(enemyColliders.Length != 0)
-        {
-            foreach(Collider collider in enemyColliders)
-            {
-                foreach(Collider collider2 in enemyColliders)
-                {
-                    Physics.IgnoreCollision(collider, collider2);
+        barrierReached = false;
 
-                }
-
-            }
-        }
 
     }
 
@@ -89,6 +78,17 @@ public class Enemy : MonoBehaviour
             Debug.Log("State changed to: "+stateMachine.activeState);
             state = stateMachine.activeState;
         }
+        //if (enemyColliders.Length != 0)
+        //{
+        //    foreach (Collider collider in enemyColliders)
+        //    {
+        //        foreach (Collider collider2 in enemyColliders)
+        //        {
+        //            Physics.IgnoreCollision(collider, collider2);
+        //        }
+
+        //    }
+        //}
     }
 
     public bool CanSeePlayer()
@@ -104,13 +104,16 @@ public class Enemy : MonoBehaviour
                 float angleToPlayer = Vector3.Angle(targetDirection, transform.forward);
                 if(angleToPlayer >= -fieldOfView && angleToPlayer <= fieldOfView)
                 {
-                    Ray ray = new Ray(transform.position + (Vector3.up * eyeHeight), targetDirection);
+                    Ray ray = new Ray(transform.position + (Vector3.up * eyeHeight)+Vector3.forward, targetDirection);
                     //RaycastHit hitInfo = new RaycastHit();
 
-                    RaycastHit[] hits = Physics.RaycastAll(ray, sightDistance, mask);
+                    //RaycastHit[] hits = Physics.RaycastAll(ray, sightDistance, mask);
 
                     //if (Physics.RaycastAll(ray, out hitInfo, sightDistance))
-                    foreach(RaycastHit hit in hits)
+
+                    //foreach(RaycastHit hit in hits)
+                    RaycastHit hit = new RaycastHit();
+                    if (Physics.Raycast(ray, out hit, meleeReach))
                     {
                         if(hit.transform.gameObject == player)
                         {
@@ -142,8 +145,9 @@ public class Enemy : MonoBehaviour
                             return true;
                         }
                     }
+            eyeHeight += 0.1f * Time.deltaTime;
 
-                }
+        }
         return false;
     }
 
@@ -157,33 +161,43 @@ public class Enemy : MonoBehaviour
             {
                 if (Vector3.Distance(transform.position, barrierPoint) < sightDistance)
                 {
-                    Vector3 targetDirection = transform.forward - (Vector3.up * eyeHeight);
                     if (eyeHeight >= 1.8f)
                     {
                         eyeHeight = 0.1f;
                     }
-                    Ray ray = new Ray(transform.position + (Vector3.up * eyeHeight), targetDirection);
-                    RaycastHit[] hits = Physics.RaycastAll(ray, meleeReach, mask);
-                    //RaycastHit hitInfo = new RaycastHit();
-                    //if (Physics.Raycast(ray, out hitInfo, meleeReach))
-                    foreach(RaycastHit hit in hits)
-                    {
-                        Debug.DrawRay(ray.origin, ray.direction * meleeReach);
+                    Vector3 targetDirection = transform.forward;// - (Vector3.up * eyeHeight);
+                    Debug.Log("ENEMYHIT**************");
 
-                        if (hit.transform.gameObject.CompareTag("Barrier"))
+                    Ray ray = new Ray(transform.position+(transform.forward*0.5f) + (Vector3.up * eyeHeight), targetDirection);
+                    RaycastHit hitInfo = new RaycastHit();
+                    if (Physics.Raycast(ray, out hitInfo, meleeReach-0.5f, mask))
+                    {
+                        Debug.Log("ENEMYHIT**************"+hitInfo.transform.name);
+
+                        Debug.DrawRay(ray.origin, ray.direction * (meleeReach - 1f), Color.red);
+                        if (hitInfo.transform.gameObject.CompareTag("Barrier"))
                         {
-                            Debug.DrawRay(ray.origin, ray.direction * meleeReach);
+
+                            Debug.Log("ENEMY REach barrier**************");
+                            barrierReached = true;
                             return true;
                         }
                     }
+                    Debug.DrawRay(ray.origin, ray.direction * meleeReach);
+
                     eyeHeight += 0.1f * Time.deltaTime;
+
+
+
 
                 }
             }
+            barrierReached = false;
             return false;
         }
         else
         {
+            barrierReached = true;
             return true;
         }
     }
@@ -197,44 +211,53 @@ public class Enemy : MonoBehaviour
 
 
 
-    public void AttackBarrier(Vector3 barrierPoint)
+    public void AttackBarrier()
     {
         //Make sure that we have a camera cached, otherwise we don't really have the ability to perform traces.
         //Debug.Log("Test attk");
 
-        if (!meleeReadyToAttack || meleeIsAttacking)
+        if (!meleeReadyToAttack )
         {
             return;
         }
         //Debug.Log("got through player camera check");
         meleeReadyToAttack = false;
-        meleeIsAttacking = true;
 
 
-        Invoke(nameof(ResetAttack), attackDelaySpeed);
 
         if (!barrier.BarrierDestroyed)
         {
-            StartCoroutine(AttackBarrierDelay(barrierPoint));
+            if (barrierReached)
+            {
+
+                enemyAnimator.SetTrigger("HitBarrier");
+            }
         }
+    }
+
+    public void AttackResetEvent()
+    {
+        Invoke(nameof(ResetAttack), attackDelaySpeed);
     }
 
 
     public void AttackPlayer()
     {
-        if (!meleeReadyToAttack || meleeIsAttacking)
+        if (!meleeReadyToAttack)
         {
             return;
         }
         //Debug.Log("got through player camera check");
         meleeReadyToAttack = false;
-        meleeIsAttacking = true;
 
-        Invoke(nameof(ResetAttack), attackDelaySpeed);
 
          if(player.GetComponent<PlayerLife>().PlayerAlive)
         {
-            StartCoroutine(AttackPlayerDelay());
+            if (CanSeePlayer())
+            {
+
+                enemyAnimator.SetTrigger("HitPlayer");
+            }
         }
 
 
@@ -242,38 +265,41 @@ public class Enemy : MonoBehaviour
 
     public void ResetAttack()
     {
-        meleeIsAttacking = false;
         meleeReadyToAttack = true;
     }
-    IEnumerator AttackBarrierDelay(Vector3 barrierpoint)
-    {
-        bool barrierReached = HasReachedBarrier(barrierpoint);
-        yield return new WaitForSeconds(attackSpeed);
-
-        if(barrierReached)
-        {
-
-            enemyAnimator.SetTrigger("HitBarrier");
-        }
-
-
-    }
 
 
 
-    IEnumerator AttackPlayerDelay()
-    {
+
+    //IEnumerator AttackBarrierDelay(Vector3 barrierpoint)
+    //{
+    //    bool barrierReached = HasReachedBarrier(barrierpoint);
+    //    yield return new WaitForSeconds(attackSpeed);
+
+    //    if(barrierReached)
+    //    {
+
+    //        enemyAnimator.SetTrigger("HitBarrier");
+    //    }
+
+
+    //}
+
+
+
+    //IEnumerator AttackPlayerDelay()
+    //{
         
-        yield return new WaitForSeconds(attackSpeed);
+    //    yield return new WaitForSeconds(attackSpeed);
 
-        if (CanSeePlayer())
-        {
+    //    if (CanSeePlayer())
+    //    {
 
-            enemyAnimator.SetTrigger("HitPlayer");
-        }
+    //        enemyAnimator.SetTrigger("HitPlayer");
+    //    }
 
 
-    }
+    //}
 
     public void DamagePlayer()
     {
@@ -293,18 +319,22 @@ public class Enemy : MonoBehaviour
 
         if (barrier != null)
         {
-            Vector3 targetDirection = transform.forward - (Vector3.up * eyeHeight);
-            Ray ray = new Ray(transform.position + (Vector3.up * eyeHeight), targetDirection);
-            RaycastHit hit = new RaycastHit();
-            if (Physics.Raycast(ray, out hit, meleeReach))
-            {
-                Debug.DrawRay(ray.origin, ray.direction * meleeReach);
+            //Vector3 targetDirection = transform.forward - (Vector3.up * eyeHeight);
+            //Ray ray = new Ray(transform.position + (Vector3.up * eyeHeight), targetDirection);
+            //RaycastHit hit = new RaycastHit();
+            //if (Physics.Raycast(ray, out hit, meleeReach))
+            //{
+            //    Debug.DrawRay(ray.origin, ray.direction * meleeReach);
 
-                if (hit.transform.gameObject.CompareTag("Barrier"))
-                {
-                    Debug.DrawRay(ray.origin, ray.direction * meleeReach);
-                    barrier.TakeDamage(damage);
-                }
+            //    if (hit.transform.gameObject.CompareTag("Barrier"))
+            //    {
+            //        Debug.DrawRay(ray.origin, ray.direction * meleeReach);
+            //        barrier.TakeDamage(damage);
+            //    }
+            //}
+            if (barrierReached)
+            {
+                barrier.TakeDamage(damage);
             }
             else
             {

@@ -383,15 +383,36 @@ public class Weapon : WeaponBehaviour
 
             EjectCasing();
             animator.SetTrigger("Shooting");
-            ammunitionCurrent--;
             shotsFired++;
-        }else if(shotsFired == ammunitionClip && ammunitionCurrent != 0)
-        {
-            Reload();
-            shotsFired = 0;
 
-        }else if(ammunitionCurrent == 0)
+            Debug.Log("Ammunition: " + (ammunitionClip - shotsFired) + "/" + ammunitionCurrent);
+
+        }
+        else if(shotsFired == ammunitionClip && ammunitionCurrent != 0)
         {
+            Debug.Log("Ammunition: " + (ammunitionClip - shotsFired) + "/" + ammunitionCurrent);
+            Debug.Log("Reloading");
+            Reload();
+            if(ammunitionCurrent >= ammunitionClip)
+            {
+                shotsFired = 0;
+                ammunitionCurrent -= ammunitionClip;
+            }
+            else
+            {
+                shotsFired = ammunitionClip - ammunitionCurrent;
+                ammunitionCurrent = 0;
+            }
+
+            Debug.Log("Ammunition: " + (ammunitionClip - shotsFired) + "/" + ammunitionCurrent);
+
+
+        }
+        else if(ammunitionCurrent == 0)
+        {
+            Debug.Log("Ammunition: " + (ammunitionClip - shotsFired) + "/" + ammunitionCurrent);
+            Debug.Log("Empty");
+
             //reload empty
         }
 

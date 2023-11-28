@@ -43,7 +43,7 @@ public class DestroyBarrierState : BaseState
                 //Debug.Log("Enemy is destroying barrier");
 
 
-                enemy.AttackBarrier(barrierPoint);
+                enemy.AttackBarrier();
 
 
 
