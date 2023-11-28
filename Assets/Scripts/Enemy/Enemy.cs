@@ -78,6 +78,9 @@ public class Enemy : MonoBehaviour
             Debug.Log("State changed to: "+stateMachine.activeState);
             state = stateMachine.activeState;
         }
+
+
+
         //if (enemyColliders.Length != 0)
         //{
         //    foreach (Collider collider in enemyColliders)
@@ -90,6 +93,7 @@ public class Enemy : MonoBehaviour
         //    }
         //}
     }
+
 
     public bool CanSeePlayer()
     {
@@ -271,36 +275,6 @@ public class Enemy : MonoBehaviour
 
 
 
-    //IEnumerator AttackBarrierDelay(Vector3 barrierpoint)
-    //{
-    //    bool barrierReached = HasReachedBarrier(barrierpoint);
-    //    yield return new WaitForSeconds(attackSpeed);
-
-    //    if(barrierReached)
-    //    {
-
-    //        enemyAnimator.SetTrigger("HitBarrier");
-    //    }
-
-
-    //}
-
-
-
-    //IEnumerator AttackPlayerDelay()
-    //{
-        
-    //    yield return new WaitForSeconds(attackSpeed);
-
-    //    if (CanSeePlayer())
-    //    {
-
-    //        enemyAnimator.SetTrigger("HitPlayer");
-    //    }
-
-
-    //}
-
     public void DamagePlayer()
     {
         PlayerLife playerHealth = player.GetComponent<PlayerLife>();
@@ -319,19 +293,6 @@ public class Enemy : MonoBehaviour
 
         if (barrier != null)
         {
-            //Vector3 targetDirection = transform.forward - (Vector3.up * eyeHeight);
-            //Ray ray = new Ray(transform.position + (Vector3.up * eyeHeight), targetDirection);
-            //RaycastHit hit = new RaycastHit();
-            //if (Physics.Raycast(ray, out hit, meleeReach))
-            //{
-            //    Debug.DrawRay(ray.origin, ray.direction * meleeReach);
-
-            //    if (hit.transform.gameObject.CompareTag("Barrier"))
-            //    {
-            //        Debug.DrawRay(ray.origin, ray.direction * meleeReach);
-            //        barrier.TakeDamage(damage);
-            //    }
-            //}
             if (barrierReached)
             {
                 barrier.TakeDamage(damage);
@@ -347,26 +308,6 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    //private void HitTarget(RaycastHit hitInfo)
-    //{
-    //   // audioSource.pitch = 1;
-    //    //audioSource.PlayOneShot(meleeHitSound);
-
-    //    if (hitInfo.collider.CompareTag("Barrier"))
-    //    {
-    //        Debug.Log("HIT ZOMBIE");
-    //        BarrierController barrier = hitInfo.collider.gameObject.GetComponentInParent<BarrierController>();
-    //        if (barrier != null)
-    //        {
-    //            barrier.TakeDamage(damage);
-    //        }
-    //        else
-    //        {
-    //            Debug.Log("Barrier is null.");
-    //        }
-    //        Instantiate(concreteImpactPrefabs[Random.Range(0, concreteImpactPrefabs.Length)], hitInfo.point, Quaternion.LookRotation(hitInfo.normal));
-    //    }
-    //}
 
     public void DamageEnemy(float damage)
     {
