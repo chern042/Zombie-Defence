@@ -5,7 +5,7 @@ using UnityEditor;
 [CustomEditor(typeof(Weapon), true), CanEditMultipleObjects]
 public class WeaponEditor : Editor
 {
-
+    
     SerializedProperty isMelee;
     SerializedProperty damage;
     SerializedProperty attackSpeed;

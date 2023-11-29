@@ -48,6 +48,8 @@ public class Enemy : MonoBehaviour
     private Collider[] enemyColliders;
 
     private bool barrierReached;
+    [HideInInspector]
+    public bool enemyDying;
 
 
     BaseState state;
@@ -65,6 +67,7 @@ public class Enemy : MonoBehaviour
         barrier = mainBarrier.GetComponent<BarrierController>();
         enemyColliders = GetComponentsInChildren<Collider>();
         barrierReached = false;
+        enemyDying = false;
 
 
     }
@@ -104,20 +107,22 @@ public class Enemy : MonoBehaviour
             //is player close enough to be seen
             if (Vector3.Distance(transform.position, player.transform.position) < sightDistance)
             {
-                Vector3 targetDirection = player.transform.position - transform.position - (Vector3.up * eyeHeight);
+                Vector3 targetDirection = player.transform.position - transform.position;// - (Vector3.up * eyeHeight) ;
                 float angleToPlayer = Vector3.Angle(targetDirection, transform.forward);
                 if(angleToPlayer >= -fieldOfView && angleToPlayer <= fieldOfView)
                 {
-                    Ray ray = new Ray(transform.position + (Vector3.up * eyeHeight)+Vector3.forward, targetDirection);
+                    Debug.Log("in enemy fov");
+
+                    Ray ray = new Ray(transform.position + (Vector3.up * eyeHeight)+(transform.forward * 0.35f), targetDirection);
                     //RaycastHit hitInfo = new RaycastHit();
 
                     //RaycastHit[] hits = Physics.RaycastAll(ray, sightDistance, mask);
-
+                    
                     //if (Physics.RaycastAll(ray, out hitInfo, sightDistance))
 
                     //foreach(RaycastHit hit in hits)
                     RaycastHit hit = new RaycastHit();
-                    if (Physics.Raycast(ray, out hit, meleeReach))
+                    if (Physics.Raycast(ray, out hit, sightDistance))
                     {
                         if(hit.transform.gameObject == player)
                         {
@@ -125,6 +130,7 @@ public class Enemy : MonoBehaviour
                             return true;
                         }
                     }
+                    Debug.DrawRay(ray.origin, ray.direction * sightDistance);
 
                 }
             }
@@ -139,7 +145,7 @@ public class Enemy : MonoBehaviour
 
             Vector3 targetDirection = player.transform.position - transform.position - (Vector3.up * eyeHeight);
 
-                    Ray ray = new Ray(transform.position + (Vector3.up * eyeHeight), targetDirection);
+                    Ray ray = new Ray(transform.position + (Vector3.up * eyeHeight) + (transform.forward * 0.35f), targetDirection);
                     RaycastHit hitInfo = new RaycastHit();
                     if (Physics.Raycast(ray, out hitInfo, meleeReach))
                     {
@@ -149,7 +155,6 @@ public class Enemy : MonoBehaviour
                             return true;
                         }
                     }
-            eyeHeight += 0.1f * Time.deltaTime;
 
         }
         return false;
@@ -209,7 +214,7 @@ public class Enemy : MonoBehaviour
 
     public void FollowPlayer()
     {
-        agent.SetDestination(player.transform.position + (Random.insideUnitSphere * 1f));
+        agent.SetDestination(player.transform.position + (Random.insideUnitSphere * 1.5f));
 
     }
 
@@ -310,11 +315,12 @@ public class Enemy : MonoBehaviour
 
     public void DamageEnemy(float damage)
     {
+
         enemyHealth -= damage;
         enemyAnimator.SetTrigger("GetHit");
         if(enemyHealth <= 0)
         {
-            if (Random.Range(0, 2) == 0)
+            if (Random.Range(0, 2) == 0 && !enemyDying)
             {
                 enemyAnimator.SetTrigger("Death1");
             }
@@ -322,6 +328,7 @@ public class Enemy : MonoBehaviour
             {
                 enemyAnimator.SetTrigger("Death2");
             }
+            enemyDying = true;
         }
     }
 

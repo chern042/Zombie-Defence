@@ -19,39 +19,46 @@ public class AttackPlayerState : BaseState
 
     public override void Perform()
     {
-        if (enemy.CanSeePlayer())
+        if (!enemy.enemyDying)
         {
-            Debug.Log("SEEING PLAYER");
-            losePlayerTimer = 0;
-            moveTimer += Time.deltaTime;
-            if(moveTimer > Random.Range(3, 7))
+            if (enemy.CanSeePlayer())
             {
-                moveTimer = 0;
-                if (enemy.CanReachPlayer())
+                Debug.Log("SEEING PLAYER");
+                losePlayerTimer = 0;
+                moveTimer += Time.deltaTime;
+                if (moveTimer > Random.Range(3, 7))
                 {
-                    Debug.Log("can reach PLAYER");
+                    moveTimer = 0;
+                    if (enemy.CanReachPlayer())
+                    {
+                        Debug.Log("can reach PLAYER");
 
-                    enemy.AttackPlayer();
+                        enemy.AttackPlayer();
+                    }
+                    else
+                    {
+                        enemy.FollowPlayer();
+                        Debug.Log("FOLLOWING PLAYER");
+
+                    }
                 }
-                else
-                {
-                    enemy.FollowPlayer();
-                    Debug.Log("FOLLOWING PLAYER");
+            }
+            else
+            {
+                //wait before search
+                losePlayerTimer += Time.deltaTime;
 
+                if (losePlayerTimer > 3)
+                {
+                    Debug.Log("lost player");
+                    //change back to search state
+                    stateMachine.ChangeState(new SeekPlayerState());
                 }
             }
         }
         else
         {
-            //wait before search
-            losePlayerTimer += Time.deltaTime;
-
-            if (losePlayerTimer > 3)
-            {
-                Debug.Log("lost player");
-                //change back to search state
-                stateMachine.ChangeState(new SeekPlayerState());
-            }
+            enemy.Agent.isStopped = true;
         }
     }
 

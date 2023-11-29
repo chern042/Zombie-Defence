@@ -10,12 +10,18 @@ public class DestroyBarrierState : BaseState
     public override void Enter()
     {
         barrierController = enemy.mainBarrier.GetComponent<BarrierController>();
-        Debug.Log("Barrier controllerfound?: " + barrierController);
     }
 
     public override void Perform()
     {
-        DestroyBarrier();
+        if (!enemy.enemyDying)
+        {
+            DestroyBarrier();
+        }
+        else
+        {
+            enemy.Agent.isStopped = true;
+        }
     }
 
     public override void Exit()

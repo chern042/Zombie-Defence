@@ -16,7 +16,7 @@ public class Weapon : WeaponBehaviour
 
     [Header("Melee Weapon Stats")]
 
-    [Tooltip("Weapon Damage.")]
+    [Tooltip("Weapon Damage (Melee & Guns).")]
     [SerializeField, HideInInspector]
     private float damage = 1f;
 
@@ -337,7 +337,9 @@ public class Weapon : WeaponBehaviour
             //bool shot = false;
             foreach (RaycastHit hit in hits)
             {
-                // Debug.DrawRay(ray.origin, ray.direction * maximumDistance);
+                 Debug.DrawRay(ray.origin, ray.direction * maximumDistance);
+                Debug.Log("*****HIT TAGS*******: "+hit.collider.name);
+
                 if (hit.collider.CompareTag("Zombie Head"))
                 {
                     Debug.Log("*****ZOMBIE HEAD HIT*******");
@@ -347,7 +349,7 @@ public class Weapon : WeaponBehaviour
                 else if (hit.collider.CompareTag("Zombie"))
                 {
                     Debug.Log("*****ZOMBIE BODY HIT*******");
-                    hit.collider.gameObject.GetComponent<Enemy>().DamageEnemy(damage);
+                    hit.collider.gameObject.GetComponentInParent<Enemy>().DamageEnemy(damage);
                 }
 
                 if (!hit.collider.CompareTag("PlayerLimit"))
@@ -372,7 +374,6 @@ public class Weapon : WeaponBehaviour
 
                     ////Add velocity to the projectile.
                     projectile.GetComponent<Rigidbody>().velocity = ((shootDirection) * projectileImpulse);
-                    break;
                 }
 
             }

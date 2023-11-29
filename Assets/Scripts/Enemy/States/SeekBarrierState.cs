@@ -14,8 +14,15 @@ public class SeekBarrierState : BaseState
     }
 
     public override void Perform()
-    { 
-        SeekBarrier();
+    {
+        if(!enemy.enemyDying)
+        {
+            SeekBarrier();
+        }
+        else
+        {
+            enemy.Agent.isStopped = true;
+        }
     }
 
     public override void Exit()
