@@ -23,7 +23,6 @@ public class AttackPlayerState : BaseState
         {
             if (enemy.CanSeePlayer())
             {
-                Debug.Log("SEEING PLAYER");
                 losePlayerTimer = 0;
                 moveTimer += Time.deltaTime;
                 if (moveTimer > Random.Range(3, 7))
@@ -31,14 +30,11 @@ public class AttackPlayerState : BaseState
                     moveTimer = 0;
                     if (enemy.CanReachPlayer())
                     {
-                        Debug.Log("can reach PLAYER");
-
                         enemy.AttackPlayer();
                     }
                     else
                     {
                         enemy.FollowPlayer();
-                        Debug.Log("FOLLOWING PLAYER");
 
                     }
                 }

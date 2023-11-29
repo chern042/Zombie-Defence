@@ -5,6 +5,7 @@ using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
+using static UnityEngine.GraphicsBuffer;
 
 public class Enemy : MonoBehaviour
 {
@@ -26,7 +27,7 @@ public class Enemy : MonoBehaviour
     public float sightDistance = 20f;
     public float fieldOfView = 85f;
     private float eyeHeight = 1f;
-    public float meleeReach = 1f;
+    public float meleeReach = 1.5f;
     public float attackDelaySpeed = 1f;
     public float damage = 5f;
     public float enemyHealth = 10f;
@@ -35,6 +36,7 @@ public class Enemy : MonoBehaviour
     private BarrierController barrier;
 
     private bool meleeReadyToAttack = true;
+
 
     private Vector3 barrierMiddlePoint;
 
@@ -214,7 +216,12 @@ public class Enemy : MonoBehaviour
 
     public void FollowPlayer()
     {
-        agent.SetDestination(player.transform.position + (Random.insideUnitSphere * 1.5f));
+        Vector3 destination = player.transform.position + (Random.insideUnitSphere * 2f);
+        while(Vector3.Distance(player.transform.position, destination) < 1f)
+        {
+            destination = player.transform.position + (Random.insideUnitSphere * 2f);
+        }
+        agent.SetDestination(destination);
 
     }
 
@@ -287,7 +294,7 @@ public class Enemy : MonoBehaviour
             if (CanReachPlayer())
             {
                 playerHealth.DamagePlayer(damage);
-            }
+           }
         }
     }
 

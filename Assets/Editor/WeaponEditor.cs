@@ -113,6 +113,7 @@ public class WeaponEditor : Editor
             EditorGUILayout.PropertyField(audioClipReload);
             EditorGUILayout.PropertyField(audioClipReloadEmpty);
             EditorGUILayout.PropertyField(audioClipFireEmpty);
+            EditorGUILayout.PropertyField(audioSource);
 
 
         }

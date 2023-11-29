@@ -133,7 +133,7 @@ public class Weapon : WeaponBehaviour
     [SerializeField, HideInInspector]
     private AudioClip meleeHitSound;
 
-    [Tooltip("Melee Weapon Audio Source.")]
+    [Tooltip("Weapon Audio Source.")]
     [SerializeField, HideInInspector]
     private AudioSource audioSource;
 
@@ -146,6 +146,7 @@ public class Weapon : WeaponBehaviour
     private float shootTime;
     private float shootStartTime;
     private float timePassed;
+    private bool isReloading = false;
 
 
 
@@ -303,8 +304,18 @@ public class Weapon : WeaponBehaviour
 
     public override void Reload()
     {
-        //Play Reload Animation.
-        //animator.Play(HasAmmunition() ? "Reload" : "Reload Empty", 0, 0.0f);
+
+        if (ammunitionCurrent >= ammunitionClip)
+        {
+            shotsFired = 0;
+            ammunitionCurrent -= ammunitionClip;
+        }
+        else
+        {
+            shotsFired = ammunitionClip - ammunitionCurrent;
+            ammunitionCurrent = 0;
+        }
+        isReloading = false;
     }
     public override void Fire(float spreadMultiplier = 1.0f)
     {
@@ -393,17 +404,14 @@ public class Weapon : WeaponBehaviour
         {
             Debug.Log("Ammunition: " + (ammunitionClip - shotsFired) + "/" + ammunitionCurrent);
             Debug.Log("Reloading");
-            Reload();
-            if(ammunitionCurrent >= ammunitionClip)
+            if (!isReloading)
             {
-                shotsFired = 0;
-                ammunitionCurrent -= ammunitionClip;
+                isReloading = true;
+                audioSource.PlayOneShot(audioClipReload);
+                animator.SetTrigger("Reload");
             }
-            else
-            {
-                shotsFired = ammunitionClip - ammunitionCurrent;
-                ammunitionCurrent = 0;
-            }
+
+
 
             Debug.Log("Ammunition: " + (ammunitionClip - shotsFired) + "/" + ammunitionCurrent);
 
@@ -413,6 +421,9 @@ public class Weapon : WeaponBehaviour
         {
             Debug.Log("Ammunition: " + (ammunitionClip - shotsFired) + "/" + ammunitionCurrent);
             Debug.Log("Empty");
+            audioSource.PlayOneShot(audioClipReloadEmpty);
+
+            animator.SetTrigger("ReloadEmpty");
 
             //reload empty
         }
