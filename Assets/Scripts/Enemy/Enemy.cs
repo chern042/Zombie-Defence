@@ -170,19 +170,19 @@ public class Enemy : MonoBehaviour
                         eyeHeight = 0.1f;
                     }
                     Vector3 targetDirection = transform.forward;// - (Vector3.up * eyeHeight);
-                    Debug.Log("ENEMYHIT**************");
+                    //Debug.Log("ENEMYHIT**************");
 
-                    Ray ray = new Ray(transform.position+(transform.forward*0.5f) + (Vector3.up * eyeHeight), targetDirection);
+                    Ray ray = new Ray(transform.position+(transform.forward*0.35f) + (Vector3.up * eyeHeight), targetDirection);
                     RaycastHit hitInfo = new RaycastHit();
-                    if (Physics.Raycast(ray, out hitInfo, meleeReach-0.5f, mask))
+                    if (Physics.Raycast(ray, out hitInfo, meleeReach-0.35f, mask))
                     {
-                        Debug.Log("ENEMYHIT**************"+hitInfo.transform.name);
+                        //Debug.Log("ENEMYHIT**************"+hitInfo.transform.name);
 
-                        Debug.DrawRay(ray.origin, ray.direction * (meleeReach - 1f), Color.red);
+                        Debug.DrawRay(ray.origin, ray.direction * (meleeReach - 0.35f), Color.red);
                         if (hitInfo.transform.gameObject.CompareTag("Barrier"))
                         {
 
-                            Debug.Log("ENEMY REach barrier**************");
+                            //Debug.Log("ENEMY REach barrier**************");
                             barrierReached = true;
                             return true;
                         }
@@ -218,19 +218,18 @@ public class Enemy : MonoBehaviour
     public void AttackBarrier()
     {
         //Make sure that we have a camera cached, otherwise we don't really have the ability to perform traces.
-        //Debug.Log("Test attk");
 
         if (!meleeReadyToAttack )
         {
             return;
         }
-        //Debug.Log("got through player camera check");
         meleeReadyToAttack = false;
 
 
 
         if (!barrier.BarrierDestroyed)
         {
+
             if (barrierReached)
             {
 

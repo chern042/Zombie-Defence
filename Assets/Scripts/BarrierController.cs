@@ -48,6 +48,7 @@ public class BarrierController : MonoBehaviour
             pieceHealth -= damage;
             if (pieceHealth < 0f && (piecesRemoved != barrierPiecesLeft.Count && piecesRemoved != barrierPiecesRight.Count))
             {
+
                 destroyBarrierAnimation.ThrowLogs(piecesRemoved);
                 pieceHealth = healthPerPiece - (-1f * pieceHealth);
                 piecesRemoved++;
@@ -55,12 +56,14 @@ public class BarrierController : MonoBehaviour
             }
             else if (pieceHealth == 0f && (piecesRemoved != barrierPiecesLeft.Count && piecesRemoved != barrierPiecesRight.Count))
             {
+
                 destroyBarrierAnimation.ThrowLogs(piecesRemoved);
                 pieceHealth = healthPerPiece;
                 piecesRemoved++;
             }
 
-            else if (pieceHealth == 0 && (piecesRemoved == barrierPiecesLeft.Count && piecesRemoved == barrierPiecesRight.Count))
+
+            if (pieceHealth == 0 || (piecesRemoved == barrierPiecesLeft.Count && piecesRemoved == barrierPiecesRight.Count))
             {
                 barrierDestroyed = true;
                 //ZOMBIES GET THROUGH
