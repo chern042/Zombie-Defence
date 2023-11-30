@@ -13,19 +13,26 @@ public abstract class Interactable : MonoBehaviour
     public string promptMessage;
 
     [SerializeField]
-    private GameObject interactButton;
+    protected GameObject interactButton;
 
-    public string OnLook()
+    public string BaseOnLook()
     {
-        if (interactButton != null && promptMessage.Substring(0,6)== "Repair")
-        {
+        //if (interactButton != null && promptMessage.Substring(0,6)== "Repair")
+        //{
 
-            interactButton.GetComponentInChildren<TextMeshProUGUI>().text = "REPAIR";
-            interactButton.GetComponentInChildren<TextMeshProUGUI>().enabled = true;
-            interactButton.GetComponent<Image>().enabled = true;
-            interactButton.GetComponent<OnScreenButton>().enabled = true;
-        }
+        //    interactButton.GetComponentInChildren<TextMeshProUGUI>().text = "REPAIR";
+        //    interactButton.GetComponentInChildren<TextMeshProUGUI>().enabled = true;
+        //    interactButton.GetComponent<Image>().enabled = true;
+        //    interactButton.GetComponent<OnScreenButton>().enabled = true;
+        //}
+
+        OnLook();
         return promptMessage;
+
+    }
+
+    protected virtual void OnLook()
+    {
     }
 
     public void OnLookOff()

@@ -37,7 +37,18 @@ public class Barrier : Interactable
 			
 	}
 
+    protected override void OnLook()
+    {
+        base.OnLook();
+        if (interactButton != null && promptMessage.Substring(0, 6) == "Repair")
+        {
 
+            interactButton.GetComponentInChildren<TextMeshProUGUI>().text = "REPAIR";
+            interactButton.GetComponentInChildren<TextMeshProUGUI>().enabled = true;
+            interactButton.GetComponent<Image>().enabled = true;
+            interactButton.GetComponent<OnScreenButton>().enabled = true;
+        }
+    }
 
     public void ResetInteract()
     {

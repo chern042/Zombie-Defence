@@ -43,7 +43,7 @@ public class PlayerInteract : MonoBehaviour
             if(hitInfo.collider.GetComponent<Interactable>() != null)
             {
                 interactable = hitInfo.collider.GetComponent<Interactable>();
-                playerUI.UpdateText(interactable.OnLook());
+                playerUI.UpdateText(interactable.BaseOnLook());
                 if (inputManager.onFoot.Interact.inProgress)
                 {
 
