@@ -24072,9 +24072,9 @@ RectTransform:
   - {fileID: 830925237}
   m_Father: {fileID: 931885899}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 1, y: 1}
-  m_AnchorMax: {x: 1, y: 1}
-  m_AnchoredPosition: {x: -180, y: -150}
+  m_AnchorMin: {x: 1, y: 0}
+  m_AnchorMax: {x: 1, y: 0}
+  m_AnchoredPosition: {x: -180, y: 425}
   m_SizeDelta: {x: 125, y: 125}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &794109092
@@ -50618,6 +50618,12 @@ MonoBehaviour:
   m_IgnoreFromBuild: 0
   m_ApplyToChildren: 1
   m_AffectedAgents: ffffffff
+--- !u!82 &1894450291 stripped
+AudioSource:
+  m_CorrespondingSourceObject: {fileID: 1991739686715865280, guid: d5820f39e977e4748991f50b5ae5c979,
+    type: 3}
+  m_PrefabInstance: {fileID: 7703846774720365022}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1896636219
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -58152,6 +58158,11 @@ PrefabInstance:
       propertyPath: spreadTime
       value: 10
       objectReference: {fileID: 0}
+    - target: {fileID: 753841913743723041, guid: d5820f39e977e4748991f50b5ae5c979,
+        type: 3}
+      propertyPath: audioSource
+      value: 
+      objectReference: {fileID: 1894450291}
     - target: {fileID: 753841913743723041, guid: d5820f39e977e4748991f50b5ae5c979,
         type: 3}
       propertyPath: ammunitionTotal

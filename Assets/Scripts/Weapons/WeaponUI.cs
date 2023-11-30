@@ -40,33 +40,39 @@ public class WeaponUI : MonoBehaviour
                 weapon = hand.GetComponentInChildren<WeaponBehaviour>();
             }
 
-            
-            ammoText.text = "AMMO: " + GetWeaponAmmo();
-
-
-            Debug.Log("Current Ammo: " + weapon.GetAmmunitionClip());
-            if (weapon.GetAmmunitionClip() == 0)
+            if (!weapon.IsMelee())
             {
-                if (weapon.HasAmmunition() && !weapon.IsReloading())
+                ammoText.text = "AMMO: " + GetWeaponAmmo();
+
+
+                Debug.Log("Current Ammo: " + weapon.GetAmmunitionClip());
+                if (weapon.GetAmmunitionClip() == 0)
                 {
-                    reloadButton.GetComponentInChildren<TextMeshProUGUI>().enabled = true;
-                    reloadButton.GetComponent<Image>().enabled = true;
-                    reloadButton.GetComponent<OnScreenButton>().enabled = true;
+                    if (weapon.HasAmmunition() && !weapon.IsReloading())
+                    {
+                        reloadButton.GetComponentInChildren<TextMeshProUGUI>().enabled = true;
+                        reloadButton.GetComponent<Image>().enabled = true;
+                        reloadButton.GetComponent<OnScreenButton>().enabled = true;
+                    }
+                    else if (weapon.IsReloading())
+                    {
+                        reloadButton.GetComponentInChildren<TextMeshProUGUI>().enabled = false;
+                        reloadButton.GetComponent<Image>().enabled = false;
+                        reloadButton.GetComponent<OnScreenButton>().enabled = false;
+                    }
+                    if (!weapon.HasAmmunition())
+                    {
+                        ammoText.color = Color.red;
+                    }
+                    else
+                    {
+                        ammoText.color = Color.black;
+                    }
                 }
-                else if (weapon.IsReloading())
-                {
-                    reloadButton.GetComponentInChildren<TextMeshProUGUI>().enabled = false;
-                    reloadButton.GetComponent<Image>().enabled = false;
-                    reloadButton.GetComponent<OnScreenButton>().enabled = false;
-                }
-                if (!weapon.HasAmmunition())
-                {
-                    ammoText.color = Color.red;
-                }
-                else
-                {
-                    ammoText.color = Color.black;
-                }
+            }
+            else
+            {
+                ammoText.text = "";
             }
         }
 
