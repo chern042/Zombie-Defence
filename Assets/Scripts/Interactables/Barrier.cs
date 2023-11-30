@@ -50,6 +50,19 @@ public class Barrier : Interactable
         }
     }
 
+    public override void OnLookOff()
+    {
+        base.OnLookOff();
+        if (interactButton != null)
+        {
+
+            interactButton.GetComponentInChildren<TextMeshProUGUI>().text = "INTERACT";
+            interactButton.GetComponentInChildren<TextMeshProUGUI>().enabled = false;
+            interactButton.GetComponent<Image>().enabled = false;
+            interactButton.GetComponent<OnScreenButton>().enabled = false;
+        }
+    }
+
     public void ResetInteract()
     {
         readyToInteract = true;

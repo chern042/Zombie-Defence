@@ -17,14 +17,6 @@ public abstract class Interactable : MonoBehaviour
 
     public string BaseOnLook()
     {
-        //if (interactButton != null && promptMessage.Substring(0,6)== "Repair")
-        //{
-
-        //    interactButton.GetComponentInChildren<TextMeshProUGUI>().text = "REPAIR";
-        //    interactButton.GetComponentInChildren<TextMeshProUGUI>().enabled = true;
-        //    interactButton.GetComponent<Image>().enabled = true;
-        //    interactButton.GetComponent<OnScreenButton>().enabled = true;
-        //}
 
         OnLook();
         return promptMessage;
@@ -35,16 +27,11 @@ public abstract class Interactable : MonoBehaviour
     {
     }
 
-    public void OnLookOff()
-    {
-        if (interactButton != null)
-        {
 
-            interactButton.GetComponentInChildren<TextMeshProUGUI>().text = "INTERACT";
-            interactButton.GetComponentInChildren<TextMeshProUGUI>().enabled = false;
-            interactButton.GetComponent<Image>().enabled = false;
-            interactButton.GetComponent<OnScreenButton>().enabled = false;
-        }
+
+    public virtual void OnLookOff()
+    {
+
     }
 
     public void BaseInteract()
