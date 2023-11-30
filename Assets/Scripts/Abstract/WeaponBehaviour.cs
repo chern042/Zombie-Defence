@@ -86,10 +86,13 @@ using UnityEngine;
         /// </summary>
         public abstract bool HasAmmunition();
 
-        /// <summary>
-        /// Returns true if the weapon is full of ammunition.
-        /// </summary>
-        public abstract bool IsFull();
+
+
+    public abstract int GetAmmunitionClip();
+    /// <summary>
+    /// Returns true if the weapon is full of ammunition.
+    /// </summary>
+    public abstract bool IsFull();
         /// <summary>
         /// Returns the weapon's rate of fire.
         /// </summary>
@@ -97,18 +100,19 @@ using UnityEngine;
 
     public abstract bool IsMelee();
 
+    public abstract bool IsReloading();
 
 
         /// <summary>
         /// Returns the RuntimeAnimationController the Character needs to use when this Weapon is equipped!
         /// </summary>
-        //public abstract RuntimeAnimatorController GetAnimatorController();
+    //public abstract RuntimeAnimatorController GetAnimatorController();
 
 
-        /// <summary>
-        /// Fires the weapon.
-        /// </summary>
-        /// <param name="spreadMultiplier">Value to multiply the weapon's spread by. Very helpful to account for aimed spread multipliers.</param>
+    /// <summary>
+    /// Fires the weapon.
+    /// </summary>
+    /// <param name="spreadMultiplier">Value to multiply the weapon's spread by. Very helpful to account for aimed spread multipliers.</param>
         public abstract void Fire(float spreadMultiplier = 1.0f);
 
 

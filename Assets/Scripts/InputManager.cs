@@ -28,6 +28,7 @@ public class InputManager : MonoBehaviour
 
         onFoot.Shoot.performed += ctx => weapon.Shoot();
         onFoot.Shoot.canceled += ctx => weapon.CancelShoot();
+        onFoot.Reload.performed += ctx => weapon.Reload();
         onFoot.Jump.performed += ctx => motor.Jump();
         onFoot.Switch.performed += ctx => ItemChange();
 

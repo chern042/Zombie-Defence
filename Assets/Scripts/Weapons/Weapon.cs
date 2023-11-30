@@ -237,7 +237,7 @@ public class Weapon : WeaponBehaviour
 
     public override int GetAmmunitionCurrent() => ammunitionCurrent;
 
-    public int GetAmmunitionClip() => ammunitionClip;
+    public override int GetAmmunitionClip() => ammunitionClip - shotsFired;
 
 
     public override int GetAmmunitionTotal() => ammunitionTotal;
@@ -249,6 +249,9 @@ public class Weapon : WeaponBehaviour
     public override bool HasAmmunition() => ammunitionCurrent > 0;
 
     public override bool IsMelee() => isMelee;
+
+    public override bool IsReloading() => isReloading;
+
 
     //public override RuntimeAnimatorController GetAnimatorController() => controller;
 
@@ -302,7 +305,7 @@ public class Weapon : WeaponBehaviour
         Invoke("ResetFOV", 0.05f);
     }
 
-    public override void Reload()
+    public void ReloadEvent()
     {
 
         if (ammunitionCurrent >= ammunitionClip)
@@ -316,6 +319,17 @@ public class Weapon : WeaponBehaviour
             ammunitionCurrent = 0;
         }
         isReloading = false;
+    }
+
+    public override void Reload()
+    {
+        Debug.Log("Reloading");
+        if (!isReloading)
+        {
+            isReloading = true;
+            audioSource.PlayOneShot(audioClipReload);
+            animator.SetTrigger("Reload");
+        }
     }
     public override void Fire(float spreadMultiplier = 1.0f)
     {
@@ -403,13 +417,8 @@ public class Weapon : WeaponBehaviour
         else if(shotsFired == ammunitionClip && ammunitionCurrent != 0)
         {
             Debug.Log("Ammunition: " + (ammunitionClip - shotsFired) + "/" + ammunitionCurrent);
-            Debug.Log("Reloading");
-            if (!isReloading)
-            {
-                isReloading = true;
-                audioSource.PlayOneShot(audioClipReload);
-                animator.SetTrigger("Reload");
-            }
+
+            audioSource.PlayOneShot(audioClipFireEmpty);
 
 
 
