@@ -324,9 +324,9 @@ public class Enemy : MonoBehaviour
     {
 
         enemyHealth -= damage;
-        enemyAnimator.SetTrigger("GetHit");
         if(enemyHealth <= 0)
         {
+            agent.isStopped = true;
             if (Random.Range(0, 2) == 0 && !enemyDying)
             {
                 enemyAnimator.SetTrigger("Death1");
@@ -336,6 +336,10 @@ public class Enemy : MonoBehaviour
                 enemyAnimator.SetTrigger("Death2");
             }
             enemyDying = true;
+        }
+        else
+        {
+            enemyAnimator.SetTrigger("GetHit");
         }
     }
 

@@ -47,8 +47,8 @@ Rigidbody:
   m_GameObject: {fileID: 1086664671600574}
   serializedVersion: 4
   m_Mass: 1
-  m_Drag: 0.1
-  m_AngularDrag: 0.0001
+  m_Drag: 0.65
+  m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -224,9 +224,6 @@ MonoBehaviour:
   - {fileID: 4587651611338842, guid: 2a77aba03cf9e430a8c7d70c5ee25a96, type: 3}
   concreteImpactPrefabs:
   - {fileID: 4587651611338842, guid: 2a77aba03cf9e430a8c7d70c5ee25a96, type: 3}
-  invisibleWalls:
-  - {fileID: 8347068863078880265, guid: 94660364adb8c41c6a84cbb9f360ea60, type: 3}
-  - {fileID: 9103888906093912966, guid: 0074855239c4c427cb498e2482237c3d, type: 3}
 --- !u!1 &1231345400216816
 GameObject:
   m_ObjectHideFlags: 0
