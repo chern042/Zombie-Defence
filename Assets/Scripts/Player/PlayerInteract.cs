@@ -11,6 +11,9 @@ public class PlayerInteract : MonoBehaviour
     private float distance = 3f;
 
     [SerializeField]
+    private float itemCollectDistance = 20f;
+
+    [SerializeField]
     private LayerMask mask;
 
 
@@ -62,7 +65,46 @@ public class PlayerInteract : MonoBehaviour
         }
         else
         {
+            LookForItem();
             if(interactable != null)
+            {
+                interactable.OnLookOff();
+            }
+        }
+    }
+
+
+    private void LookForItem()
+    {
+        Ray ray = new Ray(cam.transform.position, cam.transform.forward);
+        Debug.DrawRay(ray.origin, ray.direction * itemCollectDistance);
+        RaycastHit hitInfo;
+        if (Physics.Raycast(ray, out hitInfo, itemCollectDistance, mask))
+        {
+            if (hitInfo.collider.GetComponent<Interactable>() != null)
+            {
+                if (hitInfo.collider.CompareTag("Ammo"))
+                {
+                    interactable = hitInfo.collider.GetComponent<Interactable>();
+                    playerUI.UpdateText(interactable.BaseOnLook());
+                    if (inputManager.onFoot.Interact.inProgress)
+                    {
+
+
+                        interactable.BaseInteract();
+                    }
+                    if (canCancel)
+                    {
+                        inputManager.onFoot.Interact.canceled += ctx => interactable.BaseCancelInteract();
+                        canCancel = false;
+                    }
+
+                }
+            }
+        }
+        else
+        {
+            if (interactable != null)
             {
                 interactable.OnLookOff();
             }

@@ -64,6 +64,11 @@ public class Weapon : WeaponBehaviour
     [SerializeField, HideInInspector]
     private int ammunitionClip = 30;
 
+
+    [Tooltip("Ammunition type (AR, Shotgun, Handgun, SMG, Any).")]
+    [SerializeField, HideInInspector]
+    private string ammunitionType = "Any";
+
     [Tooltip("Fire Spread.")]
     [SerializeField, HideInInspector]
     private Vector3 spread = new Vector3(0.1f, 0.1f, 0.1f);
@@ -251,6 +256,8 @@ public class Weapon : WeaponBehaviour
     public override bool IsMelee() => isMelee;
 
     public override bool IsReloading() => isReloading;
+
+    public override string GetAmmunitionType() => ammunitionType;
 
 
     //public override RuntimeAnimatorController GetAnimatorController() => controller;

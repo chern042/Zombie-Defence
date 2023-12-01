@@ -72,10 +72,13 @@ using UnityEngine;
         /// </summary>
         public abstract int GetAmmunitionTotal();
 
-        /// <summary>
-        /// Returns the Weapon's Animator component.
-        /// </summary>
-        public abstract Animator GetAnimator();
+    public abstract string GetAmmunitionType();
+
+
+    /// <summary>
+    /// Returns the Weapon's Animator component.
+    /// </summary>
+    public abstract Animator GetAnimator();
 
         /// <summary>
         /// Returns true if this weapon shoots in automatic.
@@ -134,4 +137,5 @@ using UnityEngine;
         public abstract void EjectCasing();
 
         public abstract void Attack();
+
 }

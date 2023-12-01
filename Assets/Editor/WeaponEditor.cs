@@ -19,6 +19,7 @@ public class WeaponEditor : Editor
     SerializedProperty maximumDistance;
     SerializedProperty ammunitionTotal;
     SerializedProperty ammunitionClip;
+    SerializedProperty ammunitionType;
     SerializedProperty spread;
     SerializedProperty spreadTime;
 
@@ -53,6 +54,7 @@ public class WeaponEditor : Editor
         maximumDistance = serializedObject.FindProperty("maximumDistance");
         ammunitionTotal = serializedObject.FindProperty("ammunitionTotal");
         ammunitionClip = serializedObject.FindProperty("ammunitionClip");
+        ammunitionClip = serializedObject.FindProperty("ammunitionType");
         spread = serializedObject.FindProperty("spread");
         spreadTime = serializedObject.FindProperty("spreadTime");
 
@@ -103,6 +105,7 @@ public class WeaponEditor : Editor
             EditorGUILayout.PropertyField(maximumDistance);
             EditorGUILayout.PropertyField(ammunitionTotal);
             EditorGUILayout.PropertyField(ammunitionClip);
+            EditorGUILayout.PropertyField(ammunitionType);
             EditorGUILayout.PropertyField(spread);
             EditorGUILayout.PropertyField(spreadTime);
 
