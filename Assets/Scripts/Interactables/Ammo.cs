@@ -30,6 +30,7 @@ public class Ammo : Interactable
     protected override void Interact()
     {
         weapon = playerHand.GetComponentInChildren<WeaponBehaviour>();
+ 
         if (weapon != null)
         {
             if (ammoType == weapon.GetAmmunitionType())

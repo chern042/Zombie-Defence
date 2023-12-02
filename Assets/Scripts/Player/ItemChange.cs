@@ -8,13 +8,13 @@ namespace EvolveGames
     public class ItemChange : MonoBehaviour
     {
         [Header("Item Change")]
-        [SerializeField] public Animator ani;
         [SerializeField] Image ItemCanvasLogo;
         [SerializeField, Tooltip("You can add your new item here.")] GameObject[] Items;
         [SerializeField, Tooltip("These logos must have the same order as the items.")] Sprite[] ItemLogos;
         [SerializeField] public int ItemIdInt;
         [SerializeField] private AudioSource holsteringSounds;
-        
+
+        private Animator ani;
         private WeaponBehaviour weapon;
         int MaxItems;
         int ChangeItemInt;
@@ -23,7 +23,7 @@ namespace EvolveGames
 
         private void Start()
         {
-            if (ani == null && GetComponent<Animator>()) ani = GetComponent<Animator>();
+
             Color OpacityColor = ItemCanvasLogo.color;
             OpacityColor.a = 0;
             ItemCanvasLogo.color = OpacityColor;
@@ -33,7 +33,7 @@ namespace EvolveGames
             ItemCanvasLogo.sprite = ItemLogos[ItemIdInt];
             MaxItems = Items.Length - 1;
             weapon = GetComponentInChildren<WeaponBehaviour>();
-            Debug.Log("Weapon behaviour test: " + weapon.name + " " + weapon.isActiveAndEnabled);
+            if (ani == null && weapon.GetComponentInChildren<Animator>()) ani = weapon.GetComponentInChildren<Animator>();
             StartCoroutine(ItemChangeObject());
         }
         private void Update()
@@ -46,6 +46,7 @@ namespace EvolveGames
             if (ItemIdInt != ChangeItemInt)
             {
                 ChangeItemInt = ItemIdInt;
+
                 StartCoroutine(ItemChangeObject());
             }
         }
@@ -72,21 +73,21 @@ namespace EvolveGames
 
         IEnumerator ItemChangeObject()
         {
-            if(!DefiniteHide) ani.SetBool("Hide", true);
-            yield return new WaitForSeconds(0.3f);
+            if (!DefiniteHide && ani != null) ani.SetTrigger("Hide");
+            yield return new WaitForSeconds(1f);
+
             for (int i = 0; i < (MaxItems + 1); i++)
             {
                 Items[i].SetActive(false);
                 HolsteringSounds(false);
             }
             Items[ItemIdInt].SetActive(true);
-
             weapon = Items[ItemIdInt].GetComponent<WeaponBehaviour>();
+            ani = weapon.GetComponent<Animator>();
+
 
             HolsteringSounds(true);
             if (!ItemChangeLogo) StartCoroutine(ItemLogoChange());
-
-            if (!DefiniteHide) ani.SetBool("Hide", false);
         }
 
         IEnumerator ItemLogoChange()

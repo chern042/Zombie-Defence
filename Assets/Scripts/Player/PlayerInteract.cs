@@ -41,40 +41,43 @@ public class PlayerInteract : MonoBehaviour
         Ray ray = new Ray(cam.transform.position, cam.transform.forward);
         Debug.DrawRay(ray.origin, ray.direction * distance);
         RaycastHit hitInfo;
-        if (Physics.Raycast(ray, out hitInfo, distance, mask))
+        if (!LookForItem())
         {
-            if(hitInfo.collider.GetComponent<Interactable>() != null)
+            if (Physics.Raycast(ray, out hitInfo, distance, mask))
             {
-                interactable = hitInfo.collider.GetComponent<Interactable>();
-                playerUI.UpdateText(interactable.BaseOnLook());
-                if (inputManager.onFoot.Interact.inProgress)
+                if (hitInfo.collider.GetComponent<Interactable>() != null)
                 {
+                    interactable = hitInfo.collider.GetComponent<Interactable>();
+                    playerUI.UpdateText(interactable.BaseOnLook());
+                    if (inputManager.onFoot.Interact.inProgress)
+                    {
 
 
-                    interactable.BaseInteract();
+                        interactable.BaseInteract();
+                    }
+                    if (canCancel)
+                    {
+                        inputManager.onFoot.Interact.canceled += ctx => interactable.BaseCancelInteract();
+                        canCancel = false;
+                    }
+
+
                 }
-                if (canCancel)
-                {
-                    inputManager.onFoot.Interact.canceled += ctx => interactable.BaseCancelInteract();
-                    canCancel = false;
-                }
-
 
             }
-
-        }
-        else
-        {
-            LookForItem();
-            if(interactable != null)
+            else
             {
-                interactable.OnLookOff();
+                //LookForItem();
+                if (interactable != null)
+                {
+                    interactable.OnLookOff();
+                }
             }
         }
     }
 
 
-    private void LookForItem()
+    private bool LookForItem()
     {
         Ray ray = new Ray(cam.transform.position, cam.transform.forward);
         Debug.DrawRay(ray.origin, ray.direction * itemCollectDistance);
@@ -98,6 +101,7 @@ public class PlayerInteract : MonoBehaviour
                         inputManager.onFoot.Interact.canceled += ctx => interactable.BaseCancelInteract();
                         canCancel = false;
                     }
+                    return true;
 
                 }
             }
@@ -109,5 +113,6 @@ public class PlayerInteract : MonoBehaviour
                 interactable.OnLookOff();
             }
         }
+        return false;
     }
 }
