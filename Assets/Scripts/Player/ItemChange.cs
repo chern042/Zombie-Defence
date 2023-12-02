@@ -20,10 +20,11 @@ namespace EvolveGames
         int ChangeItemInt;
         [HideInInspector] public bool DefiniteHide;
         bool ItemChangeLogo;
+        private bool canSwitch;
 
         private void Start()
         {
-
+            canSwitch = true;
             Color OpacityColor = ItemCanvasLogo.color;
             OpacityColor.a = 0;
             ItemCanvasLogo.color = OpacityColor;
@@ -53,8 +54,11 @@ namespace EvolveGames
 
         public void ChangeItem()
         {
-            ItemIdInt++;
-
+            if (canSwitch)
+            {
+                ItemIdInt++;
+                canSwitch = false;
+            }
         }
         private void HolsteringSounds(bool holster)
         {
@@ -87,6 +91,7 @@ namespace EvolveGames
 
 
             HolsteringSounds(true);
+            canSwitch = true;
             if (!ItemChangeLogo) StartCoroutine(ItemLogoChange());
         }
 

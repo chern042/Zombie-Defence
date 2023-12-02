@@ -4,7 +4,7 @@ using System;
 using TMPro;
 using UnityEngine.UI;
 using UnityEngine.InputSystem.OnScreen;
-
+using EvolveGames;
 
 public class Ammo : Interactable
 {
@@ -20,11 +20,13 @@ public class Ammo : Interactable
     private WeaponBehaviour weapon;
 
     private Animator animator;
+    private Viewpoint viewpoint;
 
     private void Start()
     {
         animator = GetComponentInChildren<Animator>();
         promptMessage = "Ammo x"+ammoAmount+" ("+ammoType+")";
+        viewpoint = GetComponent<Viewpoint>();
     }
 
     protected override void Interact()
@@ -39,6 +41,7 @@ public class Ammo : Interactable
                 {
                     weapon.FillAmmunition(ammoAmount);
                     animator.SetTrigger("Collect");
+                    Invoke("DestroyObject", 0.3333f);
                 }
                 else
                 {
@@ -54,6 +57,7 @@ public class Ammo : Interactable
 
     private void DestroyObject()
     {
+        Destroy(viewpoint);
         Destroy(gameObject);
     }
 

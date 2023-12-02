@@ -310,6 +310,7 @@ public class Weapon : WeaponBehaviour
         shootTime = 0;
         shootStartTime = 0;
         Invoke("ResetFOV", 0.05f);
+        animator.speed = 1;
     }
 
     public void ReloadEvent()
@@ -416,6 +417,8 @@ public class Weapon : WeaponBehaviour
 
             EjectCasing();
             animator.SetTrigger("Shooting");
+            float roundsPerSec = roundsPerMinute / 60f;
+            animator.speed = roundsPerSec;
             shotsFired++;
 
             Debug.Log("Ammunition: " + (ammunitionClip - shotsFired) + "/" + ammunitionCurrent);
