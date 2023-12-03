@@ -2,6 +2,7 @@
 using UnityEngine;
 using System.Collections;
 using Random = UnityEngine.Random;
+using UnityEngine.InputSystem.HID;
 
 public class Projectile : MonoBehaviour
 {
@@ -27,7 +28,8 @@ public class Projectile : MonoBehaviour
     private BarrierController barrier;
 
 
-    //[SerializeField] private Collider player;
+     private Collider player;
+    private WeaponBehaviour weapon;
 
     private void Start()
     {
@@ -38,7 +40,9 @@ public class Projectile : MonoBehaviour
         // Debug.Log("TEST: " + gameModeService.GetPlayerCharacter());
 
         //Ignore the main player character's collision. A little hacky, but it should work.
-        Physics.IgnoreCollision(gameModeService.GetPlayerCharacter().GetComponent<Collider>(), GetComponent<Collider>());
+        player = gameModeService.GetPlayerCharacter().GetComponent<Collider>();
+        weapon = gameModeService.GetPlayerCharacter().GetComponent<WeaponBehaviour>();
+        Physics.IgnoreCollision(player, GetComponent<Collider>());
 
 
         //Start destroy timer
@@ -103,12 +107,26 @@ public class Projectile : MonoBehaviour
         if (collision.transform.tag == "Zombie")
         {
             //Instantiate random impact prefab from array
+            collision.collider.gameObject.GetComponentInParent<Enemy>().DamageEnemy(player.gameObject.GetComponentInChildren<WeaponBehaviour>().GetDamage());
+
             Instantiate(bloodImpactPrefabs[Random.Range
                 (0, bloodImpactPrefabs.Length)], transform.position,
                 Quaternion.LookRotation(collision.contacts[0].normal));
             //Destroy bullet object
             Destroy(gameObject);
         }
+        if (collision.transform.tag == "Zombie Head")
+        {
+            //Instantiate random impact prefab from array
+            collision.collider.gameObject.GetComponentInParent<Enemy>().DamageEnemy(weapon.GetDamage() * 2f);
+
+            Instantiate(bloodImpactPrefabs[Random.Range
+                (0, bloodImpactPrefabs.Length)], transform.position,
+                Quaternion.LookRotation(collision.contacts[0].normal));
+            //Destroy bullet object
+            Destroy(gameObject);
+        }
+
 
         //If bullet collides with "Concrete" tag
         if (collision.transform.tag == "Concrete")
@@ -159,14 +177,14 @@ public class Projectile : MonoBehaviour
         //}
 
         ////If bullet collides with "ExplosiveBarrel" tag
-        //if (collision.transform.tag == "ExplosiveBarrel")
-        //{
-        //    //Toggle "explode" on explosive barrel object
-        //    collision.transform.gameObject.GetComponent
-        //        <ExplosiveBarrelScript>().explode = true;
-        //    //Destroy bullet object
-        //    Destroy(gameObject);
-        //}
+        if (collision.transform.tag == "ExplosiveBarrel")
+        {
+            //Toggle "explode" on explosive barrel object
+            collision.transform.gameObject.GetComponent
+                <ExplosiveBarrelScript>().explode = true;
+            //Destroy bullet object
+            Destroy(gameObject);
+        }
 
         ////If bullet collides with "GasTank" tag
         //if (collision.transform.tag == "GasTank")

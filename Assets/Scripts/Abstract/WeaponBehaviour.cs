@@ -74,6 +74,7 @@ using UnityEngine;
 
     public abstract string GetAmmunitionType();
 
+    public abstract float GetDamage();
 
     /// <summary>
     /// Returns the Weapon's Animator component.

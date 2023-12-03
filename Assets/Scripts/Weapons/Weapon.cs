@@ -259,6 +259,8 @@ public class Weapon : WeaponBehaviour
 
     public override string GetAmmunitionType() => ammunitionType;
 
+    public override float GetDamage() => damage;
+
 
     //public override RuntimeAnimatorController GetAnimatorController() => controller;
 
@@ -281,6 +283,10 @@ public class Weapon : WeaponBehaviour
                 timePassed = 0;
             }
         }
+        else
+        {
+            timePassed += Time.deltaTime;
+        }
     }
     public override void Shoot()
     {
@@ -297,7 +303,12 @@ public class Weapon : WeaponBehaviour
             }
             else
             {
-                Fire();
+                if((timePassed) > 0.33f)
+                {
+                    Fire();
+                    timePassed = 0;
+                }
+
             }
         }
 
@@ -310,7 +321,6 @@ public class Weapon : WeaponBehaviour
         shootTime = 0;
         shootStartTime = 0;
         Invoke("ResetFOV", 0.05f);
-        animator.speed = 1;
     }
 
     public void ReloadEvent()
@@ -365,28 +375,20 @@ public class Weapon : WeaponBehaviour
             Vector3 shootDirection;// = (playerCamera.forward * 1000f);// - muzzleSocket.position);
             Ray ray;
             //If there's something blocking, then we can aim directly at that thing, which will result in more accurate shooting.
-            //if (Physics.Raycast(ray = new Ray(playerCamera.position, playerCamera.forward), out RaycastHit hit, maximumDistance, mask))
-            RaycastHit[] hits = Physics.RaycastAll(ray = new Ray(playerCamera.position, playerCamera.forward), maximumDistance, mask);
+            //RaycastHit[] hits = Physics.RaycastAll(ray = new Ray(playerCamera.position, playerCamera.forward), maximumDistance, mask);
             //bool shot = false;
-            foreach (RaycastHit hit in hits)
+
+
+            //foreach (RaycastHit hit in hits)
+            if (Physics.Raycast(ray = new Ray(playerCamera.position, playerCamera.forward), out RaycastHit hit, maximumDistance, mask))
             {
-                 Debug.DrawRay(ray.origin, ray.direction * maximumDistance);
+                Debug.DrawRay(ray.origin, ray.direction * maximumDistance);
                 Debug.Log("*****HIT TAGS*******: "+hit.collider.name);
 
-                if (hit.collider.CompareTag("Zombie Head"))
-                {
-                    Debug.Log("*****ZOMBIE HEAD HIT*******");
-                    hit.collider.gameObject.GetComponentInParent<Enemy>().DamageEnemy(damage * 2f);
 
-                }
-                else if (hit.collider.CompareTag("Zombie"))
-                {
-                    Debug.Log("*****ZOMBIE BODY HIT*******");
-                    hit.collider.gameObject.GetComponentInParent<Enemy>().DamageEnemy(damage);
-                }
 
-                if (!hit.collider.CompareTag("PlayerLimit"))
-                {
+                //if (!hit.collider.CompareTag("PlayerLimit"))
+               // {
                     rotation = Quaternion.LookRotation(hit.point - muzzleSocket.position);
                     shootDirection = (hit.point - muzzleSocket.position);
                     shootDirection.x += Random.Range(-spread.x, spread.x) * Mathf.Clamp01(shootTime / spreadTime);
@@ -407,7 +409,7 @@ public class Weapon : WeaponBehaviour
 
                     ////Add velocity to the projectile.
                     projectile.GetComponent<Rigidbody>().velocity = ((shootDirection) * projectileImpulse);
-                }
+               // }
 
             }
 
@@ -416,9 +418,13 @@ public class Weapon : WeaponBehaviour
 
 
             EjectCasing();
+
+            if (automatic)
+            {
+                float roundsPerSec = roundsPerMinute / 60f;
+                animator.speed = roundsPerSec;
+            }
             animator.SetTrigger("Shooting");
-            float roundsPerSec = roundsPerMinute / 60f;
-            animator.speed = roundsPerSec;
             shotsFired++;
 
             Debug.Log("Ammunition: " + (ammunitionClip - shotsFired) + "/" + ammunitionCurrent);
@@ -530,6 +536,7 @@ public class Weapon : WeaponBehaviour
     private void ResetFOV()
     {
         playerLook.cam.fieldOfView = 65;
+        animator.speed = 1;
     }
 
 
