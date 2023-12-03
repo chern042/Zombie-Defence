@@ -5052,7 +5052,12 @@ MonoBehaviour:
   lightDuration: 0.02
   lightFlash: {fileID: 108292519358401830}
   explosionSounds:
-  - {fileID: 0}
+  - {fileID: 8300000, guid: 2b6e097b64c4c4b10acbf70aa7bf13fb, type: 3}
+  - {fileID: 8300000, guid: 408d82733586148ef934aa1edb37ae0b, type: 3}
+  - {fileID: 8300000, guid: d3b833b9e9bb94c15b7a3024d731a005, type: 3}
+  - {fileID: 8300000, guid: f771d0efb4fe94b55adb7c3e5f1548cb, type: 3}
+  - {fileID: 8300000, guid: 2f2b6658f7f2a408e9920c3d2246a580, type: 3}
+  - {fileID: 8300000, guid: 6987caf2eb92b4888b6bb2369167467d, type: 3}
   audioSource: {fileID: 82477833726926110}
 --- !u!1 &1189621324720392
 GameObject:

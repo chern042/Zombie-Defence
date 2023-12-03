@@ -37,6 +37,9 @@ public class CasingScript : MonoBehaviour
     [Tooltip("How fast the casing spins over time")]
     public float speed = 2500.0f;
 
+
+    private bool hasHitGround;
+
     //Launch the casing at start
     private void Awake()
     {
@@ -61,25 +64,18 @@ public class CasingScript : MonoBehaviour
         //Set random rotation at start
         transform.rotation = Random.rotation;
         //Start play sound coroutine
-        StartCoroutine(PlaySound());
+        //StartCoroutine(PlaySound());
+        hasHitGround = false;
     }
 
     private void FixedUpdate()
     {
         //Spin the casing based on speed value
-        transform.Rotate(Vector3.right, speed * Time.deltaTime);
-        transform.Rotate(Vector3.down, speed * Time.deltaTime);
-    }
-
-    private IEnumerator PlaySound()
-    {
-        //Wait for random time before playing sound clip
-        yield return new WaitForSeconds(Random.Range(0.25f, 0.85f));
-        //Get a random casing sound from the array 
-        audioSource.clip = casingSounds
-            [Random.Range(0, casingSounds.Length)];
-        //Play the random casing sound
-        audioSource.Play();
+        if (!hasHitGround)
+        {
+            transform.Rotate(Vector3.right, speed * Time.deltaTime);
+            transform.Rotate(Vector3.down, speed * Time.deltaTime);
+        }
     }
 
     private IEnumerator RemoveCasing()
@@ -88,5 +84,17 @@ public class CasingScript : MonoBehaviour
         yield return new WaitForSeconds(despawnTime);
         //Destroy casing object
         Destroy(gameObject);
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if(collision.collider.CompareTag("Concrete"))
+        {
+            hasHitGround = true;
+            audioSource.clip = casingSounds[Random.Range(0, casingSounds.Length)];
+            //Play the random casing sound
+            audioSource.Play();
+        }
+
     }
 }

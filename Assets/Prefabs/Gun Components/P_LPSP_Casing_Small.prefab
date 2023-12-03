@@ -31,7 +31,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: -0.7071068, y: 0, z: 0, w: 0.7071068}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.55, y: 0.55, z: 0.55}
+  m_LocalScale: {x: 1.4, y: 1.4, z: 1.4}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -125,7 +125,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_PlayOnAwake: 1
-  m_Volume: 0.2
+  m_Volume: 1
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -225,11 +225,11 @@ MonoBehaviour:
   maximumXForce: 40
   minimumYForce: 10
   maximumYForce: 20
-  minimumZForce: -12
-  maximumZForce: 12
+  minimumZForce: -24
+  maximumZForce: -8
   minimumRotation: -360
   maximumRotation: 360
-  despawnTime: 0
+  despawnTime: 5
   casingSounds:
   - {fileID: 8300000, guid: b8431057c404b004db076407851e3ede, type: 3}
   - {fileID: 8300000, guid: 1715c914ea52a9f4ebac3ad860573e80, type: 3}
@@ -237,4 +237,4 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 9900c91b18eff614bb5654ec3471c41a, type: 3}
   - {fileID: 8300000, guid: 82fd1b9495a6b2045bbeabe4b7c168da, type: 3}
   audioSource: {fileID: 82444821930212418}
-  speed: 2500
+  speed: 2000
