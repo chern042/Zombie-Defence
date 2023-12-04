@@ -88,9 +88,10 @@ public class CasingScript : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        if(collision.collider.CompareTag("Concrete"))
+        if(collision.collider.CompareTag("Terrain"))
         {
             hasHitGround = true;
+            GetComponent<Rigidbody>().freezeRotation = true;
             audioSource.clip = casingSounds[Random.Range(0, casingSounds.Length)];
             //Play the random casing sound
             audioSource.Play();

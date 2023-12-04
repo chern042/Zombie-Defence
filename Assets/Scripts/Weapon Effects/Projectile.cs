@@ -19,9 +19,12 @@ public class Projectile : MonoBehaviour
 
     [Header("Impact Effect Prefabs")]
     public Transform[] bloodImpactPrefabs;
+    public Transform[] woodImpactPrefabs;
     public Transform[] metalImpactPrefabs;
     public Transform[] dirtImpactPrefabs;
     public Transform[] concreteImpactPrefabs;
+    public Transform[] sandImpactPrefabs;
+
 
 
 
@@ -81,37 +84,43 @@ public class Projectile : MonoBehaviour
             Destroy(gameObject);
         }
 
-        //If bullet collides with "Blood" tag
-        if (collision.transform.tag == "Blood")
+
+
+        //If bullet collides with "Metal" tag
+        if (collision.transform.tag == "Terrain")
         {
             //Instantiate random impact prefab from array
-            Instantiate(bloodImpactPrefabs[Random.Range
-                (0, bloodImpactPrefabs.Length)], transform.position,
+            Transform impact = Instantiate(dirtImpactPrefabs[Random.Range
+                (0, dirtImpactPrefabs.Length)], transform.position,
                 Quaternion.LookRotation(collision.contacts[0].normal));
+            impact.SetParent(collision.transform);
+
             //Destroy bullet object
             Destroy(gameObject);
         }
-
-        //If bullet collides with "Metal" tag
-        if (collision.transform.tag == "Metal")
+        if (collision.transform.tag == "Sand")
         {
             //Instantiate random impact prefab from array
-            Instantiate(metalImpactPrefabs[Random.Range
-                (0, bloodImpactPrefabs.Length)], transform.position,
+            Transform impact = Instantiate(sandImpactPrefabs[Random.Range
+                (0, sandImpactPrefabs.Length)], transform.position,
                 Quaternion.LookRotation(collision.contacts[0].normal));
+            impact.SetParent(collision.transform);
+
             //Destroy bullet object
             Destroy(gameObject);
         }
 
         //If bullet collides with "Zombie" tag
-        if (collision.transform.tag == "Zombie")
+        if (collision.transform.tag == "Zombie" || collision.transform.tag == "Zombie Head")
         {
             //Instantiate random impact prefab from array
             collision.collider.gameObject.GetComponentInParent<Enemy>().DamageEnemy(player.gameObject.GetComponentInChildren<WeaponBehaviour>().GetDamage());
 
-            Instantiate(bloodImpactPrefabs[Random.Range
+            Transform impact = Instantiate(bloodImpactPrefabs[Random.Range
                 (0, bloodImpactPrefabs.Length)], transform.position,
                 Quaternion.LookRotation(collision.contacts[0].normal));
+            impact.SetParent(collision.transform);
+
             //Destroy bullet object
             Destroy(gameObject);
         }
@@ -120,9 +129,11 @@ public class Projectile : MonoBehaviour
             //Instantiate random impact prefab from array
             collision.collider.gameObject.GetComponentInParent<Enemy>().DamageEnemy(weapon.GetDamage() * 2f);
 
-            Instantiate(bloodImpactPrefabs[Random.Range
+            Transform impact = Instantiate(bloodImpactPrefabs[Random.Range
                 (0, bloodImpactPrefabs.Length)], transform.position,
                 Quaternion.LookRotation(collision.contacts[0].normal));
+            impact.SetParent(collision.transform);
+
             //Destroy bullet object
             Destroy(gameObject);
         }
@@ -131,7 +142,6 @@ public class Projectile : MonoBehaviour
         //If bullet collides with "Concrete" tag
         if (collision.transform.tag == "Concrete")
         {
-            Debug.Log("DDDERRR");
             //Instantiate random impact prefab from array
             Transform impact = Instantiate(concreteImpactPrefabs[Random.Range
                 (0, concreteImpactPrefabs.Length)], collision.GetContact(0).point,
@@ -141,13 +151,35 @@ public class Projectile : MonoBehaviour
             //Destroy bullet object
             Destroy(gameObject);
         }
+        if (collision.transform.tag == "Wood")
+        {
+            //Instantiate random impact prefab from array
+            Transform impact = Instantiate(woodImpactPrefabs[Random.Range
+                (0, woodImpactPrefabs.Length)], collision.GetContact(0).point,
+                Quaternion.LookRotation(collision.GetContact(0).normal));
+            impact.SetParent(collision.transform);
+
+            //Destroy bullet object
+            Destroy(gameObject);
+        }
+        if (collision.transform.tag == "Metal")
+        {
+            //Instantiate random impact prefab from array
+            Transform impact = Instantiate(metalImpactPrefabs[Random.Range
+                (0, metalImpactPrefabs.Length)], collision.GetContact(0).point,
+                Quaternion.LookRotation(collision.GetContact(0).normal));
+            impact.SetParent(collision.transform);
+
+            //Destroy bullet object
+            Destroy(gameObject);
+        }
+
 
         if (collision.transform.tag == "Barrier")
         {
-            Debug.Log("DDDERRR");
             //Instantiate random impact prefab from array
-            Transform impact = Instantiate(concreteImpactPrefabs[Random.Range
-                (0, concreteImpactPrefabs.Length)], transform.position,
+            Transform impact = Instantiate(woodImpactPrefabs[Random.Range
+                (0, woodImpactPrefabs.Length)], transform.position,
                 Quaternion.LookRotation(collision.GetContact(0).normal));
             impact.SetParent(collision.transform);
 

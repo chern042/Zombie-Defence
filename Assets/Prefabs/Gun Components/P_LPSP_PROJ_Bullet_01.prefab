@@ -218,12 +218,16 @@ MonoBehaviour:
   bloodImpactPrefabs:
   - {fileID: 4422897939842062, guid: ffbf169ab9dcfdc45ae14010bc82a6b2, type: 3}
   - {fileID: 4422897939842062, guid: be1eb41fa96134dd496172db418056cf, type: 3}
+  woodImpactPrefabs:
+  - {fileID: 400002, guid: 7499aeb6567134b4dbfadc6051f4546d, type: 3}
   metalImpactPrefabs:
-  - {fileID: 4587651611338842, guid: 2a77aba03cf9e430a8c7d70c5ee25a96, type: 3}
+  - {fileID: 400002, guid: 3d2cab718e7acb04e8e3c2759bbab3ee, type: 3}
   dirtImpactPrefabs:
-  - {fileID: 4587651611338842, guid: 2a77aba03cf9e430a8c7d70c5ee25a96, type: 3}
+  - {fileID: 400002, guid: 6dc033bcc9d82ea4fa59028b76c5b7c3, type: 3}
   concreteImpactPrefabs:
-  - {fileID: 4587651611338842, guid: 2a77aba03cf9e430a8c7d70c5ee25a96, type: 3}
+  - {fileID: 400006, guid: 1713e531a06d4d547acdc97e2f7f03e6, type: 3}
+  sandImpactPrefabs:
+  - {fileID: 400002, guid: b20f28f7bdb1e4d4e8b7154fc451f443, type: 3}
 --- !u!1 &1231345400216816
 GameObject:
   m_ObjectHideFlags: 0

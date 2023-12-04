@@ -17,6 +17,12 @@ TagManager:
   - Zombie Head
   - PlayerLimit
   - Ammo
+  - ExplosiveBarrel
+  - FxTemporaire
+  - Terrain
+  - Wood
+  - Sand
+  - Metal
   layers:
   - Default
   - TransparentFX
