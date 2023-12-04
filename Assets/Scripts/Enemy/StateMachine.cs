@@ -17,6 +17,7 @@ public class StateMachine : MonoBehaviour
                            Random.Range(barrierWaypointOne.y, barrierWaypointTwo.y),
                            Random.Range(barrierWaypointOne.z, barrierWaypointTwo.z)
                            );
+
         SeekBarrierState state = new SeekBarrierState();
         ChangeState(state);
         state.SetBarrierPoint(barrierPoint);

@@ -83,6 +83,7 @@ public class Enemy : MonoBehaviour
             Debug.Log("State changed to: "+stateMachine.activeState);
             state = stateMachine.activeState;
         }
+        currentState = state.ToString();
 
 
 
