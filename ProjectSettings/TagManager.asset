@@ -23,6 +23,7 @@ TagManager:
   - Wood
   - Sand
   - Metal
+  - Soft
   layers:
   - Default
   - TransparentFX
