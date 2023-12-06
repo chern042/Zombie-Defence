@@ -18,10 +18,6 @@ public class DestroyBarrierState : BaseState
         {
             DestroyBarrier();
         }
-        else
-        {
-            enemy.Agent.isStopped = true;
-        }
     }
 
     public override void Exit()

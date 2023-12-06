@@ -42,10 +42,6 @@ public class SeekPlayerState : BaseState
                 stateMachine.ChangeState(new AttackPlayerState());
             }
         }
-        else
-        {
-            enemy.Agent.isStopped = true;
-        }
     }
 
 

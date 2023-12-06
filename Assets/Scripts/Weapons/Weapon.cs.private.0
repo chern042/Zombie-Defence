@@ -154,6 +154,7 @@ public class Weapon : WeaponBehaviour
     private bool isReloading = false;
 
 
+
     /// <summary>
     /// Weapon Animator.
     /// </summary>
@@ -286,13 +287,6 @@ public class Weapon : WeaponBehaviour
         {
             timePassed += Time.deltaTime;
         }
-        if(automatic && !isFiring)
-        {
-            if(playerLook.cam.fieldOfView != 65f)
-            {
-                ResetFOV();
-            }
-        }
     }
     public override void Shoot()
     {
@@ -404,11 +398,12 @@ public class Weapon : WeaponBehaviour
                     shootDirection.Normalize();
                     Debug.DrawRay(ray.origin, ray.direction * maximumDistance);
 
-                playerLook.cam.fieldOfView = 65 - Mathf.Clamp(shootTime / (spreadTime/4), 0f, 4f);
-
-
-                //Try to play the fire particles from the muzzle!
-                muzzleBehaviour.Effect();
+                    //playerLook.cam.fieldOfView = 65 - Mathf.Clamp(shootTime / (spreadTime / 4), 0f, 4f);
+                float percentComplete = shootTime / spreadTime;
+                //percentComplete = percentComplete * percentComplete;
+                playerLook.cam.fieldOfView = Mathf.Lerp(65f, 61f, percentComplete);
+                    //Try to play the fire particles from the muzzle!
+                    muzzleBehaviour.Effect();
 
                     //Spawn projectile from the projectile spawn point.
                     GameObject projectile = Instantiate(prefabProjectile, muzzleSocket.position, rotation);
@@ -515,9 +510,7 @@ public class Weapon : WeaponBehaviour
         audioSource.pitch = 1;
         audioSource.PlayOneShot(meleeHitSound);
 
-        Enemy enemy = hitInfo.collider.gameObject.GetComponent<Enemy>();
-        enemy.DamageEnemy(damage);
-
+        hitInfo.collider.gameObject.GetComponent<Enemy>().DamageEnemy(damage);
 
         //if (hitInfo.collider.CompareTag("Zombie"))
         //{
@@ -544,7 +537,8 @@ public class Weapon : WeaponBehaviour
 
     private void ResetFOV()
     {
-        playerLook.cam.fieldOfView = 65;
+        Mathf.Lerp(playerLook.cam.fieldOfView, 65f, 1f);
+        //playerLook.cam.fieldOfView = 65;
         animator.speed = 1;
     }
 

@@ -21,6 +21,9 @@ public class Enemy : MonoBehaviour
     [SerializeField]
     private string currentState;
 
+    [SerializeField]
+    public int pointsWorth = 100;
+
     public BarrierPath barrierPath;
     private GameObject player;
     public GameObject mainBarrier;
@@ -44,6 +47,8 @@ public class Enemy : MonoBehaviour
 
     private Animator enemyAnimator;
 
+    private PlayerPoints playerPoints;
+
 
     public Transform[] concreteImpactPrefabs;
 
@@ -64,6 +69,7 @@ public class Enemy : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("GameController");
         enemyAnimator = GetComponent<Animator>();
         playerLocation = player.transform;
+        playerPoints = player.GetComponent<PlayerPoints>();
         eyeHeight = 0.1f;
         state = stateMachine.activeState;
         barrier = mainBarrier.GetComponent<BarrierController>();
@@ -327,6 +333,7 @@ public class Enemy : MonoBehaviour
         enemyHealth -= damage;
         if(enemyHealth <= 0)
         {
+            playerPoints.AddPoints(pointsWorth);
             agent.isStopped = true;
             if (Random.Range(0, 2) == 0 && !enemyDying)
             {
