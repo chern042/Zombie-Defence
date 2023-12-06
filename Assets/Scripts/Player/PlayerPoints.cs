@@ -27,14 +27,12 @@ public class PlayerPoints : MonoBehaviour
     }
     public void AddPoints(int addAmount)
     {
-        points += addAmount;
-        pointsText.text = "POINTS: " + points;
-        instantiatedObject = Instantiate(addedPointsAnimatedPrefab);
-        instantiatedObject.transform.SetParent(canvas.transform, false);
-        instantiatedObject.text = "+" + addAmount;
-        instantiatedObject.color = Color.green;
-        Invoke("DestroyInstantiatedObject", 1.6f);
-
+            points += addAmount;
+            pointsText.text = "POINTS: " + points;
+            instantiatedObject = Instantiate(addedPointsAnimatedPrefab);
+            instantiatedObject.transform.SetParent(canvas.transform, false);
+            instantiatedObject.text = "+" + addAmount;
+            instantiatedObject.color = Color.green;
     }
 
     public void RemovePoints(int removeAmount)
@@ -48,7 +46,6 @@ public class PlayerPoints : MonoBehaviour
 
             instantiatedObject.text = "-" + removeAmount;
             instantiatedObject.color = Color.red;
-            Invoke("DestroyInstantiatedObject", 1.6f);
 
         }
         else if(points != 0 && (points - removeAmount) < 0)
@@ -58,17 +55,11 @@ public class PlayerPoints : MonoBehaviour
 
             instantiatedObject.text = "-" + points;
             instantiatedObject.color = Color.red;
-            Invoke("DestroyInstantiatedObject", 1.6f);
             points = 0;
-            pointsText.text = "POINTS: " + points;
+            pointsText.text = "POINTS: 0";
         }
     }
 
-
-    private void DestroyInstantiatedObject()
-    {
-        Destroy(instantiatedObject);
-    }
 
 
 }

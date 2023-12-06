@@ -421,7 +421,7 @@ public class Weapon : WeaponBehaviour
             }
 
 
-
+            //GetComponentInParent<PlayerPoints>().AddPoints(100);
 
 
             EjectCasing();

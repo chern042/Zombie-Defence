@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 5851392860975100556}
   - component: {fileID: 828851662880638162}
   - component: {fileID: 6534583495005217242}
+  - component: {fileID: -7685588959917421726}
   m_Layer: 5
   m_Name: Added points text
   m_TagString: Untagged
@@ -156,3 +157,16 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &-7685588959917421726
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 412517433194540289}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 08c4b7590fd354ab3b771053ffbcb071, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  destroyAfterSeconds: 1.6
