@@ -106,10 +106,16 @@ using UnityEngine;
 
     public abstract bool IsReloading();
 
+    public abstract int GetUpgradeCost();
+    public abstract int GetMaxUpgrade();
+    public abstract float GetUpgradeTime();
+    public abstract int GetCurrentUpgradeLevel();
+    public abstract void SetWeaponIsUpgrading();
 
-        /// <summary>
-        /// Returns the RuntimeAnimationController the Character needs to use when this Weapon is equipped!
-        /// </summary>
+
+    /// <summary>
+    /// Returns the RuntimeAnimationController the Character needs to use when this Weapon is equipped!
+    /// </summary>
     //public abstract RuntimeAnimatorController GetAnimatorController();
 
 
@@ -117,7 +123,7 @@ using UnityEngine;
     /// Fires the weapon.
     /// </summary>
     /// <param name="spreadMultiplier">Value to multiply the weapon's spread by. Very helpful to account for aimed spread multipliers.</param>
-        public abstract void Fire(float spreadMultiplier = 1.0f);
+    public abstract void Fire(float spreadMultiplier = 1.0f);
 
 
     public abstract void Shoot();

@@ -143,6 +143,20 @@ public class Weapon : WeaponBehaviour
     private AudioSource audioSource;
 
 
+    [Tooltip("How much the weapon costs to upgrade (in points).")]
+    [SerializeField]
+    private int upgradeCost = 1000;
+
+
+    [Tooltip("How many times can this weapon be upgraded.")]
+    [SerializeField]
+    private int maxUpgrade = 5;
+
+
+    [Tooltip("How long it takes this weapon to upgrade to next level.")]
+    [SerializeField]
+    private float upgradeTime = 5;
+
     private bool meleeIsAttacking = false;
     private bool meleeReadyToAttack = true;
     private bool isFiring;
@@ -152,8 +166,9 @@ public class Weapon : WeaponBehaviour
     private float shootStartTime;
     private float timePassed;
     private bool isReloading = false;
-
-
+    private int currentUpgradeLevel;
+    private bool isUpgrading = false;
+    private float semiAutoFireDelay = 0.33f;
     /// <summary>
     /// Weapon Animator.
     /// </summary>
@@ -201,6 +216,7 @@ public class Weapon : WeaponBehaviour
 
         //Cache the camera
         playerCamera = playerLook.cam.transform;
+        currentUpgradeLevel = 0;
     }
 
     protected override void Start()
@@ -261,12 +277,41 @@ public class Weapon : WeaponBehaviour
     public override float GetDamage() => damage;
 
 
+    public override int GetUpgradeCost() => upgradeCost;
+    public override int GetMaxUpgrade() => maxUpgrade;
+    public override float GetUpgradeTime() => upgradeTime;
+    public override int GetCurrentUpgradeLevel() => currentUpgradeLevel;
+    public override void SetWeaponIsUpgrading() => isUpgrading = true;
+
+
     //public override RuntimeAnimatorController GetAnimatorController() => controller;
 
 
 
     protected override void Update()
     {
+        if (isUpgrading)
+        {
+            currentUpgradeLevel++;
+            isUpgrading = false;
+            damage += (((currentUpgradeLevel + 1) * (currentUpgradeLevel + 1)) * 0.5f);
+            ammunitionClip += 3;
+            ammunitionTotal += 20;
+            spread.x *= 0.9f;
+            spread.y *= 0.9f;
+            spread.z *= 0.9f;
+            if (automatic)
+            {
+                roundsPerMinute = roundsPerMinute + ((currentUpgradeLevel + 1) * (currentUpgradeLevel + 1));
+            }
+            else
+            {
+                semiAutoFireDelay *= 0.8f;
+            }
+            upgradeCost *= (currentUpgradeLevel + 1) * (currentUpgradeLevel + 1);
+            upgradeTime *= (currentUpgradeLevel + 1) * (currentUpgradeLevel + 1);
+
+        }
         if (automatic && isFiring)
         {
             if (shootStartTime == 0)
@@ -309,7 +354,7 @@ public class Weapon : WeaponBehaviour
             }
             else
             {
-                if((timePassed) > 0.33f)
+                if((timePassed) > semiAutoFireDelay)
                 {
                     Fire();
                     timePassed = 0;
@@ -421,7 +466,7 @@ public class Weapon : WeaponBehaviour
             }
 
 
-            //GetComponentInParent<PlayerPoints>().AddPoints(100);
+            GetComponentInParent<PlayerPoints>().AddPoints(100);
 
 
             EjectCasing();

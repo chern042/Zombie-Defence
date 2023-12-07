@@ -18,7 +18,8 @@ public class PlayerPoints : MonoBehaviour
     [SerializeField]
     private Canvas canvas;
 
-    private int points;
+    [HideInInspector]
+    public int points;
     private TextMeshProUGUI instantiatedObject;
     private void Start()
     {
