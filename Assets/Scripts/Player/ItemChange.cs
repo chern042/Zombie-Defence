@@ -96,9 +96,11 @@ namespace EvolveGames
             for (int i = 0; i < (MaxItems + 1); i++)
             {
                 Items[i].SetActive(false);
+ 
                 HolsteringSounds(false);
             }
             Items[ItemIdInt].SetActive(true);
+
             weapon = Items[ItemIdInt].GetComponent<WeaponBehaviour>();
             ani = weapon.GetComponent<Animator>();
 
