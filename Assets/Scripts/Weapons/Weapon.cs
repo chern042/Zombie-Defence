@@ -284,6 +284,9 @@ public class Weapon : WeaponBehaviour
     public override void SetWeaponIsUpgrading() => isUpgrading = true;
 
 
+    public override void SetUpgradeLevel(int level) => currentUpgradeLevel = level;
+
+
     //public override RuntimeAnimatorController GetAnimatorController() => controller;
 
 
@@ -300,6 +303,8 @@ public class Weapon : WeaponBehaviour
             spread.x *= 0.9f;
             spread.y *= 0.9f;
             spread.z *= 0.9f;
+            upgradeCost = upgradeCost * ( (currentUpgradeLevel + 1) * (currentUpgradeLevel + 1));
+            upgradeTime = upgradeTime * ((currentUpgradeLevel + 1) * (currentUpgradeLevel + 1));
             if (automatic)
             {
                 roundsPerMinute = roundsPerMinute + ((currentUpgradeLevel + 1) * (currentUpgradeLevel + 1));
@@ -308,8 +313,7 @@ public class Weapon : WeaponBehaviour
             {
                 semiAutoFireDelay *= 0.8f;
             }
-            upgradeCost *= (currentUpgradeLevel + 1) * (currentUpgradeLevel + 1);
-            upgradeTime *= (currentUpgradeLevel + 1) * (currentUpgradeLevel + 1);
+
 
         }
         if (automatic && isFiring)

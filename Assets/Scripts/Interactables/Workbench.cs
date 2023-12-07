@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using EvolveGames;
 using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem.OnScreen;
@@ -35,13 +36,24 @@ public class Workbench : Interactable
 
     private PlayerPoints playerPoints;
 
+    private int itemUpgradingIndex;
+
+    private bool isUpgraded;
+
+    private bool finishedUpgrade;
+
+    private int weaponUpgradeLevel;
+
     private void Awake()
     {
         weapon = playerHand.GetComponentInChildren<WeaponBehaviour>();
         upgradeCost = weapon.GetUpgradeCost();
         upgradeTime = 0;
         isUpgrading = false;
+        isUpgraded = false;
+        finishedUpgrade = false;
         playerPoints = playerHand.GetComponentInParent<PlayerPoints>();
+        weaponUpgradeLevel = 0;
     }
 
     protected override void OnLook()
@@ -57,7 +69,7 @@ public class Workbench : Interactable
         if (!isUpgrading)
         {
 
-            if ((interactButton != null && promptMessage.Substring(0, 7) == "Upgrade") && weapon.GetCurrentUpgradeLevel() < weapon.GetMaxUpgrade())
+            if ((interactButton != null) && weapon.GetCurrentUpgradeLevel() < weapon.GetMaxUpgrade())
             {
 
                 interactButton.GetComponentInChildren<TextMeshProUGUI>().text = "UPGRADE";
@@ -68,7 +80,18 @@ public class Workbench : Interactable
         }
         else
         {
-            upgradeBar.SetActive(true);
+            if (!isUpgraded)
+            {
+                upgradeBar.SetActive(true);
+            }
+            else if(isUpgrading && !finishedUpgrade)
+            {
+                promptMessage = "Pick Up Weapon";
+                interactButton.GetComponentInChildren<TextMeshProUGUI>().text = "GRAB";
+                interactButton.GetComponentInChildren<TextMeshProUGUI>().enabled = true;
+                interactButton.GetComponent<Image>().enabled = true;
+                interactButton.GetComponent<OnScreenButton>().enabled = true;
+            }
         }
 
         base.OnLook();
@@ -98,7 +121,16 @@ public class Workbench : Interactable
         }
         else
         {
-            upgradeBar.SetActive(false);
+            if (!isUpgraded)
+            {
+                upgradeBar.SetActive(false);
+            }
+            else
+            {
+                interactButton.GetComponentInChildren<TextMeshProUGUI>().enabled = false;
+                interactButton.GetComponent<Image>().enabled = false;
+                interactButton.GetComponent<OnScreenButton>().enabled = false;
+            }
         }
     }
 
@@ -106,36 +138,64 @@ public class Workbench : Interactable
 
     protected override void Interact()
     {
-        if((playerPoints.points >= upgradeCost && !isUpgrading) && weapon.GetCurrentUpgradeLevel() <= weapon.GetMaxUpgrade())
+        if (!isUpgrading)
         {
-            playerPoints.RemovePoints((int)upgradeCost);
-            foreach(GameObject wep in weaponPrefabs)
+            if ((playerPoints.points >= upgradeCost) && weapon.GetCurrentUpgradeLevel() <= weapon.GetMaxUpgrade())
             {
-                if(wep.name.Substring(0,3) == weapon.name.Substring(0, 3))
+                playerPoints.RemovePoints((int)upgradeCost);
+                foreach (GameObject wep in weaponPrefabs)
                 {
-                    workbenchWeapon = wep;
+                    if (wep.name.Substring(0, 3) == weapon.name.Substring(0, 3))
+                    {
+                        workbenchWeapon = wep;
+                    }
                 }
-            }
-            workbenchWeapon.GetComponentInChildren<SkinnedMeshRenderer>().enabled = true;
-            isUpgrading = true;
-            promptMessage = "";
-            upgradeBar.SetActive(true);
-            upgradeBarCurrent.fillAmount = 0;
+                workbenchWeapon.GetComponentInChildren<SkinnedMeshRenderer>().enabled = true;
+                isUpgrading = true;
+                promptMessage = "";
+                upgradeBar.SetActive(true);
+                upgradeBarCurrent.fillAmount = 0;
+                weaponUpgradeLevel = weapon.GetCurrentUpgradeLevel() + 1;
 
-        }else if(weapon.GetCurrentUpgradeLevel() == weapon.GetMaxUpgrade())
-        {
-            promptMessage = "No More Upgrades";
+                itemUpgradingIndex = playerPoints.GetComponent<ItemChange>().DropItem();
+
+            }
+            else if (weapon.GetCurrentUpgradeLevel() == weapon.GetMaxUpgrade())
+            {
+                promptMessage = "No More Upgrades";
+            }
+            else
+            {
+                Debug.Log("NO POINTS");
+                promptMessage = "Insufficent Points";
+            }
         }
         else
         {
-            Debug.Log("NO POINTS");
-            promptMessage = "Insufficent Points";
+            if (isUpgraded && !finishedUpgrade) {
+                isUpgraded = false;
+                finishedUpgrade = true;
+                workbenchWeapon.GetComponentInChildren<SkinnedMeshRenderer>().enabled = false;
+                playerPoints.GetComponent<ItemChange>().ReturnItem(itemUpgradingIndex);
+                weapon = playerHand.GetComponentInChildren<WeaponBehaviour>();
+                weapon.SetUpgradeLevel(weaponUpgradeLevel);
+                weapon.SetWeaponIsUpgrading();
+
+            }
         }
     }
 
 
     public override void CancelInteract()
     {
+        if (finishedUpgrade)
+        {
+            isUpgrading = false;
+            finishedUpgrade = false;
+            promptMessage = "Upgrade Weapon (" + upgradeCost + ")";
+            weaponUpgradeLevel = 0;
+
+        }
         //promptMessage = "Upgrade Weapon (" + upgradeCost + ")";
 
     }
@@ -158,7 +218,7 @@ public class Workbench : Interactable
     // Update is called once per frame
     void Update()
     {
-        if (isUpgrading)
+        if (isUpgrading && !isUpgraded)
         {
             upgradeTime += Time.deltaTime;
             float percentComplete = upgradeTime / weapon.GetUpgradeTime();
@@ -172,11 +232,11 @@ public class Workbench : Interactable
 
             if (upgradeTime >= weapon.GetUpgradeTime())
             {
-                weapon.SetWeaponIsUpgrading();
-                isUpgrading = false;
+
+                isUpgraded = true;
                 upgradeTime = 0;
                 upgradeBar.SetActive(false);
-                workbenchWeapon.GetComponentInChildren<SkinnedMeshRenderer>().enabled = false;
+                interactButton.GetComponentInChildren<TextMeshProUGUI>().text = "GRAB";
                 interactButton.GetComponentInChildren<TextMeshProUGUI>().enabled = true;
                 interactButton.GetComponent<Image>().enabled = true;
                 interactButton.GetComponent<OnScreenButton>().enabled = true;

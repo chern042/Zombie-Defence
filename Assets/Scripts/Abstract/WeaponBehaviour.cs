@@ -111,6 +111,7 @@ using UnityEngine;
     public abstract float GetUpgradeTime();
     public abstract int GetCurrentUpgradeLevel();
     public abstract void SetWeaponIsUpgrading();
+    public abstract void SetUpgradeLevel(int level);
 
 
     /// <summary>

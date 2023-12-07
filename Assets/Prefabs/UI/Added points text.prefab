@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5851392860975100556}
   - component: {fileID: 828851662880638162}
   - component: {fileID: 6534583495005217242}
-  - component: {fileID: -7685588959917421726}
+  - component: {fileID: 4352083407208201945}
   m_Layer: 5
   m_Name: Added points text
   m_TagString: Untagged
@@ -157,7 +157,7 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &-7685588959917421726
+--- !u!114 &4352083407208201945
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

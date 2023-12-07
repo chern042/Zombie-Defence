@@ -1,19 +1,17 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class DestroyAfterTime : MonoBehaviour
 {
 
     [SerializeField]
-    public float destroyAfterSeconds = 1.6f;
+    private float destroyAfterSeconds = 1.6f;
     // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
         Invoke("DestroyObject", destroyAfterSeconds);
     }
 
-    void DestroyObject()
+    private void DestroyObject()
     {
         Destroy(gameObject);
     }

@@ -13,6 +13,7 @@ namespace EvolveGames
         [SerializeField, Tooltip("These logos must have the same order as the items.")] Sprite[] ItemLogos;
         [SerializeField] public int ItemIdInt;
         [SerializeField] private AudioSource holsteringSounds;
+        [SerializeField] private List<int> itemsInInventory;
 
         private Animator ani;
         private WeaponBehaviour weapon;
@@ -34,6 +35,13 @@ namespace EvolveGames
             ItemCanvasLogo.sprite = ItemLogos[ItemIdInt];
             MaxItems = Items.Length - 1;
             weapon = GetComponentInChildren<WeaponBehaviour>();
+            if(itemsInInventory.Count == 0)
+            {
+                for(int i=0;i<Items.Length;i++)
+                {
+                    itemsInInventory.Add(i);
+                }
+            }
             if (ani == null && weapon.GetComponentInChildren<Animator>()) ani = weapon.GetComponentInChildren<Animator>();
             StartCoroutine(ItemChangeObject());
         }
@@ -57,6 +65,11 @@ namespace EvolveGames
             if (canSwitch)
             {
                 ItemIdInt++;
+                while (!itemsInInventory.Contains(ItemIdInt))
+                {
+                    ItemIdInt++;
+                    if (ItemIdInt > MaxItems) ItemIdInt = 0;
+                }
                 canSwitch = false;
             }
         }
@@ -119,6 +132,20 @@ namespace EvolveGames
                 OpacityColor.a = Mathf.Lerp(OpacityColor.a, 1, 6 * Time.deltaTime);
                 ItemCanvasLogo.color = OpacityColor;
             }
+        }
+
+        public int DropItem()
+        {
+            int itemToDrop = ItemIdInt;
+            itemsInInventory.Remove(itemToDrop);
+            ChangeItem();
+            return itemToDrop;
+        }
+
+        public void ReturnItem(int item)
+        {
+            itemsInInventory.Add(item);
+            ItemIdInt = item;
         }
 
         public  WeaponBehaviour GetActiveWeapon() => weapon;
