@@ -384,8 +384,17 @@ public class Weapon : WeaponBehaviour
 
         if (ammunitionCurrent >= ammunitionClip)
         {
-            shotsFired = 0;
-            ammunitionCurrent -= ammunitionClip;
+            if(shotsFired < ammunitionClip)
+            {
+                ammunitionCurrent -= shotsFired;
+                shotsFired = 0;
+            }
+            else
+            {
+                shotsFired = 0;
+                ammunitionCurrent -= ammunitionClip;
+            }
+
         }
         else
         {
@@ -580,8 +589,16 @@ public class Weapon : WeaponBehaviour
     public override void FillAmmunition(int amount)
     {
         //Update the value by a certain amount.
-        ammunitionCurrent = amount != 0 ? Mathf.Clamp(ammunitionCurrent + amount,
-            0, GetAmmunitionTotal()) : ammunitionTotal;
+        //ammunitionCurrent = amount != 0 ? Mathf.Clamp(ammunitionCurrent + amount,
+        //    0, GetAmmunitionTotal()) : ammunitionTotal;
+        if(ammunitionCurrent + amount <= ammunitionTotal)
+        {
+            ammunitionCurrent += amount;
+        }
+        else
+        {
+            ammunitionCurrent = ammunitionTotal;
+        }
     }
 
     public override void EjectCasing()

@@ -24,6 +24,9 @@ public class Enemy : MonoBehaviour
     [SerializeField]
     public int pointsWorth = 100;
 
+    [SerializeField]
+    private GameObject[] dropPrefabs;
+
     public BarrierPath barrierPath;
     private GameObject player;
     public GameObject mainBarrier;
@@ -343,6 +346,7 @@ public class Enemy : MonoBehaviour
             {
                 enemyAnimator.SetTrigger("Death2");
             }
+            Invoke("DropItemOnDeath", 1f);
             enemyDying = true;
         }
         else
@@ -350,6 +354,20 @@ public class Enemy : MonoBehaviour
             enemyAnimator.SetTrigger("GetHit");
         }
     }
+
+    private void DropItemOnDeath()
+    {
+        GameObject itemToInstantiate = dropPrefabs[Random.Range(0, dropPrefabs.Length)];
+
+        GameObject item = Instantiate(itemToInstantiate, transform.position, transform.rotation);
+
+        Ammo ammo = item.GetComponent<Ammo>();
+        if(ammo != null)
+        {
+            ammo.ammoAmount = Random.Range(1, 31);
+        }
+    }
+
 
 
 }

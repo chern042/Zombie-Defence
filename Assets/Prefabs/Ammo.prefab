@@ -48,8 +48,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PointText: Ammo
-  cam: {fileID: 0}
-  PlayerController: {fileID: 0}
+  cam: {fileID: 5903030552797835976, guid: d8f783de09aa843aaa1086769cc6be95, type: 3}
+  PlayerController: {fileID: 9004252101424524133, guid: eab56d5d9765d4f70afce2cae6aa8006,
+    type: 3}
   ImagePrefab: {fileID: 5311345518241477974, guid: c52be775796724f32be0429eeb8f5758,
     type: 3}
   MaxViewRange: 8
@@ -68,10 +69,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   useEvents: 0
   promptMessage: 
-  interactButton: {fileID: 0}
+  interactButton: {fileID: 2946960918993389871, guid: bdb29a3f4a110415e9a2d65cb6823461,
+    type: 3}
   ammoAmount: 30
   ammoType: Any
-  playerHand: {fileID: 0}
 --- !u!65 &2138638867656949954
 BoxCollider:
   m_ObjectHideFlags: 0

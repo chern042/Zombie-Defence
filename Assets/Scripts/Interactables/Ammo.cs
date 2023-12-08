@@ -9,39 +9,52 @@ using EvolveGames;
 public class Ammo : Interactable
 {
     [SerializeField]
-    private int ammoAmount = 30;
+    public int ammoAmount = 30;
 
     [SerializeField]
-    private string ammoType = "Any";
+    public string ammoType = "Any";
 
-    [SerializeField]
-    private GameObject playerHand;
+
+    private InputManager player;
 
     private WeaponBehaviour weapon;
 
     private Animator animator;
     private Viewpoint viewpoint;
+    private bool isCollecting;
+
+    
 
     private void Start()
     {
         animator = GetComponentInChildren<Animator>();
         promptMessage = "Ammo x"+ammoAmount+" ("+ammoType+")";
         viewpoint = GetComponent<Viewpoint>();
+        var gameModeService = ServiceLocator.Current.Get<IGameModeService>();
+
+        player = gameModeService.GetPlayerCharacter();
+        interactButton = gameModeService.GetInteractButton();
+        isCollecting = false;
     }
 
     protected override void Interact()
     {
-        weapon = playerHand.GetComponentInChildren<WeaponBehaviour>();
+        weapon = player.GetComponentInChildren<WeaponBehaviour>();
  
         if (weapon != null)
         {
             if (ammoType == weapon.GetAmmunitionType())
             {
-                if (!weapon.IsFull())
+                if (!weapon.IsFull() && !isCollecting)
                 {
+                    isCollecting = true;
                     weapon.FillAmmunition(ammoAmount);
                     animator.SetTrigger("Collect");
                     Invoke("DestroyObject", 0.3333f);
+                    interactButton.GetComponentInChildren<TextMeshProUGUI>().text = "INTERACT";
+                    interactButton.GetComponentInChildren<TextMeshProUGUI>().enabled = false;
+                    interactButton.GetComponent<Image>().enabled = false;
+                    interactButton.GetComponent<OnScreenButton>().enabled = false;
                 }
                 else
                 {
@@ -52,6 +65,10 @@ public class Ammo : Interactable
             {
                 promptMessage = "Wrong Ammo Type";
             }
+        }
+        else
+        {
+            promptMessage = "Weapon Is Null";
         }
     }
 
@@ -72,7 +89,7 @@ public class Ammo : Interactable
     protected override void OnLook()
     {
         base.OnLook();
-        if (interactButton != null && promptMessage.Substring(0, 4) == "Ammo")
+        if (interactButton != null)
         {
 
             interactButton.GetComponentInChildren<TextMeshProUGUI>().text = "GRAB";
@@ -80,6 +97,7 @@ public class Ammo : Interactable
             interactButton.GetComponent<Image>().enabled = true;
             interactButton.GetComponent<OnScreenButton>().enabled = true;
         }
+
     }
 
     public override void OnLookOff()
