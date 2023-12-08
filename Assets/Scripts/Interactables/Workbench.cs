@@ -32,6 +32,8 @@ public class Workbench : Interactable
 
     private float upgradeTime;
 
+    private float weaponUpgradeTime;
+
     private bool isUpgrading;
 
     private PlayerPoints playerPoints;
@@ -58,16 +60,17 @@ public class Workbench : Interactable
 
     protected override void OnLook()
     {
-        weapon = playerHand.GetComponentInChildren<WeaponBehaviour>();
-        playerPoints = playerHand.GetComponentInParent<PlayerPoints>();
 
-        if (weapon != null && switchWeaponButton != null)
-        {
-            upgradeCost = weapon.GetUpgradeCost();
-            switchWeaponButton.SetActive(false);
-        }
         if (!isUpgrading)
         {
+            weapon = playerHand.GetComponentInChildren<WeaponBehaviour>();
+            playerPoints = playerHand.GetComponentInParent<PlayerPoints>();
+
+            if (weapon != null && switchWeaponButton != null)
+            {
+                upgradeCost = weapon.GetUpgradeCost();
+                switchWeaponButton.SetActive(false);
+            }
 
             if ((interactButton != null) && weapon.GetCurrentUpgradeLevel() < weapon.GetMaxUpgrade())
             {
@@ -177,9 +180,10 @@ public class Workbench : Interactable
                 finishedUpgrade = true;
                 workbenchWeapon.GetComponentInChildren<SkinnedMeshRenderer>().enabled = false;
                 playerPoints.GetComponent<ItemChange>().ReturnItem(itemUpgradingIndex);
-                weapon = playerHand.GetComponentInChildren<WeaponBehaviour>();
+
                 weapon.SetUpgradeLevel(weaponUpgradeLevel);
                 weapon.SetWeaponIsUpgrading();
+
 
             }
         }
@@ -192,6 +196,7 @@ public class Workbench : Interactable
         {
             isUpgrading = false;
             finishedUpgrade = false;
+            upgradeCost = weapon.GetUpgradeCost();
             promptMessage = "Upgrade Weapon (" + upgradeCost + ")";
             weaponUpgradeLevel = 0;
 

@@ -295,6 +295,7 @@ public class Weapon : WeaponBehaviour
     {
         if (isUpgrading)
         {
+
             currentUpgradeLevel++;
             isUpgrading = false;
             damage += (((currentUpgradeLevel + 1) * (currentUpgradeLevel + 1)) * 0.5f);
@@ -413,7 +414,6 @@ public class Weapon : WeaponBehaviour
         //Make sure that we have a camera cached, otherwise we don't really have the ability to perform traces.
         if (playerCamera == null)
             return;
-
 
 
         if (shotsFired != ammunitionClip && ammunitionCurrent != 0)
