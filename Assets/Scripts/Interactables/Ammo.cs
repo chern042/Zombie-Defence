@@ -6,6 +6,7 @@ using UnityEngine.UI;
 using UnityEngine.InputSystem.OnScreen;
 using EvolveGames;
 
+
 public class Ammo : Interactable
 {
     [SerializeField]
@@ -17,14 +18,11 @@ public class Ammo : Interactable
 
     private InputManager player;
 
-    private WeaponBehaviour weapon;
+    private GunBehaviour weapon;
 
     private Animator animator;
     private Viewpoint viewpoint;
     private bool isCollecting;
-
-    [HideInInspector]
-    protected new GameObject interactButton;
 
     private void Start()
     {
@@ -40,36 +38,37 @@ public class Ammo : Interactable
 
     protected override void Interact()
     {
-        weapon = player.GetComponentInChildren<WeaponBehaviour>();
+        weapon = player.GetComponentInChildren<GunBehaviour>();
  
         if (weapon != null)
         {
-            if (ammoType == weapon.GetAmmunitionType())
-            {
-                if (!weapon.IsFull() && !isCollecting)
+                if (ammoType == weapon.GetAmmunitionType())
                 {
-                    isCollecting = true;
-                    weapon.FillAmmunition(ammoAmount);
-                    animator.SetTrigger("Collect");
-                    Invoke("DestroyObject", 0.3333f);
-                    interactButton.GetComponentInChildren<TextMeshProUGUI>().text = "INTERACT";
-                    interactButton.GetComponentInChildren<TextMeshProUGUI>().enabled = false;
-                    interactButton.GetComponent<Image>().enabled = false;
-                    interactButton.GetComponent<OnScreenButton>().enabled = false;
+                    if (!weapon.IsFull() && !isCollecting)
+                    {
+                        isCollecting = true;
+                        weapon.FillAmmunition(ammoAmount);
+                        animator.SetTrigger("Collect");
+                        Invoke("DestroyObject", 0.3333f);
+                        interactButton.GetComponentInChildren<TextMeshProUGUI>().text = "INTERACT";
+                        interactButton.GetComponentInChildren<TextMeshProUGUI>().enabled = false;
+                        interactButton.GetComponent<Image>().enabled = false;
+                        interactButton.GetComponent<OnScreenButton>().enabled = false;
+                    }
+                    else
+                    {
+                        promptMessage = "Ammo Full";
+                    }
                 }
                 else
                 {
-                    promptMessage = "Ammo Full";
+                    promptMessage = "Wrong Ammo Type";
                 }
-            }
-            else
-            {
-                promptMessage = "Wrong Ammo Type";
-            }
+
         }
         else
         {
-            promptMessage = "Weapon Is Null";
+            promptMessage = "Weapon Does Not Require Ammo";
         }
     }
 

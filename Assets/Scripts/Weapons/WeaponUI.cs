@@ -20,47 +20,65 @@ public class WeaponUI : MonoBehaviour
     private int currentClipAmmo;
     private int currentTotalAmmo;
     private WeaponBehaviour weapon;
+    private GunBehaviour gun;
 
     private string lastWeapon;
     // Start is called before the first frame update
     void Start()
     {
         weapon = hand.GetComponentInChildren<WeaponBehaviour>();
-        lastWeapon = weapon.name;
-        currentClipAmmo = weapon.GetAmmunitionClip();
+        //lastWeapon = weapon.name;
+        if (weapon.GetWeaponType() != WeaponBehaviour.WeaponType.Melee)
+        {
+            gun = hand.GetComponent<GunBehaviour>();
+            //currentClipAmmo = gun.GetAmmunitionClip();
+        }
+        else
+        {
+            gun = null;
+        }
     }
 
     // Update is called once per frame
     void Update()
     {
+
         if (weapon != null)
         {
             if (weapon.name != hand.GetComponentInChildren<WeaponBehaviour>().name)
             {
                 weapon = hand.GetComponentInChildren<WeaponBehaviour>();
+                if (weapon.GetWeaponType() != WeaponBehaviour.WeaponType.Melee)
+                {
+                    gun = hand.GetComponent<GunBehaviour>();
+                }
+                else
+                {
+                    gun = null;
+                }
             }
-
-            if (!weapon.IsMelee())
+            if (gun != null)
             {
+
                 ammoText.text = "AMMO: " + GetWeaponAmmo();
 
 
-                Debug.Log("Current Ammo: " + weapon.GetAmmunitionClip());
-                if (weapon.GetAmmunitionClip() == 0)
+                Debug.Log("Current Ammo: " + gun.GetAmmunitionClip());
+                if (gun.GetAmmunitionClip() == 0)
                 {
-                    if (weapon.HasAmmunition() && !weapon.IsReloading())
+                    if (gun.HasAmmunition() && !gun.IsReloading())
                     {
                         reloadButton.GetComponentInChildren<TextMeshProUGUI>().enabled = true;
                         reloadButton.GetComponent<Image>().enabled = true;
                         reloadButton.GetComponent<OnScreenButton>().enabled = true;
                     }
-                    else if (weapon.IsReloading())
+                    else if (gun.IsReloading())
                     {
                         reloadButton.GetComponentInChildren<TextMeshProUGUI>().enabled = false;
                         reloadButton.GetComponent<Image>().enabled = false;
                         reloadButton.GetComponent<OnScreenButton>().enabled = false;
                     }
-                    if (!weapon.HasAmmunition())
+                    if (!gun.HasAmmunition())
                     {
                         ammoText.color = Color.red;
                     }
@@ -75,12 +93,16 @@ public class WeaponUI : MonoBehaviour
                 ammoText.text = "";
             }
         }
+        else
+        {
+            ammoText.text = "";
+        }
 
     }
 
 
     private string GetWeaponAmmo()
     {
-        return weapon.GetAmmunitionClip() + "/" + weapon.GetAmmunitionCurrent();
+        return gun.GetAmmunitionClip() + "/" + gun.GetAmmunitionCurrent();
     }
 }

@@ -2,79 +2,60 @@
 
 using UnityEditor.PackageManager;
 using UnityEngine;
-using UnityEngine.UIElements;
-using static UnityEditor.FilePathAttribute;
 
 /// <summary>
 /// Weapon. This class handles most of the things that weapons need.
 /// </summary>
-public class Weapon : WeaponBehaviour
+public class Weapon : GunBehaviour
 {
 
-    [SerializeField, HideInInspector]
-    private bool isMelee;
-
-    [Header("Melee Weapon Stats")]
-
-    [Tooltip("Weapon Damage (Melee & Guns).")]
-    [SerializeField, HideInInspector]
+    [Tooltip("Weapon Damage.")]
+    [SerializeField]
     private float damage = 1f;
-
-    [Tooltip("Attack Speed(How long the attack lasts.")]
-    [SerializeField, HideInInspector]
-    private float attackSpeed = 2f;
-
-    [Tooltip("How far can the weapon reach?")]
-    [SerializeField, HideInInspector]
-    private float meleeReach = 2.0f;
-
-    [Tooltip("Impact Blood Effect Prefabs.")]
-    [SerializeField, HideInInspector]
-    public Transform[] bloodImpactPrefabs;
 
 
 
     [Header("Firing")]
 
     [Tooltip("Is this weapon automatic? If yes, then holding down the firing button will continuously fire.")]
-    [SerializeField, HideInInspector]
+    [SerializeField]
     private bool automatic;
 
     [Tooltip("How fast the projectiles are.")]
-    [SerializeField, HideInInspector]
+    [SerializeField]
     private float projectileImpulse = 400.0f;
 
     [Tooltip("Amount of shots this weapon can shoot in a minute. It determines how fast the weapon shoots.")]
-    [SerializeField, HideInInspector]
+    [SerializeField]
     private float roundsPerMinute = 200f;
 
     [Tooltip("Mask of things recognized when firing.")]
-    [SerializeField, HideInInspector]
+    [SerializeField]
     private LayerMask mask;
 
     [Tooltip("Maximum distance at which this weapon can fire accurately. Shots beyond this distance will not use linetracing for accuracy.")]
-    [SerializeField, HideInInspector]
+    [SerializeField]
     private float maximumDistance = 500.0f;
 
     [Tooltip("Total(Maximum) Ammunition.")]
-    [SerializeField, HideInInspector]
+    [SerializeField]
     private int ammunitionTotal = 300;
 
     [Tooltip("Ammunition in clip.")]
-    [SerializeField, HideInInspector]
+    [SerializeField]
     private int ammunitionClip = 30;
 
 
     [Tooltip("Ammunition type (AR, Shotgun, Handgun, SMG, Any).")]
-    [SerializeField, HideInInspector]
+    [SerializeField]
     private string ammunitionType = "Any";
 
     [Tooltip("Fire Spread.")]
-    [SerializeField, HideInInspector]
+    [SerializeField]
     private Vector3 spread = new Vector3(0.1f, 0.1f, 0.1f);
 
     [Tooltip("Fire Spread Max Time.")]
-    [SerializeField, HideInInspector]
+    [SerializeField]
     private float spreadTime = 5f;
 
 
@@ -83,17 +64,17 @@ public class Weapon : WeaponBehaviour
     [Header("Animation")]
 
     [Tooltip("Transform that represents the weapon's ejection port, meaning the part of the weapon that casings shoot from.")]
-    [SerializeField, HideInInspector]
+    [SerializeField]
     private Transform socketEjection;
 
     [Header("Resources")]
 
     [Tooltip("Casing Prefab.")]
-    [SerializeField, HideInInspector]
+    [SerializeField]
     private GameObject prefabCasing;
 
     [Tooltip("Projectile Prefab. This is the prefab spawned when the weapon shoots.")]
-    [SerializeField, HideInInspector]
+    [SerializeField]
     private GameObject prefabProjectile;
 
     //[Tooltip("The AnimatorController a player character needs to use while wielding this weapon.")]
@@ -108,38 +89,30 @@ public class Weapon : WeaponBehaviour
     [Header("Audio Clips.")]
 
     [Tooltip("Holster Audio Clip.")]
-    [SerializeField, HideInInspector]
+    [SerializeField]
     private AudioClip audioClipHolster;
 
     [Tooltip("Unholster Audio Clip.")]
-    [SerializeField, HideInInspector]
+    [SerializeField]
     private AudioClip audioClipUnholster;
 
     [Header("Audio Clips Reloads")]
 
     [Tooltip("Reload Audio Clip.")]
-    [SerializeField, HideInInspector]
+    [SerializeField]
     private AudioClip audioClipReload;
 
     [Tooltip("Reload Empty Audio Clip.")]
-    [SerializeField, HideInInspector]
+    [SerializeField]
     private AudioClip audioClipReloadEmpty;
 
     [Tooltip("AudioClip played when this weapon is fired without any ammunition.")]
-    [SerializeField, HideInInspector]
+    [SerializeField]
     private AudioClip audioClipFireEmpty;
 
 
-    [Tooltip("Melee attack swing Audio Clip.")]
-    [SerializeField, HideInInspector]
-    private AudioClip meleeSwingSound;
-
-    [Tooltip("Melee attack hit Audio Clip.")]
-    [SerializeField, HideInInspector]
-    private AudioClip meleeHitSound;
-
     [Tooltip("Weapon Audio Source.")]
-    [SerializeField, HideInInspector]
+    [SerializeField]
     private AudioSource audioSource;
 
 
@@ -157,8 +130,6 @@ public class Weapon : WeaponBehaviour
     [SerializeField]
     private float upgradeTime = 5;
 
-    private bool meleeIsAttacking = false;
-    private bool meleeReadyToAttack = true;
     private bool isFiring;
     private float lastFired;
     private PlayerLook playerLook;
@@ -204,6 +175,7 @@ public class Weapon : WeaponBehaviour
     private Transform playerCamera;
     Transform muzzleSocket;
 
+    private WeaponType weaponType;
 
     protected override void Awake()
     {
@@ -213,7 +185,7 @@ public class Weapon : WeaponBehaviour
         shootStartTime = 0;
 
         //Get Attachment Manager.
-
+        weaponType = WeaponType.Gun;
         //Cache the camera
         playerCamera = playerLook.cam.transform;
         currentUpgradeLevel = 0;
@@ -268,8 +240,6 @@ public class Weapon : WeaponBehaviour
     public override bool IsFull() => ammunitionCurrent == ammunitionTotal;
     public override bool HasAmmunition() => ammunitionCurrent > 0;
 
-    public override bool IsMelee() => isMelee;
-
     public override bool IsReloading() => isReloading;
 
     public override string GetAmmunitionType() => ammunitionType;
@@ -282,7 +252,7 @@ public class Weapon : WeaponBehaviour
     public override float GetUpgradeTime() => upgradeTime;
     public override int GetCurrentUpgradeLevel() => currentUpgradeLevel;
     public override void SetWeaponIsUpgrading() => isUpgrading = true;
-
+    public override WeaponType GetWeaponType() => weaponType;
 
     public override void SetUpgradeLevel(int level) => currentUpgradeLevel = level;
 
@@ -346,13 +316,7 @@ public class Weapon : WeaponBehaviour
     }
     public override void Shoot()
     {
-        Debug.Log("Fire Test is melee: " + isMelee + " name: " + gameObject.name);
-        if (isMelee)
-        {
-            Attack();
-        }
-        else
-        {
+
             if (automatic)
             {
                 isFiring = true;
@@ -366,13 +330,12 @@ public class Weapon : WeaponBehaviour
                 }
 
             }
-        }
+
 
     }
 
     public override void CancelShoot()
     {
-        if (isMelee) return;
         isFiring = false;
         shootTime = 0;
         shootStartTime = 0;
@@ -518,70 +481,6 @@ public class Weapon : WeaponBehaviour
             //reload empty
         }
 
-    }
-
-
-
-    public override void Attack()
-    {
-        //Make sure that we have a camera cached, otherwise we don't really have the ability to perform traces.
-        Debug.Log("Test attk");
-        if (playerCamera == null)
-        {
-            return;
-        }
-        if (!meleeReadyToAttack || meleeIsAttacking)
-        {
-            return;
-        }
-        Debug.Log("got through player camera check");
-        meleeIsAttacking = true;
-        meleeReadyToAttack = false;
-
-
-        Invoke(nameof(ResetAttack), attackSpeed);
-        AttackRayCast();
-
-
-    }
-
-    public void ResetAttack()
-    {
-        meleeIsAttacking = false;
-        meleeReadyToAttack = true;
-    }
-    public void AttackRayCast()
-    {
-        Ray ray = new Ray(playerCamera.position, playerCamera.forward);
-        Debug.DrawRay(ray.origin, ray.direction * meleeReach);
-        RaycastHit hitInfo;
-        animator.SetTrigger("Hit");
-        // meleeIsAttacking = true;
-        // meleeReadyToAttack = false;
-
-
-        audioSource.pitch = Random.Range(0.9f, 1.1f);
-        audioSource.PlayOneShot(meleeSwingSound);
-        if (Physics.Raycast(ray, out hitInfo, meleeReach, mask))
-        {
-            HitTarget(hitInfo);
-        }
-    }
-
-    private void HitTarget(RaycastHit hitInfo)
-    {
-        audioSource.pitch = 1;
-        audioSource.PlayOneShot(meleeHitSound);
-
-        Enemy enemy = hitInfo.collider.gameObject.GetComponent<Enemy>();
-        enemy.DamageEnemy(damage);
-
-
-        //if (hitInfo.collider.CompareTag("Zombie"))
-        //{
-        //    Debug.Log("HIT ZOMBIE");
-        //    Instantiate(bloodImpactPrefabs[Random.Range(0, bloodImpactPrefabs.Length)], hitInfo.point,Quaternion.LookRotation(hitInfo.normal));
-        //}
     }
 
 

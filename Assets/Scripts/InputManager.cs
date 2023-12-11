@@ -15,6 +15,7 @@ public class InputManager : MonoBehaviour
     private ItemChange itemChange;
     private string lastWeapon;
     private WeaponBehaviour weapon;
+    private GunBehaviour gun;
 
     void Awake()
     {
@@ -25,10 +26,16 @@ public class InputManager : MonoBehaviour
         look = GetComponent<PlayerLook>();
         itemChange = GetComponent<ItemChange>();
         weapon = GetComponentInChildren<WeaponBehaviour>();
+        gun = GetComponentInChildren<GunBehaviour>();
+        if(gun != null)
+        {
+            onFoot.Reload.performed += ctx => gun.Reload();
+        }
 
         onFoot.Shoot.performed += ctx => weapon.Shoot();
         onFoot.Shoot.canceled += ctx => weapon.CancelShoot();
-        onFoot.Reload.performed += ctx => weapon.Reload();
+
+        //onFoot.Reload.performed += ctx => weapon.Reload();
         onFoot.Jump.performed += ctx => motor.Jump();
         onFoot.Switch.performed += ctx => ItemChange();
 
