@@ -69,8 +69,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   useEvents: 0
   promptMessage: 
-  interactButton: {fileID: 2946960918993389871, guid: bdb29a3f4a110415e9a2d65cb6823461,
-    type: 3}
+  interactButton: {fileID: 0}
   ammoAmount: 30
   ammoType: Any
 --- !u!65 &2138638867656949954

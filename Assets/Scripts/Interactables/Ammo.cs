@@ -23,7 +23,8 @@ public class Ammo : Interactable
     private Viewpoint viewpoint;
     private bool isCollecting;
 
-    
+    [HideInInspector]
+    protected new GameObject interactButton;
 
     private void Start()
     {
