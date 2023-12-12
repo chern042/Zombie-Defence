@@ -27,10 +27,9 @@ public class InputManager : MonoBehaviour
         itemChange = GetComponent<ItemChange>();
         weapon = GetComponentInChildren<WeaponBehaviour>();
         gun = GetComponentInChildren<GunBehaviour>();
-        if(gun != null)
-        {
-            onFoot.Reload.performed += ctx => gun.Reload();
-        }
+
+        onFoot.Reload.performed += ctx => gun.Reload();
+
 
         onFoot.Shoot.performed += ctx => weapon.Shoot();
         onFoot.Shoot.canceled += ctx => weapon.CancelShoot();
@@ -67,10 +66,6 @@ public class InputManager : MonoBehaviour
             {
                 weapon = GetComponentInChildren<WeaponBehaviour>();
                 gun = GetComponentInChildren<GunBehaviour>();
-                if (gun != null)
-                {
-                    onFoot.Reload.performed += ctx => gun.Reload();
-                }
                 lastWeapon = itemChange.GetActiveWeapon().name;
             }
         }

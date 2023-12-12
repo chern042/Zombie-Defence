@@ -35,7 +35,7 @@ public class Shotgun : GunBehaviour
 
     [Tooltip("Maximum distance at which this weapon can fire accurately. Shots beyond this distance will not use linetracing for accuracy.")]
     [SerializeField]
-    private float maximumDistance = 50.0f;
+    private float maximumDistance = 500.0f;
 
     [Tooltip("Total(Maximum) Ammunition.")]
     [SerializeField]
@@ -196,7 +196,7 @@ public class Shotgun : GunBehaviour
         shootStartTime = 0;
 
         //Get Attachment Manager.
-        weaponType = WeaponType.Gun;
+        weaponType = WeaponType.Shotgun;
         //Cache the camera
         playerCamera = playerLook.cam.transform;
         currentUpgradeLevel = 0;
@@ -413,7 +413,13 @@ public class Shotgun : GunBehaviour
             //Determine the rotation that we want to shoot our projectile in.
             //Quaternion rotation = Quaternion.LookRotation((playerCamera.forward * 1000.0f));//- muzzleSocket.position);
 
-            playerLook.ApplyRecoil(new Vector2(Random.Range(-spread.x, spread.x) * (spreadMultiplier) * Mathf.Clamp01(shootTime / spreadTime), Random.Range(-spread.y, spread.y)) * (spreadMultiplier) * Mathf.Clamp01(shootTime / spreadTime));
+
+
+            //****
+            //playerLook.ApplyRecoil(new Vector2(Random.Range(-spread.x, spread.x) * (spreadMultiplier) * Mathf.Clamp01(shootTime / spreadTime), Random.Range(-spread.y, spread.y)) * (spreadMultiplier) * Mathf.Clamp01(shootTime / spreadTime));
+
+
+
 
             Vector3 shootDirection;// = (playerCamera.forward * 1000f);// - muzzleSocket.position);
             Ray ray;
@@ -428,31 +434,32 @@ public class Shotgun : GunBehaviour
                 ray = new Ray(playerCamera.position, shootDirection);
                 if (Physics.Raycast(ray, out RaycastHit hit, maximumDistance, mask))
                 {
-                    // Adjust damage based on the number of pellets.
-                    spreadRotation = Quaternion.LookRotation(hit.point - muzzleSocket.position);
+                    //spreadRotation = Quaternion.LookRotation(hit.point - muzzleSocket.position);
 
-                    shootDirection = (hit.point - muzzleSocket.position);
-                    shootDirection.x += Random.Range(-spread.x, spread.x) * Mathf.Clamp01(shootTime / spreadTime);
-                    shootDirection.y += Random.Range(-spread.y, spread.y) * Mathf.Clamp01(shootTime / spreadTime);
-                    shootDirection.z += Random.Range(-spread.z, spread.z) * Mathf.Clamp01(shootTime / spreadTime);
-
-                    shootDirection.Normalize();
-                    Debug.DrawRay(ray.origin, ray.direction * maximumDistance);
-
-                    float distanceFactor = Mathf.Clamp01(1f - hit.distance / maxEffectiveRange);
-                    preDistanceDamage = damage;
-                    damage *= distanceFactor;
+                    //shootDirection = (hit.point - muzzleSocket.position);
+                    //shootDirection.x += Random.Range(-spread.x, spread.x) * Mathf.Clamp01(shootTime / spreadTime);
+                    //shootDirection.y += Random.Range(-spread.y, spread.y) * Mathf.Clamp01(shootTime / spreadTime);
+                    //shootDirection.z += Random.Range(-spread.z, spread.z) * Mathf.Clamp01(shootTime / spreadTime);
 
 
-
-                    //Spawn projectile from the projectile spawn point.
-                    GameObject projectile = Instantiate(prefabProjectile, muzzleSocket.position, spreadRotation);
-
-
-                    ////Add velocity to the projectile.
-                    projectile.GetComponent<Rigidbody>().velocity = ((shootDirection) * projectileImpulse);
                     Debug.DrawRay(ray.origin, ray.direction * maximumDistance, Color.red, 0.1f);
                 }
+                shootDirection.Normalize();
+
+                float distanceFactor = Mathf.Clamp01(1f - hit.distance / maxEffectiveRange);
+                preDistanceDamage = damage;
+                damage = preDistanceDamage * distanceFactor;
+
+
+
+                //Spawn projectile from the projectile spawn point.
+                GameObject projectile = Instantiate(prefabProjectile, muzzleSocket.position, spreadRotation);
+
+
+                ////Add velocity to the projectile.
+                projectile.GetComponent<Rigidbody>().velocity = ((shootDirection) * projectileImpulse);
+                Debug.DrawRay(ray.origin, ray.direction * maximumDistance, Color.red, 0.2f);
+
             }
 
 

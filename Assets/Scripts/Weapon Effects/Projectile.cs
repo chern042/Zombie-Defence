@@ -111,7 +111,7 @@ public class Projectile : MonoBehaviour
         }
 
         //If bullet collides with "Zombie" tag
-        if (collision.transform.tag == "Zombie" || collision.transform.tag == "Zombie Head")
+        if (collision.transform.tag == "Zombie")
         {
             //Instantiate random impact prefab from array
             collision.collider.gameObject.GetComponentInParent<Enemy>().DamageEnemy(player.gameObject.GetComponentInChildren<WeaponBehaviour>().GetDamage());
