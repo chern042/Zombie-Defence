@@ -6,7 +6,7 @@ using UnityEngine;
 /// <summary>
 /// Weapon. This class handles most of the things that weapons need.
 /// </summary>
-public class Weapon : GunBehaviour
+public class Gun : GunBehaviour
 {
 
     [Tooltip("Weapon Damage.")]

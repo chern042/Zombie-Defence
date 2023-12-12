@@ -66,6 +66,11 @@ public class InputManager : MonoBehaviour
             if (itemChange.GetActiveWeapon().name != lastWeapon)
             {
                 weapon = GetComponentInChildren<WeaponBehaviour>();
+                gun = GetComponentInChildren<GunBehaviour>();
+                if (gun != null)
+                {
+                    onFoot.Reload.performed += ctx => gun.Reload();
+                }
                 lastWeapon = itemChange.GetActiveWeapon().name;
             }
         }
