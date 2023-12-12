@@ -151,6 +151,7 @@ public class Shotgun : GunBehaviour
     private bool isUpgrading = false;
     private float semiAutoFireDelay = 0.33f;
     private float preDistanceDamage;
+    private Vector2 previousAngle;
     /// <summary>
     /// Weapon Animator.
     /// </summary>
@@ -200,6 +201,7 @@ public class Shotgun : GunBehaviour
         //Cache the camera
         playerCamera = playerLook.cam.transform;
         currentUpgradeLevel = 0;
+        previousAngle = Vector2.zero;
     }
 
     protected override void Start()
@@ -416,7 +418,6 @@ public class Shotgun : GunBehaviour
 
 
             //****
-            //playerLook.ApplyRecoil(new Vector2(Random.Range(-spread.x, spread.x) * (spreadMultiplier) * Mathf.Clamp01(shootTime / spreadTime), Random.Range(-spread.y, spread.y)) * (spreadMultiplier) * Mathf.Clamp01(shootTime / spreadTime));
 
 
 
@@ -427,16 +428,29 @@ public class Shotgun : GunBehaviour
             for (int i = 0; i < pelletCount; i++)
             {
                 // Calculate spread direction based on the spread angle.
-                Quaternion spreadRotation = Quaternion.Euler(Random.Range(-spreadAngle, spreadAngle), Random.Range(-spreadAngle, spreadAngle), 0f);
+                float currentAngleX = Random.Range(-spreadAngle, spreadAngle);
+                float currentAngleY = Random.Range(-spreadAngle, spreadAngle);
+                Quaternion spreadRotation;
+                if(previousAngle == Vector2.zero)
+                {
+                    previousAngle = new Vector2(currentAngleX, currentAngleY);
+                    spreadRotation = Quaternion.Euler(0f, currentAngleX, currentAngleY);
+                }
+                else
+                {
+                    spreadRotation = Quaternion.Euler(0f, -previousAngle.x, -previousAngle.y);
+                    previousAngle = Vector2.zero;
+                }
+
                 shootDirection = spreadRotation * playerCamera.forward;
 
                 // Use raycasting for each pellet.
                 ray = new Ray(playerCamera.position, shootDirection);
                 if (Physics.Raycast(ray, out RaycastHit hit, maximumDistance, mask))
                 {
-                    //spreadRotation = Quaternion.LookRotation(hit.point - muzzleSocket.position);
+                    spreadRotation = Quaternion.LookRotation(hit.point - muzzleSocket.position);
 
-                    //shootDirection = (hit.point - muzzleSocket.position);
+                    shootDirection = (hit.point - muzzleSocket.position);
                     //shootDirection.x += Random.Range(-spread.x, spread.x) * Mathf.Clamp01(shootTime / spreadTime);
                     //shootDirection.y += Random.Range(-spread.y, spread.y) * Mathf.Clamp01(shootTime / spreadTime);
                     //shootDirection.z += Random.Range(-spread.z, spread.z) * Mathf.Clamp01(shootTime / spreadTime);
@@ -458,9 +472,11 @@ public class Shotgun : GunBehaviour
 
                 ////Add velocity to the projectile.
                 projectile.GetComponent<Rigidbody>().velocity = ((shootDirection) * projectileImpulse);
-                Debug.DrawRay(ray.origin, ray.direction * maximumDistance, Color.red, 0.2f);
+                Debug.DrawRay(muzzleSocket.position, shootDirection * maximumDistance, Color.red, 0.2f);
 
             }
+            playerLook.ApplyRecoil(new Vector2(Random.Range(-spread.x, spread.x) * (spreadMultiplier) * Mathf.Clamp01(shootTime / spreadTime), Random.Range(-spread.y, spread.y)) * (spreadMultiplier) * Mathf.Clamp01(shootTime / spreadTime));
+
 
 
             playerLook.cam.fieldOfView = 65 - Mathf.Clamp(shootTime / (spreadTime / 4), 0f, 4f);

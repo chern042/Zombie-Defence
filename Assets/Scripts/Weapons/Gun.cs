@@ -397,7 +397,6 @@ public class Gun : GunBehaviour
             //Determine the rotation that we want to shoot our projectile in.
             Quaternion rotation = Quaternion.LookRotation((playerCamera.forward * 1000.0f));//- muzzleSocket.position);
 
-            playerLook.ApplyRecoil(new Vector2(Random.Range(-spread.x, spread.x) * (spreadMultiplier) * Mathf.Clamp01(shootTime / spreadTime), Random.Range(-spread.y, spread.y)) * (spreadMultiplier) * Mathf.Clamp01(shootTime / spreadTime));
 
             Vector3 shootDirection;// = (playerCamera.forward * 1000f);// - muzzleSocket.position);
             Ray ray;
@@ -440,6 +439,9 @@ public class Gun : GunBehaviour
                // }
 
             }
+
+            playerLook.ApplyRecoil(new Vector2(Random.Range(-spread.x, spread.x) * (spreadMultiplier) * Mathf.Clamp01(shootTime / spreadTime), Random.Range(-spread.y, spread.y)) * (spreadMultiplier) * Mathf.Clamp01(shootTime / spreadTime));
+
 
 
             GetComponentInParent<PlayerPoints>().AddPoints(100);
