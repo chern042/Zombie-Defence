@@ -152,6 +152,8 @@ namespace EvolveGames
 
         public  WeaponBehaviour GetActiveWeapon() => weapon;
 
+        public GameObject[] GetWeaponList() => Items;
+
 
     }
 
