@@ -21,11 +21,15 @@ public class WeaponsChest : Interactable
     private float weaponGenerationTime;
 
     [SerializeField]
-    private float weaponCost;
+    private int weaponCost;
 
     private bool isGeneratingWeapon;
 
     private bool weaponGenerationComplete;
+
+    private bool insufficientPoints;
+
+    private bool weaponGrabbed;
 
     private float timeGenerating;
 
@@ -33,7 +37,6 @@ public class WeaponsChest : Interactable
 
     private GameObject[] weaponList;
 
-    private bool blockInteractButton;
 
     // Start is called before the first frame update
     void Start()
@@ -45,7 +48,8 @@ public class WeaponsChest : Interactable
         weaponList = playerItems.GetWeaponList();
         isGeneratingWeapon = false;
         weaponGenerationComplete = false;
-        blockInteractButton = false;
+        insufficientPoints = false;
+        weaponGrabbed = false;
     }
 
     // Update is called once per frame
@@ -78,111 +82,115 @@ public class WeaponsChest : Interactable
 
     private void TurnOnInteractButton(string text)
     {
-        //if (!blockInteractButton)
-        //{
             interactButton.GetComponentInChildren<TextMeshProUGUI>().text = text;
             interactButton.GetComponentInChildren<TextMeshProUGUI>().enabled = true;
             interactButton.GetComponent<Image>().enabled = true;
             interactButton.GetComponent<OnScreenButton>().enabled = true;
-       // }
-        //else
-        //{
-        //    interactButton.GetComponentInChildren<TextMeshProUGUI>().text = "INTERACT";
-        //    interactButton.GetComponentInChildren<TextMeshProUGUI>().enabled = false;
-        //    interactButton.GetComponent<Image>().enabled = false;
-        //    interactButton.GetComponent<OnScreenButton>().enabled = false;
-        //}
     }
 
     protected override void OnLook()
     {
 
+        if (!insufficientPoints && !weaponGrabbed)
+        {
             if (!isGeneratingWeapon && !weaponGenerationComplete)
-            {
-                Debug.Log("ONLOOK !ISGENERATING AND !GENERATINGCOMPLETE == TRUE");
-            if (!blockInteractButton)
             {
                 TurnOnInteractButton("BUY");
                 promptMessage = "Purchase a weapon (" + weaponCost + ")";
                 animator.SetBool("ChestOpen", true);
-                Debug.Log("PURCHASING WEAPON CHEST OPEN");
-
-            }
             }
             else if (isGeneratingWeapon && !weaponGenerationComplete)
             {
-                Debug.Log("ONLOOK ISGENERATING AND !GENERATINGCOMPLETE == TRUE");
-
-            TurnOffInteractButton();
+                TurnOffInteractButton();
             }
-            else if (isGeneratingWeapon && weaponGenerationComplete)
+            else if (isGeneratingWeapon && weaponGenerationComplete && !insufficientPoints)
             {
-                Debug.Log("ONLOOK ISGENERATING AND GENERATINGCOMPLETE == TRUE");
-
-            TurnOnInteractButton("GRAB");
+                TurnOnInteractButton("GRAB");
                 promptMessage = "Generated: " + weaponList[generatedItemIndex].name;
-                animator.SetBool("ChestOpen", false);
+                animator.SetBool("ChestOpen", true);
 
             }
+        }else if (insufficientPoints && !weaponGrabbed)
+        {
+            promptMessage = "Insufficient Points";
+            TurnOffInteractButton();
+        }
+        else
+        {
+            promptMessage = "Weapon Grabbed";
+        }
 
     }
 
     protected override void Interact()
     {
-        if (!isGeneratingWeapon)
+        if (playerPoints.points < weaponCost)
         {
-            Debug.Log("INTERACT !ISGENERATING AND !ISINTERACTING == TRUE");
+            Debug.Log("INTERACT PLAYERPOINTS < COST == TRUE");
+            insufficientPoints = true;
+        }
 
-            if (playerPoints.points < weaponCost)
-            {
-                Debug.Log("INTERACT PLAYERPOINTS < COST == TRUE");
-
-                promptMessage = "Insufficient Points";
-                TurnOffInteractButton();
-                blockInteractButton = true;
-            }
-            else
+        if (!insufficientPoints)
+        {
+            if (!weaponGenerationComplete && !isGeneratingWeapon)
             {
                 Debug.Log("INTERACT WEAPON GENERATING");
-
                 isGeneratingWeapon = true;
-                weaponGenerationComplete = false;
                 animator.SetBool("WeaponIsGenerating", true);
             }
-        }
-        else if(isGeneratingWeapon)
-        {
-            if (weaponGenerationComplete)
+            else if (isGeneratingWeapon)
             {
-                playerItems.ReturnItem(generatedItemIndex);
-                isGeneratingWeapon = false;
-                weaponGenerationComplete = false;
+                if (weaponGenerationComplete)
+                {
+                    playerItems.ReturnItem(generatedItemIndex);
+                    playerPoints.RemovePoints(weaponCost);
+                    TurnOffInteractButton();
+                    weaponGrabbed = true;
+                    isGeneratingWeapon = false;
+                    weaponGenerationComplete = false;
 
+                }
             }
         }
-        base.Interact();
+
     }
+
 
     public override void CancelInteract()
     {
         Debug.Log("CANCEL INTERACT");
-        base.CancelInteract();
+
     }
 
     public override void OnLookOff()
     {
-        if (!isGeneratingWeapon)
+
+        if (insufficientPoints)
         {
+            insufficientPoints = false;
+            promptMessage = "Purchase a weapon (" + weaponCost + ")";
             animator.SetBool("ChestOpen", false);
+            TurnOffInteractButton();
+        }
+        else if (!isGeneratingWeapon)
+        {
+            insufficientPoints = false;
+            promptMessage = "Purchase a weapon (" + weaponCost + ")";
+            animator.SetBool("ChestOpen", false);
+            TurnOffInteractButton();
         }
         else
         {
-            if (weaponGenerationComplete)
+            if (weaponGenerationComplete && !weaponGrabbed)
             {
                 promptMessage = "Weapon Generated";
+                TurnOffInteractButton();
             }
         }
 
-
+        if (weaponGrabbed)
+        {
+            weaponGrabbed = false;
+        }
     }
 }
