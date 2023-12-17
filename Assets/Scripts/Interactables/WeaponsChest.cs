@@ -23,6 +23,11 @@ public class WeaponsChest : Interactable
     [SerializeField]
     private int weaponCost;
 
+    [SerializeField]
+    private GameObject[] weaponPrefabs;
+
+    private GameObject weaponGeneratedPrefab;
+
     private bool isGeneratingWeapon;
 
     private bool weaponGenerationComplete;
@@ -36,6 +41,8 @@ public class WeaponsChest : Interactable
     private int generatedItemIndex;
 
     private GameObject[] weaponList;
+
+    private float boxDelay;
 
 
     // Start is called before the first frame update
@@ -88,32 +95,49 @@ public class WeaponsChest : Interactable
             interactButton.GetComponent<OnScreenButton>().enabled = true;
     }
 
+    private void FindGeneratedWeapon()
+    {
+        foreach (GameObject wep in weaponPrefabs)
+        {
+            if (wep.name.Substring(0, 3) == weaponList[generatedItemIndex].name.Substring(0, 3))
+            {
+                weaponGeneratedPrefab = wep;
+            }
+        }
+
+    }
+
     protected override void OnLook()
     {
 
-        if (!insufficientPoints && !weaponGrabbed)
+        if (!weaponGrabbed)
         {
-            if (!isGeneratingWeapon && !weaponGenerationComplete)
+            if (!isGeneratingWeapon && !weaponGenerationComplete && !insufficientPoints)
             {
                 TurnOnInteractButton("BUY");
                 promptMessage = "Purchase a weapon (" + weaponCost + ")";
                 animator.SetBool("ChestOpen", true);
             }
-            else if (isGeneratingWeapon && !weaponGenerationComplete)
+
+            if (isGeneratingWeapon && !weaponGenerationComplete)
             {
                 TurnOffInteractButton();
             }
-            else if (isGeneratingWeapon && weaponGenerationComplete && !insufficientPoints)
+            else if (isGeneratingWeapon && weaponGenerationComplete)
             {
+                FindGeneratedWeapon();
+
+
                 TurnOnInteractButton("GRAB");
                 promptMessage = "Generated: " + weaponList[generatedItemIndex].name;
                 animator.SetBool("ChestOpen", true);
+                Invoke("SetWeaponPrefabActive", boxDelay);
 
             }
-        }else if (insufficientPoints && !weaponGrabbed)
-        {
-            promptMessage = "Insufficient Points";
-            TurnOffInteractButton();
+            else if (insufficientPoints)
+            {
+                promptMessage = "Insufficient points";
+            }
         }
         else
         {
@@ -124,7 +148,7 @@ public class WeaponsChest : Interactable
 
     protected override void Interact()
     {
-        if (playerPoints.points < weaponCost)
+        if (playerPoints.points < weaponCost && !isGeneratingWeapon && !weaponGenerationComplete)
         {
             Debug.Log("INTERACT PLAYERPOINTS < COST == TRUE");
             insufficientPoints = true;
@@ -132,22 +156,29 @@ public class WeaponsChest : Interactable
 
         if (!insufficientPoints)
         {
+
             if (!weaponGenerationComplete && !isGeneratingWeapon)
             {
+                playerPoints.RemovePoints(weaponCost);
                 Debug.Log("INTERACT WEAPON GENERATING");
                 isGeneratingWeapon = true;
                 animator.SetBool("WeaponIsGenerating", true);
+                boxDelay = 2.5f;
             }
             else if (isGeneratingWeapon)
             {
                 if (weaponGenerationComplete)
                 {
                     playerItems.ReturnItem(generatedItemIndex);
-                    playerPoints.RemovePoints(weaponCost);
                     TurnOffInteractButton();
                     weaponGrabbed = true;
                     isGeneratingWeapon = false;
                     weaponGenerationComplete = false;
+                    animator.SetBool("ChestOpen",false);
+                    Invoke("SetWeaponPrefabInactive", 1f);
+                    weaponGeneratedPrefab.GetComponent<Animator>().SetTrigger("WeaponHide");
+
+
 
                 }
             }
@@ -160,6 +191,21 @@ public class WeaponsChest : Interactable
     {
         Debug.Log("CANCEL INTERACT");
 
+    }
+    private void SetWeaponPrefabActive()
+    {
+        if (weaponGeneratedPrefab != null)
+        {
+            weaponGeneratedPrefab.SetActive(true);
+        }
+    }
+
+    private void SetWeaponPrefabInactive()
+    {
+        if (weaponGeneratedPrefab != null)
+        {
+            weaponGeneratedPrefab.SetActive(false);
+        }
     }
 
     public override void OnLookOff()
@@ -185,6 +231,12 @@ public class WeaponsChest : Interactable
             {
                 promptMessage = "Weapon Generated";
                 TurnOffInteractButton();
+                boxDelay = 0.5f;
+                animator.SetBool("ChestOpen", false);
+                Invoke("SetWeaponPrefabInactive", 1f);
+                weaponGeneratedPrefab.GetComponent<Animator>().SetTrigger("WeaponHide");
+
+
             }
         }
 
