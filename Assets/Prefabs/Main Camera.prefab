@@ -201,13 +201,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92485ac9db02d4c48b271475db844999, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isMelee: 1
   damage: 1
-  attackSpeed: 2
-  meleeReach: 2
-  bloodImpactPrefabs:
-  - {fileID: 4422897939842062, guid: ffbf169ab9dcfdc45ae14010bc82a6b2, type: 3}
-  - {fileID: 4422897939842062, guid: be1eb41fa96134dd496172db418056cf, type: 3}
   automatic: 0
   projectileImpulse: 400
   roundsPerMinute: 200
@@ -228,8 +222,6 @@ MonoBehaviour:
   audioClipReload: {fileID: 0}
   audioClipReloadEmpty: {fileID: 0}
   audioClipFireEmpty: {fileID: 0}
-  meleeSwingSound: {fileID: 8300000, guid: a1f6daaf8be9e417990bc448d906ab2b, type: 3}
-  meleeHitSound: {fileID: 8300000, guid: 67deeded4dccb412883a7320c385afa7, type: 3}
   audioSource: {fileID: 0}
   upgradeCost: 1000
   maxUpgrade: 5
@@ -1586,7 +1578,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6459015983850760482}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.06737384, y: -0, z: -0, w: 0.9977278}
+  m_LocalRotation: {x: 0.067370966, y: 0, z: 0, w: 0.997728}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -3054,12 +3046,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92485ac9db02d4c48b271475db844999, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isMelee: 0
   damage: 1
-  attackSpeed: 2
-  meleeReach: 2
-  bloodImpactPrefabs:
-  - {fileID: 4587651611338842, guid: 2a77aba03cf9e430a8c7d70c5ee25a96, type: 3}
   automatic: 1
   projectileImpulse: 400
   roundsPerMinute: 200
@@ -3083,8 +3070,6 @@ MonoBehaviour:
   audioClipReloadEmpty: {fileID: 8300000, guid: 1fe5c2e1733f354428fe88c1a7cbafe4,
     type: 3}
   audioClipFireEmpty: {fileID: 8300000, guid: eeef5302d4ca04d8e84d09ea04fa85da, type: 3}
-  meleeSwingSound: {fileID: 0}
-  meleeHitSound: {fileID: 0}
   audioSource: {fileID: 6837636111881180959}
   upgradeCost: 1000
   maxUpgrade: 5
@@ -4195,12 +4180,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92485ac9db02d4c48b271475db844999, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isMelee: 0
   damage: 1
-  attackSpeed: 2
-  meleeReach: 2
-  bloodImpactPrefabs:
-  - {fileID: 4587651611338842, guid: 2a77aba03cf9e430a8c7d70c5ee25a96, type: 3}
   automatic: 0
   projectileImpulse: 400
   roundsPerMinute: 200
@@ -4224,8 +4204,6 @@ MonoBehaviour:
   audioClipReloadEmpty: {fileID: 8300000, guid: c565065df3907944b8b58f0d27066ba8,
     type: 3}
   audioClipFireEmpty: {fileID: 8300000, guid: eeef5302d4ca04d8e84d09ea04fa85da, type: 3}
-  meleeSwingSound: {fileID: 0}
-  meleeHitSound: {fileID: 0}
   audioSource: {fileID: 6311213308672279470}
   upgradeCost: 0
   maxUpgrade: 0
@@ -4388,12 +4366,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 92485ac9db02d4c48b271475db844999, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isMelee: 0
   damage: 2
-  attackSpeed: 2
-  meleeReach: 2
-  bloodImpactPrefabs:
-  - {fileID: 4587651611338842, guid: 2a77aba03cf9e430a8c7d70c5ee25a96, type: 3}
   automatic: 1
   projectileImpulse: 600
   roundsPerMinute: 400
@@ -4417,8 +4390,6 @@ MonoBehaviour:
   audioClipReloadEmpty: {fileID: 8300000, guid: 1fe5c2e1733f354428fe88c1a7cbafe4,
     type: 3}
   audioClipFireEmpty: {fileID: 8300000, guid: eeef5302d4ca04d8e84d09ea04fa85da, type: 3}
-  meleeSwingSound: {fileID: 0}
-  meleeHitSound: {fileID: 0}
   audioSource: {fileID: 4612947505039938619}
   upgradeCost: 1000
   maxUpgrade: 5

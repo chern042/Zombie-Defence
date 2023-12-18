@@ -153,7 +153,7 @@ public class Workbench : Interactable
                         workbenchWeapon = wep;
                     }
                 }
-                workbenchWeapon.GetComponentInChildren<SkinnedMeshRenderer>().enabled = true;
+                workbenchWeapon.SetActive(true);
                 isUpgrading = true;
                 promptMessage = "";
                 upgradeBar.SetActive(true);
@@ -178,7 +178,7 @@ public class Workbench : Interactable
             if (isUpgraded && !finishedUpgrade) {
                 isUpgraded = false;
                 finishedUpgrade = true;
-                workbenchWeapon.GetComponentInChildren<SkinnedMeshRenderer>().enabled = false;
+                workbenchWeapon.SetActive(false);
                 playerPoints.GetComponent<ItemChange>().ReturnItem(itemUpgradingIndex);
 
                 weapon.SetUpgradeLevel(weaponUpgradeLevel);

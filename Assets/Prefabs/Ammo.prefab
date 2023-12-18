@@ -53,8 +53,8 @@ MonoBehaviour:
     type: 3}
   ImagePrefab: {fileID: 5311345518241477974, guid: c52be775796724f32be0429eeb8f5758,
     type: 3}
-  MaxViewRange: 8
-  MaxTextViewRange: 3
+  MaxViewRange: 10.16
+  MaxTextViewRange: 10.16
 --- !u!114 &8653204030893090776
 MonoBehaviour:
   m_ObjectHideFlags: 0

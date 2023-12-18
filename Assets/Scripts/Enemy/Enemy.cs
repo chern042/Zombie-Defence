@@ -334,7 +334,7 @@ public class Enemy : MonoBehaviour
     {
 
         enemyHealth -= damage;
-        if(enemyHealth <= 0)
+        if(enemyHealth <= 0 && !enemyDying)
         {
             playerPoints.AddPoints(pointsWorth);
             agent.isStopped = true;
