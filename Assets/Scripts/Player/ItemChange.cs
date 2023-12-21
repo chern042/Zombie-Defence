@@ -146,8 +146,61 @@ namespace EvolveGames
 
         public void ReturnItem(int item)
         {
-            itemsInInventory.Add(item);
-            ItemIdInt = item;
+            GameObject weapon = Items[item];
+            WeaponBehaviour weaponBehaviour = weapon.GetComponent<WeaponBehaviour>();
+            if(weaponBehaviour == null)
+            {
+                MeleeWeaponBehaviour meleeWeaponBehaviour = weapon.GetComponent<MeleeWeaponBehaviour>();
+                WeaponBehaviour.WeaponType weaponType = meleeWeaponBehaviour.GetWeaponType();
+                bool weaponTypeFound = false;
+                int weaponIndex = -1;
+                foreach (int i in itemsInInventory)
+                {
+                    if (Items[i].GetComponent<WeaponBehaviour>().GetWeaponType() == weaponType)
+                    {
+                        weaponTypeFound = true;
+                        weaponIndex = i;
+                    }
+                }
+                if (weaponTypeFound)
+                {
+                    itemsInInventory.Remove(weaponIndex);
+                    itemsInInventory.Add(item);
+                    ItemIdInt = item;
+                }
+                else
+                {
+                    itemsInInventory.Add(item);
+                    ItemIdInt = item;
+                }
+            }
+            else
+            {
+                WeaponBehaviour.WeaponType weaponType = weaponBehaviour.GetWeaponType();
+                bool weaponTypeFound = false;
+                int weaponIndex = -1;
+                foreach(int i in itemsInInventory)
+                {
+                    if (Items[i].GetComponent<WeaponBehaviour>().GetWeaponType() == weaponType)
+                    {
+                        weaponTypeFound = true;
+                        weaponIndex = i;
+                    }
+                }
+                if (weaponTypeFound)
+                {
+                    itemsInInventory.Remove(weaponIndex);
+                    itemsInInventory.Add(item);
+                    ItemIdInt = item;
+                }
+                else
+                {
+                    itemsInInventory.Add(item);
+                    ItemIdInt = item;
+                }
+
+            }
+
         }
 
         public  WeaponBehaviour GetActiveWeapon() => weapon;

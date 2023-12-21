@@ -94,7 +94,8 @@ public class MeleeWeapon : MeleeWeaponBehaviour
     /// The player character's camera.
     /// </summary>
     private Transform playerCamera;
-  
+
+    [SerializeField]
     private WeaponType weaponType;
 
     protected override void Awake()
@@ -104,7 +105,6 @@ public class MeleeWeapon : MeleeWeaponBehaviour
         playerLook = GetComponentInParent<PlayerLook>();
 
         //Get Attachment Manager.
-        weaponType = WeaponType.Melee;
         //Cache the camera
         playerCamera = playerLook.cam.transform;
         currentUpgradeLevel = 0;

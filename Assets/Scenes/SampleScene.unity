@@ -3367,6 +3367,7 @@ MonoBehaviour:
   upgradeCost: 1000
   maxUpgrade: 5
   upgradeTime: 5
+  weaponType: 2
 --- !u!114 &79012513
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -8732,6 +8733,12 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f5b099e6487383d4f8661e894b5d3f64, type: 3}
+--- !u!1 &194541079 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 485762954184775373, guid: eab56d5d9765d4f70afce2cae6aa8006,
+    type: 3}
+  m_PrefabInstance: {fileID: 3765665978034356452}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &194672392
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -68410,6 +68417,12 @@ Transform:
     type: 3}
   m_PrefabInstance: {fileID: 1518170741}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1522312518 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2982268019980371349, guid: eab56d5d9765d4f70afce2cae6aa8006,
+    type: 3}
+  m_PrefabInstance: {fileID: 3765665978034356452}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1525385993 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3308914722744996560, guid: 29abf24f5c3a0c346920490127e9b6d1,
@@ -71150,6 +71163,7 @@ MonoBehaviour:
   mask:
     serializedVersion: 2
     m_Bits: 192
+  weaponType: 0
 --- !u!1001 &1587288391
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -90304,6 +90318,7 @@ MonoBehaviour:
   upgradeCost: 1000
   maxUpgrade: 5
   upgradeTime: 15
+  weaponType: 3
 --- !u!1 &2029296815 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 3308914722744996560, guid: 29abf24f5c3a0c346920490127e9b6d1,
@@ -98479,6 +98494,11 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 914369508822801062, guid: eab56d5d9765d4f70afce2cae6aa8006,
+        type: 3}
+      propertyPath: weaponType
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 1153207413077470743, guid: eab56d5d9765d4f70afce2cae6aa8006,
         type: 3}
       propertyPath: mask.m_Bits
@@ -98517,13 +98537,28 @@ PrefabInstance:
     - target: {fileID: 2653305843186207168, guid: eab56d5d9765d4f70afce2cae6aa8006,
         type: 3}
       propertyPath: Items.Array.size
-      value: 6
+      value: 4
       objectReference: {fileID: 0}
+    - target: {fileID: 2653305843186207168, guid: eab56d5d9765d4f70afce2cae6aa8006,
+        type: 3}
+      propertyPath: Items.Array.data[1]
+      value: 
+      objectReference: {fileID: 1522312518}
+    - target: {fileID: 2653305843186207168, guid: eab56d5d9765d4f70afce2cae6aa8006,
+        type: 3}
+      propertyPath: Items.Array.data[2]
+      value: 
+      objectReference: {fileID: 194541079}
+    - target: {fileID: 2653305843186207168, guid: eab56d5d9765d4f70afce2cae6aa8006,
+        type: 3}
+      propertyPath: Items.Array.data[3]
+      value: 
+      objectReference: {fileID: 79012509}
     - target: {fileID: 2653305843186207168, guid: eab56d5d9765d4f70afce2cae6aa8006,
         type: 3}
       propertyPath: Items.Array.data[4]
       value: 
-      objectReference: {fileID: 257005908}
+      objectReference: {fileID: 79012509}
     - target: {fileID: 2653305843186207168, guid: eab56d5d9765d4f70afce2cae6aa8006,
         type: 3}
       propertyPath: Items.Array.data[5]
@@ -98532,7 +98567,7 @@ PrefabInstance:
     - target: {fileID: 2653305843186207168, guid: eab56d5d9765d4f70afce2cae6aa8006,
         type: 3}
       propertyPath: ItemLogos.Array.size
-      value: 6
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 2653305843186207168, guid: eab56d5d9765d4f70afce2cae6aa8006,
         type: 3}
@@ -98549,7 +98584,7 @@ PrefabInstance:
     - target: {fileID: 2653305843186207168, guid: eab56d5d9765d4f70afce2cae6aa8006,
         type: 3}
       propertyPath: itemsInInventory.Array.size
-      value: 5
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 2653305843186207168, guid: eab56d5d9765d4f70afce2cae6aa8006,
         type: 3}
@@ -98620,6 +98655,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 1.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 6578263247804680304, guid: eab56d5d9765d4f70afce2cae6aa8006,
+        type: 3}
+      propertyPath: weaponType
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6644904981725959642, guid: eab56d5d9765d4f70afce2cae6aa8006,
+        type: 3}
+      propertyPath: weaponType
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 8138504433753634991, guid: eab56d5d9765d4f70afce2cae6aa8006,
         type: 3}

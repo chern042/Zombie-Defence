@@ -6,7 +6,7 @@ using UnityEngine;
     public abstract class WeaponBehaviour : MonoBehaviour
     {
 
-        public enum WeaponType { Melee, Gun, Shotgun}
+        public enum WeaponType { Melee, Handgun, Shotgun, Rifle}
         /// <summary>
         /// Awake.
         /// </summary>

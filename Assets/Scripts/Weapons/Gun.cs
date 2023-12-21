@@ -175,6 +175,7 @@ public class Gun : GunBehaviour
     private Transform playerCamera;
     Transform muzzleSocket;
 
+    [SerializeField]
     private WeaponType weaponType;
 
     protected override void Awake()
@@ -185,7 +186,6 @@ public class Gun : GunBehaviour
         shootStartTime = 0;
 
         //Get Attachment Manager.
-        weaponType = WeaponType.Gun;
         //Cache the camera
         playerCamera = playerLook.cam.transform;
         currentUpgradeLevel = 0;
