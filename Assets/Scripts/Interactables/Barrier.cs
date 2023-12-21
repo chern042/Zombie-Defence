@@ -10,7 +10,6 @@ public class Barrier : Interactable
 	private BarrierController barrierController;
 
 
-
 	[SerializeField]
 	public float barrierRepairAmount = 14.28572f;
 

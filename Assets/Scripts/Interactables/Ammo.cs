@@ -24,6 +24,7 @@ public class Ammo : Interactable
     private Viewpoint viewpoint;
     private bool isCollecting;
 
+
     private void Start()
     {
         animator = GetComponentInChildren<Animator>();
@@ -74,7 +75,8 @@ public class Ammo : Interactable
 
     private void DestroyObject()
     {
-        Destroy(viewpoint);
+        viewpoint.DestroyViewpointUI();
+        Destroy(viewpoint.gameObject);
         Destroy(gameObject);
     }
 
@@ -89,13 +91,20 @@ public class Ammo : Interactable
     protected override void OnLook()
     {
         base.OnLook();
-        if (interactButton != null)
+        if (interactButton != null && !isCollecting)
         {
 
             interactButton.GetComponentInChildren<TextMeshProUGUI>().text = "GRAB";
             interactButton.GetComponentInChildren<TextMeshProUGUI>().enabled = true;
             interactButton.GetComponent<Image>().enabled = true;
             interactButton.GetComponent<OnScreenButton>().enabled = true;
+        }
+        else
+        {
+            interactButton.GetComponentInChildren<TextMeshProUGUI>().text = "INTERACT";
+            interactButton.GetComponentInChildren<TextMeshProUGUI>().enabled = false;
+            interactButton.GetComponent<Image>().enabled = false;
+            interactButton.GetComponent<OnScreenButton>().enabled = false;
         }
 
     }
@@ -106,6 +115,13 @@ public class Ammo : Interactable
         if (interactButton != null)
         {
 
+            interactButton.GetComponentInChildren<TextMeshProUGUI>().text = "INTERACT";
+            interactButton.GetComponentInChildren<TextMeshProUGUI>().enabled = false;
+            interactButton.GetComponent<Image>().enabled = false;
+            interactButton.GetComponent<OnScreenButton>().enabled = false;
+        }
+        if (isCollecting)
+        {
             interactButton.GetComponentInChildren<TextMeshProUGUI>().text = "INTERACT";
             interactButton.GetComponentInChildren<TextMeshProUGUI>().enabled = false;
             interactButton.GetComponent<Image>().enabled = false;

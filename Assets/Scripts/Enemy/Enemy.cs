@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
+using EvolveGames;
 using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.AI;
@@ -365,6 +366,9 @@ public class Enemy : MonoBehaviour
         if(ammo != null)
         {
             ammo.ammoAmount = Random.Range(1, 31);
+            Viewpoint ammoViewpoint = ammo.GetComponent<Viewpoint>();
+            ammoViewpoint.PlayerController = player;
+            ammoViewpoint.cam = player.GetComponentInChildren<Camera>();
         }
     }
 

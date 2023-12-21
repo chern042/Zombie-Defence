@@ -9,8 +9,8 @@ namespace EvolveGames
     {
         [Header("Viewpoint")]
         [SerializeField] string PointText = "Press E";
-        [Space, SerializeField] Camera cam;
-        [SerializeField] GameObject PlayerController;
+        [Space, SerializeField] public Camera cam;
+        [SerializeField] public GameObject PlayerController;
         [SerializeField] Image ImagePrefab;
         [Space, SerializeField, Range(0.1f, 20)] float MaxViewRange = 8;
         [SerializeField, Range(0.1f, 20)] float MaxTextViewRange = 3;
@@ -67,6 +67,12 @@ namespace EvolveGames
                 position = camera.transform.position + (vectorFromCam - proj);
             }
             return position;
+        }
+
+        public void DestroyViewpointUI()
+        {
+            Destroy(ImageUI);
+            Destroy(ImageText);
         }
 
     }
