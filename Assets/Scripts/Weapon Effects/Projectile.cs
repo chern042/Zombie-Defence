@@ -113,8 +113,16 @@ public class Projectile : MonoBehaviour
         //If bullet collides with "Zombie" tag
         if (collision.transform.tag == "Zombie")
         {
+            weapon = player.gameObject.GetComponentInChildren<WeaponBehaviour>();
+            float weaponDamage = weapon.GetDamage();
+
+            //if(weapon.GetWeaponType() == WeaponBehaviour.WeaponType.Shotgun)
+            //{
+            //    GunBehaviour gun = player.gameObject.GetComponentInChildren<GunBehaviour>();
+            //    weaponDamage = weapon.GetDamage();
+            //}
             //Instantiate random impact prefab from array
-            collision.collider.gameObject.GetComponentInParent<Enemy>().DamageEnemy(player.gameObject.GetComponentInChildren<WeaponBehaviour>().GetDamage());
+            collision.collider.gameObject.GetComponentInParent<Enemy>().DamageEnemy(weaponDamage);
 
             Transform impact = Instantiate(bloodImpactPrefabs[Random.Range
                 (0, bloodImpactPrefabs.Length)], transform.position,

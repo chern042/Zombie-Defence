@@ -149,9 +149,10 @@ public class Shotgun : GunBehaviour
     private bool isReloading = false;
     private int currentUpgradeLevel;
     private bool isUpgrading = false;
-    private float semiAutoFireDelay = 0.33f;
+    private float semiAutoFireDelay = 1.5f;
     private float preDistanceDamage;
     private Vector2 previousAngle;
+    private int reloadCount;
     /// <summary>
     /// Weapon Animator.
     /// </summary>
@@ -202,6 +203,7 @@ public class Shotgun : GunBehaviour
         playerCamera = playerLook.cam.transform;
         currentUpgradeLevel = 0;
         previousAngle = Vector2.zero;
+        reloadCount = 0;
     }
 
     protected override void Start()
@@ -220,6 +222,9 @@ public class Shotgun : GunBehaviour
         //Max Out Ammo.
         ammunitionCurrent = ammunitionTotal;
         // }
+
+        preDistanceDamage = damage;
+
 
 
     }
@@ -257,7 +262,7 @@ public class Shotgun : GunBehaviour
 
     public override string GetAmmunitionType() => ammunitionType;
 
-    public override float GetDamage() => damage;
+    public override float GetDamage() => damage / pelletCount;
 
 
     public override int GetUpgradeCost() => upgradeCost;
@@ -266,6 +271,8 @@ public class Shotgun : GunBehaviour
     public override int GetCurrentUpgradeLevel() => currentUpgradeLevel;
     public override void SetWeaponIsUpgrading() => isUpgrading = true;
     public override WeaponType GetWeaponType() => weaponType;
+
+
 
     public override void SetUpgradeLevel(int level) => currentUpgradeLevel = level;
 
@@ -359,41 +366,62 @@ public class Shotgun : GunBehaviour
     public void ReloadEvent()
     {
 
-        if (ammunitionCurrent >= ammunitionClip)
+        ammunitionCurrent -= 1;
+        shotsFired -= 1;
+        isReloading = false;
+        if(((ammunitionClip-shotsFired) < ammunitionClip) && (ammunitionCurrent != 0))
         {
-            if(shotsFired < ammunitionClip)
-            {
-                ammunitionCurrent -= shotsFired;
-                shotsFired = 0;
-            }
-            else
-            {
-                shotsFired = 0;
-                ammunitionCurrent -= ammunitionClip;
-            }
-
+            //animator.SetTrigger("Reload");
+            Reload();
         }
         else
         {
-            shotsFired = ammunitionClip - ammunitionCurrent;
-            ammunitionCurrent = 0;
-        }
-        isReloading = false;
-        if (!automatic)
-        {
-            EjectCasing();
+
+                animator.SetTrigger("ReloadDone");
+
         }
     }
 
     public override void Reload()
     {
         Debug.Log("Reloading");
-        if (!isReloading)
+
+        if (reloadCount == 0)
+        {
+            if (ammunitionCurrent >= ammunitionClip)
+            {
+                reloadCount = ammunitionClip;
+                //for(int i = 0; i < ammunitionClip; i++)
+                //{
+                //    audioSource.PlayOneShot(audioClipReload);
+                //    animator.SetBool("Reload", true);
+                //}
+            }
+            else
+            {
+                reloadCount = ammunitionCurrent;
+                //for(int i=0;i< ammunitionCurrent; i++)
+                //{
+                //    audioSource.PlayOneShot(audioClipReload);
+                //    animator.SetBool("Reload", true);
+                //}
+            }
+        }
+
+
+        if (!isReloading && reloadCount != 0)
         {
             isReloading = true;
             audioSource.PlayOneShot(audioClipReload);
             animator.SetTrigger("Reload");
+            //animator.SetBool("Reload", true);
+
+            reloadCount--;
+
         }
+
+
+
     }
     public override void Fire(float spreadMultiplier = 1.0f)
     {
@@ -457,12 +485,12 @@ public class Shotgun : GunBehaviour
 
 
                     Debug.DrawRay(ray.origin, ray.direction * maximumDistance, Color.red, 0.1f);
+                    float distanceFactor = Mathf.Clamp01(1f - hit.distance / maxEffectiveRange);
+                    damage = preDistanceDamage * distanceFactor;
                 }
                 shootDirection.Normalize();
 
-                float distanceFactor = Mathf.Clamp01(1f - hit.distance / maxEffectiveRange);
-                preDistanceDamage = damage;
-                damage = preDistanceDamage * distanceFactor;
+
 
 
 
@@ -556,7 +584,6 @@ public class Shotgun : GunBehaviour
             Debug.Log("Empty");
             audioSource.PlayOneShot(audioClipReloadEmpty);
 
-            animator.SetTrigger("ReloadEmpty");
 
             //reload empty
         }
