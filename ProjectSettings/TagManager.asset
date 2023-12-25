@@ -33,10 +33,10 @@ TagManager:
   - Water
   - UI
   - Interactable
-  - Concrete
+  - 
   - Projectile
   - Map Walls
-  - 
+  - Ignore Shooting Raycast
   - 
   - 
   - 

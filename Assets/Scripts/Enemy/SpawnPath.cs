@@ -2,9 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CollectObject : Interactable
+public class SpawnPath : MonoBehaviour
 {
-    public GameObject particle;
+    public List<Transform> spawnWaypoints = new List<Transform>();
     // Start is called before the first frame update
     void Start()
     {
@@ -15,11 +15,5 @@ public class CollectObject : Interactable
     void Update()
     {
         
-    }
-
-    protected override void Interact()
-    {
-        Destroy(gameObject);
-        Instantiate(particle, transform.position, Quaternion.identity);
     }
 }
