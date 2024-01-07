@@ -12,10 +12,11 @@ TagManager:
   - ExplosiveBarrel
   - Target
   - GasTank
-  - Metal (Static)
-  - Wood (Static)
-  - Dirt (Static)
   - Wood
+  - Zombie
+  - Undefined
+  - Soft
+  - Sand
   layers:
   - Default
   - TransparentFX
