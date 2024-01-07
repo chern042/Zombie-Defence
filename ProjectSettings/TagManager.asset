@@ -4,45 +4,36 @@
 TagManager:
   serializedVersion: 2
   tags:
-  - Weapon
-  - SecondCamera
-  - BulletSpawn
-  - LevelPart
-  - Dummie
   - Wall
-  - Concrete
-  - Zombie
-  - Barrier
-  - Main Barrier
-  - Zombie Head
-  - PlayerLimit
-  - Ammo
-  - ExplosiveBarrel
-  - FxTemporaire
-  - Terrain
-  - Wood
-  - Sand
   - Metal
-  - Soft
-  - InteractButton
+  - Blood
+  - Dirt
+  - Concrete
+  - ExplosiveBarrel
+  - Target
+  - GasTank
+  - Metal (Static)
+  - Wood (Static)
+  - Dirt (Static)
+  - Wood
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - Terrain
+  - 
   - Water
   - UI
-  - Interactable
   - 
+  - 
+  - Wall
+  - First Person View
+  - Character
+  - Post Processing
+  - Post Processing Weapon
+  - Post Processing Scope
+  - Invisible Wall
   - Projectile
-  - Map Walls
-  - Ignore Shooting Raycast
-  - 
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Interactable
   - 
   - 
   - 
