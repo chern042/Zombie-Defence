@@ -30,7 +30,12 @@ namespace InfimaGames.LowPolyShooterPack.Legacy
 		public Transform[] dirtImpactPrefabs;
 		public Transform[] concreteImpactPrefabs;
 
-		private void Start()
+        public Transform[] woodImpactPrefabs;
+        public Transform[] softImpactPrefabs;
+        public Transform[] sandImpactPrefabs;
+
+
+        private void Start()
 		{
 			//Grab the game mode service, we need it to access the player character!
 			var gameModeService = ServiceLocator.Current.Get<IGameModeService>();
@@ -91,7 +96,7 @@ namespace InfimaGames.LowPolyShooterPack.Legacy
 			{
 				//Instantiate random impact prefab from array
 				Instantiate(metalImpactPrefabs[Random.Range
-						(0, bloodImpactPrefabs.Length)], transform.position,
+						(0, metalImpactPrefabs.Length)], transform.position,
 					Quaternion.LookRotation(collision.contacts[0].normal));
 				//Destroy bullet object
 				Destroy(gameObject);
@@ -102,7 +107,7 @@ namespace InfimaGames.LowPolyShooterPack.Legacy
 			{
 				//Instantiate random impact prefab from array
 				Instantiate(dirtImpactPrefabs[Random.Range
-						(0, bloodImpactPrefabs.Length)], transform.position,
+						(0, dirtImpactPrefabs.Length)], transform.position,
 					Quaternion.LookRotation(collision.contacts[0].normal));
 				//Destroy bullet object
 				Destroy(gameObject);
@@ -113,14 +118,44 @@ namespace InfimaGames.LowPolyShooterPack.Legacy
 			{
 				//Instantiate random impact prefab from array
 				Instantiate(concreteImpactPrefabs[Random.Range
-						(0, bloodImpactPrefabs.Length)], transform.position,
+						(0, concreteImpactPrefabs.Length)], transform.position,
 					Quaternion.LookRotation(collision.contacts[0].normal));
 				//Destroy bullet object
 				Destroy(gameObject);
 			}
 
-			//If bullet collides with "Target" tag
-			if (collision.transform.tag == "Target")
+            if (collision.transform.tag == "Wood")
+            {
+                //Instantiate random impact prefab from array
+                Instantiate(woodImpactPrefabs[Random.Range
+                        (0, woodImpactPrefabs.Length)], transform.position,
+                    Quaternion.LookRotation(collision.contacts[0].normal));
+                //Destroy bullet object
+                Destroy(gameObject);
+            }
+
+            if (collision.transform.tag == "Soft")
+            {
+                //Instantiate random impact prefab from array
+                Instantiate(softImpactPrefabs[Random.Range
+                        (0, softImpactPrefabs.Length)], transform.position,
+                    Quaternion.LookRotation(collision.contacts[0].normal));
+                //Destroy bullet object
+                Destroy(gameObject);
+            }
+
+            if (collision.transform.tag == "Sand")
+            {
+                //Instantiate random impact prefab from array
+                Instantiate(sandImpactPrefabs[Random.Range
+                        (0, sandImpactPrefabs.Length)], transform.position,
+                    Quaternion.LookRotation(collision.contacts[0].normal));
+                //Destroy bullet object
+                Destroy(gameObject);
+            }
+
+            //If bullet collides with "Target" tag
+            if (collision.transform.tag == "Target")
 			{
 				//Toggle "isHit" on target object
 				collision.transform.gameObject.GetComponent

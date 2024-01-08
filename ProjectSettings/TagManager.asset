@@ -17,6 +17,12 @@ TagManager:
   - Undefined
   - Soft
   - Sand
+  - Main Barrier
+  - Ammo
+  - Barrier
+  - Zombie Head
+  - PlayerLimit
+  - InteractButton
   layers:
   - Default
   - TransparentFX
@@ -25,7 +31,7 @@ TagManager:
   - Water
   - UI
   - 
-  - 
+  - Terrain
   - Wall
   - First Person View
   - Character

@@ -18,7 +18,15 @@ namespace InfimaGames.LowPolyShooterPack
 	{
 		#region FIELDS SERIALIZED
 
-		[Title(label: "References")]
+
+		[Title(label: "Look Sensitivity")]
+
+		[Tooltip("The sensitivity of the player's input when the character is looking around.")]
+        [Range(1.0f, 10.0f)]
+        [SerializeField]
+		private float lookSensitivity = 1f;
+
+        [Title(label: "References")]
 
 		[Tooltip("The character's LowerWeapon component.")]
 		[SerializeField]
@@ -1357,7 +1365,7 @@ namespace InfimaGames.LowPolyShooterPack
 				return;
 
 			//If we're aiming, multiply by the mouse sensitivity multiplier of the equipped weapon's scope!
-			axisLook *= aiming ? equippedWeaponScope.GetMultiplierMouseSensitivity() : 1.0f;
+			axisLook *= aiming ? equippedWeaponScope.GetMultiplierMouseSensitivity() : 1.0f * lookSensitivity;
 		}
 
 		/// <summary>
