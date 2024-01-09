@@ -77,7 +77,7 @@ namespace InfimaGames.LowPolyShooterPack.Interface
                         
                     //Modify Text.
                     if(textToModify != null)
-                        textToModify.text = interactable.GetInteractionText().ToUpper();
+                        textToModify.text = interactable.GetPromptText().ToUpper();
                 }
                 //Hide.
                 else

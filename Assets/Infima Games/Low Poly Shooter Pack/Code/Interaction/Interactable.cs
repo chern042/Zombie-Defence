@@ -13,10 +13,13 @@ namespace InfimaGames.LowPolyShooterPack
 
         //TODO
         [SerializeField]
-        protected string interactionText;
-        
+        protected string promptText;
+
+        [SerializeField]
+        protected GameObject interactButton;
+
         #endregion
-        
+
         #region UNITY
 
         /// <summary>
@@ -53,13 +56,38 @@ namespace InfimaGames.LowPolyShooterPack
         /// </summary>
         /// <param name="actor">The actor starting the interaction.</param>
         public abstract void Interact(GameObject actor = null);
+
+        public virtual void InteractHold(GameObject actor = null)
+        {
+        }
+
+        public virtual void CancelInteract()
+        {
+        }
+
+
+        public string BaseOnLook()
+        {
+            OnLook();
+            return GetPromptText();
+        }
+
+        protected virtual void OnLook()
+        {
+        }
+
+        public virtual void OnLookOff()
+        {
+        }
         
         #endregion
 
         #region GETTERS
 
         //TODO
-        public virtual string GetInteractionText() => interactionText;
+        public virtual string GetPromptText() => promptText;
+        public virtual string SetPromptText(string text) => promptText = text;
+
 
         #endregion
     }

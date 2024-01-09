@@ -1,5 +1,6 @@
 //Copyright 2022, Infima Games. All Rights Reserved.
 
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -18,6 +19,10 @@ namespace InfimaGames.LowPolyShooterPack
         [SerializeField]
         private Transform interactor;
 
+        [Tooltip("Used to set the text the player sees when near an interactable object.")]
+        [SerializeField]
+        public TextMeshProUGUI promptText;
+
         [Header("Settings")]
 
         [Tooltip("Mask used to trace for interactions.")]
@@ -32,6 +37,8 @@ namespace InfimaGames.LowPolyShooterPack
         [SerializeField]
         private float maxDistance = 5.0f;
 
+
+
         #endregion
 
         #region FIELDS
@@ -45,6 +52,8 @@ namespace InfimaGames.LowPolyShooterPack
 		/// </summary>
         private Interactable interactable;
 
+        private bool inProgress;
+
         #endregion
 
         #region UNITY
@@ -54,21 +63,36 @@ namespace InfimaGames.LowPolyShooterPack
         /// </summary>
         protected override void Update()
         {
-	        //Interaction Trace.
-	        if (Physics.SphereCast(interactor.position, radius,
-		            interactor.forward, out hitResult, maxDistance, mask))
-	        {
-		        //If we hit a collider.
-		        if (hitResult.collider != null)
-		        {
-			        //Try to get the interactable.
-			        interactable = hitResult.collider.GetComponent<Interactable>();
-		        }
-		        else
-			        interactable = null;
-	        }
-	        else
-		        interactable = null;
+            promptText.text = string.Empty;
+            //Interaction Trace.
+            if (Physics.SphereCast(interactor.position, radius,
+                    interactor.forward, out hitResult, maxDistance, mask))
+            {
+                //If we hit a collider.
+                if (hitResult.collider != null)
+                {
+                    //Try to get the interactable.
+                    interactable = hitResult.collider.GetComponent<Interactable>();
+                    promptText.text = interactable.BaseOnLook();
+                    if (inProgress)
+                    {
+                        interactable.InteractHold(gameObject);
+                    }
+                }
+                else
+                {
+
+                    interactable = null;
+                }
+            }
+            else
+            {
+                if (interactable != null)
+                {
+                    interactable.OnLookOff();
+                }
+                interactable = null;
+            }
         }
 
         #endregion
@@ -85,16 +109,26 @@ namespace InfimaGames.LowPolyShooterPack
 			switch (context)
 			{
 				//Performed.
-				case {phase: InputActionPhase.Performed}:
-					//Make sure we can interact before continuing.
-					if (CanInteract() == false)
+				case {phase: InputActionPhase.Started}:
+                    //Make sure we can interact before continuing.
+                    if (CanInteract() == false)
 						return;
-					
-					//Try Interact.
-					if (interactable != null)
+                    inProgress = true;
+                    //Try Interact.
+                    if (interactable != null)
 						interactable.Interact(gameObject);
 					break;
+                case {phase: InputActionPhase.Canceled}:
+                    inProgress = false;
+                    if (interactable != null)
+                        interactable.CancelInteract();
+                    break;
 			}
+
+            if (context.action.inProgress)
+            {
+                Debug.Log("ACTION IN PROGRESS:");
+            }
 		}
 
         #endregion

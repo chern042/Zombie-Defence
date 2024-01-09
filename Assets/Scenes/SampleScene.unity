@@ -82989,6 +82989,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3994073307255220152, guid: 19eadcf8fbed56b4da77ca94c1b4145f,
         type: 3}
+      propertyPath: promptText
+      value: 
+      objectReference: {fileID: 602849196}
+    - target: {fileID: 3994073307255220152, guid: 19eadcf8fbed56b4da77ca94c1b4145f,
+        type: 3}
       propertyPath: mask.m_Bits
       value: 65920
       objectReference: {fileID: 0}
