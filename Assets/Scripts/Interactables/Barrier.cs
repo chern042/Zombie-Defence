@@ -39,9 +39,10 @@ namespace InfimaGames.LowPolyShooterPack
 
         }
 
-        protected override void OnLook()
+        public override void OnLook()
         {
-            base.OnLook();
+
+            //base.OnLook();
             if (interactButton != null)
             {
 
@@ -92,7 +93,7 @@ namespace InfimaGames.LowPolyShooterPack
                 interactTime = 0;
                 readyToInteract = false;
                 barrierController.RepairDamage(barrierRepairAmount);
-                Invoke(nameof(ResetInteract), interactDelay); //interact delay
+                //Invoke(nameof(ResetInteract), interactDelay); //interact delay
 
             }
 
@@ -110,6 +111,8 @@ namespace InfimaGames.LowPolyShooterPack
             else
             {
                 SetPromptText("Please Rest.");
+                Invoke(nameof(ResetInteract), interactDelay); //interact delay
+
             }
         }
 

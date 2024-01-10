@@ -65,14 +65,7 @@ namespace InfimaGames.LowPolyShooterPack
         {
         }
 
-
-        public string BaseOnLook()
-        {
-            OnLook();
-            return GetPromptText();
-        }
-
-        protected virtual void OnLook()
+        public virtual void OnLook()
         {
         }
 

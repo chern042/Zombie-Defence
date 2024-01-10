@@ -18,6 +18,7 @@
 	"sourceSize": {"w":128,"h":128},
 	"pivot": {"x":0.5,"y":0.5}
 },
+{
 	"filename": "1f60d.png",
 	"frame": {"x":256,"y":0,"w":128,"h":128},
 	"rotated": false,

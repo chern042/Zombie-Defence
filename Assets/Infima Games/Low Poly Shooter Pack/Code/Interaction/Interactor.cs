@@ -19,9 +19,9 @@ namespace InfimaGames.LowPolyShooterPack
         [SerializeField]
         private Transform interactor;
 
-        [Tooltip("Used to set the text the player sees when near an interactable object.")]
-        [SerializeField]
-        public TextMeshProUGUI promptText;
+        //[Tooltip("Used to set the text the player sees when near an interactable object.")]
+        //[SerializeField]
+        //public TextMeshProUGUI promptText;
 
         [Header("Settings")]
 
@@ -63,7 +63,7 @@ namespace InfimaGames.LowPolyShooterPack
         /// </summary>
         protected override void Update()
         {
-            promptText.text = string.Empty;
+            //promptText.text = string.Empty;
             //Interaction Trace.
             if (Physics.SphereCast(interactor.position, radius,
                     interactor.forward, out hitResult, maxDistance, mask))
@@ -73,7 +73,7 @@ namespace InfimaGames.LowPolyShooterPack
                 {
                     //Try to get the interactable.
                     interactable = hitResult.collider.GetComponent<Interactable>();
-                    promptText.text = interactable.BaseOnLook();
+                    interactable.OnLook();
                     if (inProgress)
                     {
                         interactable.InteractHold(gameObject);
