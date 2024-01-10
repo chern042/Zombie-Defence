@@ -83358,7 +83358,7 @@ MonoBehaviour:
   switchWeaponButton: {fileID: 926250428}
   upgradeBar: {fileID: 2111349225}
   upgradeBarCurrent: {fileID: 169251942}
-  workbenchUpgradeSlot: {fileID: 0}
+  workbenchUpgradeSlot: {fileID: 1129559947}
 --- !u!1001 &2047691461
 PrefabInstance:
   m_ObjectHideFlags: 0

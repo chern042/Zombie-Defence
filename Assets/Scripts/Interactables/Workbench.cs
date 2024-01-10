@@ -61,18 +61,22 @@ namespace InfimaGames.LowPolyShooterPack
             if (!isUpgrading)
             {
                 //weapon = playerHand.GetComponentInChildren<WeaponBehaviour>();
-                weapon = actor.GetComponentInChildren<Weapon>();
+                weapon = actor.GetComponentInParent<CharacterController>().gameObject.GetComponentInChildren<Weapon>();
                 //playerPoints = playerHand.GetComponentInParent<PlayerPoints>();
+                //Debug.Log("PLAYER****: " + actor.GetComponentInParent<CharacterController>().gameObject.name);
+                //Debug.Log("WEAPON****: " + actor.GetComponentInParent<CharacterController>().gameObject.GetComponentInChildren<Weapon>().name);
 
                 if (weapon != null && switchWeaponButton != null)
                 {
                     //upgradeCost = weapon.GetUpgradeCost();
-                    upgradeCost = weapon.GetUpgradeLevel() * 1000;
+                    upgradeCost = (weapon.GetUpgradeLevel()+1) * 1000;
                     switchWeaponButton.SetActive(false);
                 }
-
+                interactButton.GetComponentInChildren<TextMeshProUGUI>().enabled = true;
+                Debug.Log("REACHING INTERACT BUTTON SETTING");
                 if ((interactButton != null) && weapon.GetUpgradeLevel() < 5)
                 {
+                    Debug.Log("REACHED INTERACT BUTTON SETTING");
 
                     interactButton.GetComponentInChildren<TextMeshProUGUI>().text = "UPGRADE";
                     interactButton.GetComponentInChildren<TextMeshProUGUI>().enabled = true;
@@ -96,13 +100,13 @@ namespace InfimaGames.LowPolyShooterPack
                 }
             }
 
-            base.OnLook();
+          //  base.OnLook();
 
         }
 
         public override void OnLookOff()
         {
-            base.OnLookOff();
+            //base.OnLookOff();
 
             if (switchWeaponButton != null)
             {
@@ -142,9 +146,10 @@ namespace InfimaGames.LowPolyShooterPack
         {
             if (!isUpgrading)
             {
-                if ((playerPoints.points >= upgradeCost) && weapon.GetUpgradeLevel() <= 5)
+                //if ((playerPoints.points >= upgradeCost) && weapon.GetUpgradeLevel() <= 5)
+                if ((10000 >= upgradeCost) && weapon.GetUpgradeLevel() <= 5)
                 {
-                    playerPoints.RemovePoints((int)upgradeCost);
+                    //playerPoints.RemovePoints((int)upgradeCost);
                     //foreach (GameObject wep in weaponPrefabs)
                     //{
                     //    if (wep.name.Substring(0, 3) == weapon.name.Substring(0, 3))
@@ -153,6 +158,8 @@ namespace InfimaGames.LowPolyShooterPack
                     //    }
                     //}
                     weapon.gameObject.transform.SetParent(workbenchUpgradeSlot.transform);
+                    weapon.gameObject.transform.localPosition = Vector3.zero;
+                    weapon.gameObject.transform.localRotation = Quaternion.Euler(0, 0, 0);
                    // workbenchUpgradeSlot = weapon.gameObject;
                    // workbenchUpgradeSlot.SetActive(true);
 
@@ -162,7 +169,7 @@ namespace InfimaGames.LowPolyShooterPack
                     upgradeBarCurrent.fillAmount = 0;
                     weaponUpgradeLevel = weapon.GetUpgradeLevel() + 1;
 
-                    itemUpgradingIndex = playerPoints.GetComponent<ItemChange>().DropItem();
+                    //itemUpgradingIndex = playerPoints.GetComponent<ItemChange>().DropItem();
 
                 }
                 else if (weapon.GetUpgradeLevel() == 5)
@@ -182,10 +189,12 @@ namespace InfimaGames.LowPolyShooterPack
                     isUpgraded = false;
                     finishedUpgrade = true;
 
-                    weapon.gameObject.transform.SetParent(actor.GetComponentInChildren<Inventory>().gameObject.transform);
+                    weapon.gameObject.transform.SetParent(actor.GetComponentInParent<CharacterController>().gameObject.GetComponentInChildren<Inventory>().gameObject.transform);
+                    weapon.gameObject.transform.localPosition = Vector3.zero;
+                    weapon.gameObject.transform.localRotation = Quaternion.Euler(0, 0, 0);
                     //workbenchUpgradeSlot.SetActive(false);
 
-                    playerPoints.GetComponent<ItemChange>().ReturnItem(itemUpgradingIndex);
+                    // playerPoints.GetComponent<ItemChange>().ReturnItem(itemUpgradingIndex);
 
                     weapon.SetUpgradeLevel(weaponUpgradeLevel);
                     //weapon.SetWeaponIsUpgrading();
@@ -202,7 +211,7 @@ namespace InfimaGames.LowPolyShooterPack
             {
                 isUpgrading = false;
                 finishedUpgrade = false;
-                upgradeCost = weapon.GetUpgradeLevel() * 1000;
+                upgradeCost = (weapon.GetUpgradeLevel()+1) * 1000;
                 SetPromptText("Upgrade Weapon (" + upgradeCost + ")");
                 weaponUpgradeLevel = 0;
 
