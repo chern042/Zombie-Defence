@@ -47,6 +47,10 @@ namespace InfimaGames.LowPolyShooterPack
         [SerializeField] 
         private int roundsPerMinutes = 200;
 
+        [Tooltip("Amount of damage each projectile from this weapon inflicts on enemy when hit.")]
+        [SerializeField]
+        private int damage = 2;
+
         [Title(label: "Reloading")]
         
         [Tooltip("Determines if this weapon reloads in cycles, meaning that it inserts one bullet at a time, or not.")]
@@ -195,6 +199,9 @@ namespace InfimaGames.LowPolyShooterPack
         /// The player character's camera.
         /// </summary>
         private Transform playerCamera;
+
+        private int upgradeLevel;
+
         
         #endregion
 
@@ -213,6 +220,7 @@ namespace InfimaGames.LowPolyShooterPack
             characterBehaviour = gameModeService.GetPlayerCharacter();
             //Cache the world camera. We use this in line traces.
             playerCamera = characterBehaviour.GetCameraWorld().transform;
+            upgradeLevel = 0;
         }
         protected override void Start()
         {
@@ -289,6 +297,8 @@ namespace InfimaGames.LowPolyShooterPack
         /// GetMultiplierMovementSpeed.
         /// </summary>
         public override float GetMultiplierMovementSpeed() => multiplierMovementSpeed;
+
+        public void SetMultiplierMovementSpeed(float newMultiplier) => multiplierMovementSpeed = newMultiplier;
 
         /// <summary>
         /// GetAudioClipHolster.
@@ -374,7 +384,21 @@ namespace InfimaGames.LowPolyShooterPack
         /// GetRateOfFire.
         /// </summary>
         public override float GetRateOfFire() => roundsPerMinutes;
-        
+
+        public void SetRateOfFire(int newRateOfFire) => roundsPerMinutes = newRateOfFire;
+
+        public float GetSpread() => spread;
+
+        public void SetSpread(float newSpread) => spread = newSpread;
+
+        public int GetShotCount() => shotCount;
+
+        public void SetShotCount(int newShotCount) => shotCount = newShotCount;
+
+        public int GetDamage() => damage;
+
+        public void SetDamage(int newDamage) => damage = newDamage;
+
         /// <summary>
         /// IsFull.
         /// </summary>
@@ -392,6 +416,8 @@ namespace InfimaGames.LowPolyShooterPack
         /// GetAttachmentManager.
         /// </summary>
         public override WeaponAttachmentManagerBehaviour GetAttachmentManager() => attachmentManager;
+
+        public int GetUpgradeLevel() => upgradeLevel;
 
         #endregion
 

@@ -148,11 +148,12 @@ namespace InfimaGames.LowPolyShooterPack
             muzzleBehaviour = muzzleArray.SelectAndSetActive(muzzleIndex);
 
             //Randomize. This allows us to spice things up a little!
-            if (laserIndexRandom)
-                laserIndex = Random.Range(0, laserArray.Length);
+            //if (laserIndexRandom)
+            //    laserIndex = Random.Range(0, laserArray.Length);
             //Select Laser!
-            laserBehaviour = laserArray.SelectAndSetActive(laserIndex);
-            
+            laserIndex = 1;
+            laserBehaviour = laserArray.SelectAndSetActive(laserIndex); //always select flashlight
+
             //Randomize. This allows us to spice things up a little!
             if (gripIndexRandom)
                 gripIndex = Random.Range(0, gripArray.Length);
