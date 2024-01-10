@@ -73,7 +73,7 @@ namespace InfimaGames.LowPolyShooterPack
                 {
                     //Try to get the interactable.
                     interactable = hitResult.collider.GetComponent<Interactable>();
-                    interactable.OnLook();
+                    interactable.OnLook(gameObject);
                     if (inProgress)
                     {
                         interactable.InteractHold(gameObject);

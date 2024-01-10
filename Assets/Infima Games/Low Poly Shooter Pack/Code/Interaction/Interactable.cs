@@ -65,7 +65,7 @@ namespace InfimaGames.LowPolyShooterPack
         {
         }
 
-        public virtual void OnLook()
+        public virtual void OnLook(GameObject actor = null)
         {
         }
 

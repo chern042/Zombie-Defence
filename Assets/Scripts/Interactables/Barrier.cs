@@ -25,7 +25,7 @@ namespace InfimaGames.LowPolyShooterPack
         private bool readyToInteract;
         private float interactTime;
         // Use this for initialization
-        void Start()
+        protected override void Start()
         {
             readyToInteract = true;
             interactTime = 0;
@@ -34,15 +34,13 @@ namespace InfimaGames.LowPolyShooterPack
         }
 
         // Update is called once per frame
-        void Update()
+        //void Update()
+        //{
+
+        //}
+
+        public override void OnLook(GameObject actor)
         {
-
-        }
-
-        public override void OnLook()
-        {
-
-            //base.OnLook();
             if (interactButton != null)
             {
 

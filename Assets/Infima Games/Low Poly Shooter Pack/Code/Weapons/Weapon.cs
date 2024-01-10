@@ -298,8 +298,6 @@ namespace InfimaGames.LowPolyShooterPack
         /// </summary>
         public override float GetMultiplierMovementSpeed() => multiplierMovementSpeed;
 
-        public void SetMultiplierMovementSpeed(float newMultiplier) => multiplierMovementSpeed = newMultiplier;
-
         /// <summary>
         /// GetAudioClipHolster.
         /// </summary>
@@ -385,19 +383,11 @@ namespace InfimaGames.LowPolyShooterPack
         /// </summary>
         public override float GetRateOfFire() => roundsPerMinutes;
 
-        public void SetRateOfFire(int newRateOfFire) => roundsPerMinutes = newRateOfFire;
-
         public float GetSpread() => spread;
-
-        public void SetSpread(float newSpread) => spread = newSpread;
 
         public int GetShotCount() => shotCount;
 
-        public void SetShotCount(int newShotCount) => shotCount = newShotCount;
-
         public int GetDamage() => damage;
-
-        public void SetDamage(int newDamage) => damage = newDamage;
 
         /// <summary>
         /// IsFull.
@@ -418,6 +408,22 @@ namespace InfimaGames.LowPolyShooterPack
         public override WeaponAttachmentManagerBehaviour GetAttachmentManager() => attachmentManager;
 
         public int GetUpgradeLevel() => upgradeLevel;
+
+        #endregion
+
+        #region SETTERS
+
+        public void SetMultiplierMovementSpeed(float newMultiplier) => multiplierMovementSpeed = newMultiplier;
+
+        public void SetRateOfFire(int newRateOfFire) => roundsPerMinutes = newRateOfFire;
+
+        public void SetSpread(float newSpread) => spread = newSpread;
+
+        public void SetShotCount(int newShotCount) => shotCount = newShotCount;
+
+        public void SetDamage(int newDamage) => damage = newDamage;
+
+        public void SetUpgradeLevel(int newLevel) => upgradeLevel = newLevel;
 
         #endregion
 
