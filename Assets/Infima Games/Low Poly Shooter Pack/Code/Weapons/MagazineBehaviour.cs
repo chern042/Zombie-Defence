@@ -21,5 +21,11 @@ namespace InfimaGames.LowPolyShooterPack
         public abstract Sprite GetSprite();
 
         #endregion
+
+        #region SETTERS
+
+        public abstract void SetAmmunitionTotal(int newTotal);
+
+        #endregion
     }
 }

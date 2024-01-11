@@ -64,10 +64,15 @@ namespace InfimaGames.LowPolyShooterPack.Legacy
 				//Launch the projectile forward by adding force to it at start
 				GetComponent<Rigidbody>().AddForce
 					(gameObject.transform.forward * force);
-			}
+            }
+			//Grab the game mode service, we need it to access the player character!
+            var gameModeService = ServiceLocator.Current.Get<IGameModeService>();
+            //Ignore the main player character's collision. A little hacky, but it should work.
+            Physics.IgnoreCollision(gameModeService.GetPlayerCharacter().GetComponent<Collider>(),
+                GetComponent<Collider>());
 
-			//Start the destroy timer
-			StartCoroutine(DestroyTimer());
+            //Start the destroy timer
+            StartCoroutine(DestroyTimer());
 		}
 
 		private void FixedUpdate()

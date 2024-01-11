@@ -73,30 +73,27 @@ namespace InfimaGames.LowPolyShooterPack
                     switchWeaponButton.SetActive(false);
                 }
                 interactButton.GetComponentInChildren<TextMeshProUGUI>().enabled = true;
-                Debug.Log("REACHING INTERACT BUTTON SETTING");
                 if ((interactButton != null) && weapon.GetUpgradeLevel() < 5)
                 {
-                    Debug.Log("REACHED INTERACT BUTTON SETTING");
-
                     interactButton.GetComponentInChildren<TextMeshProUGUI>().text = "UPGRADE";
                     interactButton.GetComponentInChildren<TextMeshProUGUI>().enabled = true;
                     interactButton.GetComponent<Image>().enabled = true;
                     interactButton.GetComponent<OnScreenButton>().enabled = true;
                 }
             }
-            else
+            else if(isUpgrading && !finishedUpgrade)
             {
-                if (!isUpgraded)
-                {
-                    upgradeBar.SetActive(true);
-                }
-                else if (isUpgrading && !finishedUpgrade)
+                if ( isUpgraded)
                 {
                     SetPromptText("Pick Up Weapon");
                     interactButton.GetComponentInChildren<TextMeshProUGUI>().text = "GRAB";
                     interactButton.GetComponentInChildren<TextMeshProUGUI>().enabled = true;
                     interactButton.GetComponent<Image>().enabled = true;
                     interactButton.GetComponent<OnScreenButton>().enabled = true;
+                }
+                else
+                {
+                    upgradeBar.SetActive(true);
                 }
             }
 
@@ -150,22 +147,18 @@ namespace InfimaGames.LowPolyShooterPack
                 if ((10000 >= upgradeCost) && weapon.GetUpgradeLevel() <= 5)
                 {
                     //playerPoints.RemovePoints((int)upgradeCost);
-                    //foreach (GameObject wep in weaponPrefabs)
-                    //{
-                    //    if (wep.name.Substring(0, 3) == weapon.name.Substring(0, 3))
-                    //    {
-                    //        workbenchWeapon = wep;
-                    //    }
-                    //}
+
+
                     weapon.gameObject.transform.SetParent(workbenchUpgradeSlot.transform);
                     weapon.gameObject.transform.localPosition = Vector3.zero;
                     weapon.gameObject.transform.localRotation = Quaternion.Euler(0, 0, 0);
+                    weapon.gameObject.layer = workbenchUpgradeSlot.gameObject.layer;
+                    SetLayerAllChildren(weapon.gameObject.transform, workbenchUpgradeSlot.gameObject.layer);
                    // workbenchUpgradeSlot = weapon.gameObject;
                    // workbenchUpgradeSlot.SetActive(true);
 
                     isUpgrading = true;
                     SetPromptText("");
-                    upgradeBar.SetActive(true);
                     upgradeBarCurrent.fillAmount = 0;
                     weaponUpgradeLevel = weapon.GetUpgradeLevel() + 1;
 
@@ -192,12 +185,44 @@ namespace InfimaGames.LowPolyShooterPack
                     weapon.gameObject.transform.SetParent(actor.GetComponentInParent<CharacterController>().gameObject.GetComponentInChildren<Inventory>().gameObject.transform);
                     weapon.gameObject.transform.localPosition = Vector3.zero;
                     weapon.gameObject.transform.localRotation = Quaternion.Euler(0, 0, 0);
-                    //workbenchUpgradeSlot.SetActive(false);
+                    weapon.gameObject.layer = actor.GetComponentInParent<CharacterController>().gameObject.layer;
+                    SetLayerAllChildren(weapon.gameObject.transform, weapon.gameObject.layer);
 
+
+
+                    MagazineBehaviour magazine = weapon.GetAttachmentManager().GetEquippedMagazine();
+
+                    if (weapon.name.Contains("AR") || weapon.name.Contains("SMG"))
+                    {
+                        weapon.SetRateOfFire(Mathf.RoundToInt(weapon.GetRateOfFire() * 1.25f));
+                        magazine.SetAmmunitionTotal(magazine.GetAmmunitionTotal() + 5);
+                    }
+                    else if(weapon.name.Contains("RL") || weapon.name.Contains("GL"))
+                    {
+                        //magazine.SetAmmunitionTotal(magazine.GetAmmunitionTotal() + 5);
+                        //make ammunition TOTAL go up, clip must remain 1
+                    }
+                    else if(weapon.name.Contains("Sniper"))
+                    {
+                        magazine.SetAmmunitionTotal(magazine.GetAmmunitionTotal() + 1);
+                    }
+                    else if(weapon.name.Contains("Shotgun"))
+                    {
+                        magazine.SetAmmunitionTotal(magazine.GetAmmunitionTotal() + 3);
+                        weapon.SetShotCount(weapon.GetShotCount() + 1);
+                    }
+                    else
+                    {
+                        magazine.SetAmmunitionTotal(magazine.GetAmmunitionTotal() + 5);
+                    }
+
+
+                    weapon.SetMultiplierMovementSpeed(weapon.GetMultiplierMovementSpeed() * 1.1f);
+                    weapon.SetDamage(Mathf.RoundToInt(weapon.GetDamage() + ((weaponUpgradeLevel + 1) * (weaponUpgradeLevel + 1) * 0.5f)));
+                    weapon.SetSpread(weapon.GetSpread() * 0.85f);
                     // playerPoints.GetComponent<ItemChange>().ReturnItem(itemUpgradingIndex);
 
                     weapon.SetUpgradeLevel(weaponUpgradeLevel);
-                    //weapon.SetWeaponIsUpgrading();
 
 
                 }
@@ -242,7 +267,7 @@ namespace InfimaGames.LowPolyShooterPack
             {
                 upgradeTimer += Time.deltaTime;
                 //float percentComplete = upgradeTimer / weapon.GetUpgradeTime();
-                float percentComplete = upgradeTimer / 20f;
+                float percentComplete = upgradeTimer / 5f;
 
                 if (upgradeBar.activeInHierarchy)
                 {
@@ -253,7 +278,7 @@ namespace InfimaGames.LowPolyShooterPack
                 interactButton.GetComponent<OnScreenButton>().enabled = false;
 
                 // if (upgradeTimer >= weapon.GetUpgradeTime())
-                if (upgradeTimer >= 20f)
+                if (upgradeTimer >= 5f)
                 {
 
                     isUpgraded = true;
@@ -267,5 +292,17 @@ namespace InfimaGames.LowPolyShooterPack
                 }
             }
         }
+
+
+        private void SetLayerAllChildren(Transform root, int layer)
+        {
+            var children = root.GetComponentsInChildren<Transform>(includeInactive: true);
+            foreach (var child in children)
+            {
+                //            Debug.Log(child.name);
+                child.gameObject.layer = layer;
+            }
+        }
+
     }
 }

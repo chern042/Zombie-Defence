@@ -109,7 +109,7 @@ namespace InfimaGames.LowPolyShooterPack
 			switch (context)
 			{
 				//Performed.
-				case {phase: InputActionPhase.Started}:
+				case {phase: InputActionPhase.Performed}:
                     //Make sure we can interact before continuing.
                     if (CanInteract() == false)
 						return;

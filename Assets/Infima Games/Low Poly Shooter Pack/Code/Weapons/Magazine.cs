@@ -37,5 +37,12 @@ namespace InfimaGames.LowPolyShooterPack
         public override Sprite GetSprite() => sprite;
 
         #endregion
+
+        #region SETTERS
+
+        public override void SetAmmunitionTotal(int newTotal) => ammunitionTotal = newTotal;
+
+
+        #endregion
     }
 }
