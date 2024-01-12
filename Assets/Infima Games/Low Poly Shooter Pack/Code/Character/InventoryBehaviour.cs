@@ -48,7 +48,7 @@ namespace InfimaGames.LowPolyShooterPack
         /// </summary>
         /// <param name="index">Index of the weapon to equip.</param>
         /// <returns>Weapon that was just equipped.</returns>
-        public abstract WeaponBehaviour Equip(int index);
+        public abstract WeaponBehaviour Equip(int index, bool manual=false);
 
         #endregion
     }

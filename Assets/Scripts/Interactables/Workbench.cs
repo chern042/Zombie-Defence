@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using EvolveGames;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem.OnScreen;
 using UnityEngine.UI;
@@ -53,6 +54,7 @@ namespace InfimaGames.LowPolyShooterPack
             finishedUpgrade = false;
             //playerPoints = playerHand.GetComponentInParent<PlayerPoints>();
             weaponUpgradeLevel = 0;
+            SetShowPromptIcon(true);
         }
 
         public override void OnLook(GameObject actor)
@@ -60,6 +62,7 @@ namespace InfimaGames.LowPolyShooterPack
 
             if (!isUpgrading)
             {
+                SetShowPromptIcon(true);
                 //weapon = playerHand.GetComponentInChildren<WeaponBehaviour>();
                 weapon = actor.GetComponentInParent<CharacterController>().gameObject.GetComponentInChildren<Weapon>();
                 //playerPoints = playerHand.GetComponentInParent<PlayerPoints>();
@@ -71,6 +74,7 @@ namespace InfimaGames.LowPolyShooterPack
                     //upgradeCost = weapon.GetUpgradeCost();
                     upgradeCost = (weapon.GetUpgradeLevel()+1) * 1000;
                     switchWeaponButton.SetActive(false);
+                    SetPromptText("Upgrade Weapon (" + upgradeCost + ")");
                 }
                 interactButton.GetComponentInChildren<TextMeshProUGUI>().enabled = true;
                 if ((interactButton != null) && weapon.GetUpgradeLevel() < 5)
@@ -83,8 +87,10 @@ namespace InfimaGames.LowPolyShooterPack
             }
             else if(isUpgrading && !finishedUpgrade)
             {
+                SetShowPromptIcon(false);
                 if ( isUpgraded)
                 {
+                    SetShowPromptIcon(true);
                     SetPromptText("Pick Up Weapon");
                     interactButton.GetComponentInChildren<TextMeshProUGUI>().text = "GRAB";
                     interactButton.GetComponentInChildren<TextMeshProUGUI>().enabled = true;
@@ -141,10 +147,11 @@ namespace InfimaGames.LowPolyShooterPack
 
         public override void Interact(GameObject actor)
         {
+            Inventory inventory = actor.GetComponentInParent<CharacterController>().gameObject.GetComponentInChildren<Inventory>();
             if (!isUpgrading)
             {
                 //if ((playerPoints.points >= upgradeCost) && weapon.GetUpgradeLevel() <= 5)
-                if ((10000 >= upgradeCost) && weapon.GetUpgradeLevel() <= 5)
+                if ((10000 >= upgradeCost) && weapon.GetUpgradeLevel() <= 5 && inventory.GetNextIndex() != inventory.GetEquippedIndex()  )
                 {
                     //playerPoints.RemovePoints((int)upgradeCost);
 
@@ -154,8 +161,12 @@ namespace InfimaGames.LowPolyShooterPack
                     weapon.gameObject.transform.localRotation = Quaternion.Euler(0, 0, 0);
                     weapon.gameObject.layer = workbenchUpgradeSlot.gameObject.layer;
                     SetLayerAllChildren(weapon.gameObject.transform, workbenchUpgradeSlot.gameObject.layer);
-                   // workbenchUpgradeSlot = weapon.gameObject;
-                   // workbenchUpgradeSlot.SetActive(true);
+                    //inventory.Equip(inventory.GetNextIndex());
+                    actor.GetComponentInParent<Character>().SwitchWeaponManual(inventory.GetNextIndex());
+
+
+                    // workbenchUpgradeSlot = weapon.gameObject;
+                    // workbenchUpgradeSlot.SetActive(true);
 
                     isUpgrading = true;
                     SetPromptText("");
@@ -182,7 +193,7 @@ namespace InfimaGames.LowPolyShooterPack
                     isUpgraded = false;
                     finishedUpgrade = true;
 
-                    weapon.gameObject.transform.SetParent(actor.GetComponentInParent<CharacterController>().gameObject.GetComponentInChildren<Inventory>().gameObject.transform);
+                    weapon.gameObject.transform.SetParent(inventory.gameObject.transform);
                     weapon.gameObject.transform.localPosition = Vector3.zero;
                     weapon.gameObject.transform.localRotation = Quaternion.Euler(0, 0, 0);
                     weapon.gameObject.layer = actor.GetComponentInParent<CharacterController>().gameObject.layer;
@@ -223,6 +234,8 @@ namespace InfimaGames.LowPolyShooterPack
                     // playerPoints.GetComponent<ItemChange>().ReturnItem(itemUpgradingIndex);
 
                     weapon.SetUpgradeLevel(weaponUpgradeLevel);
+                    //inventory.Equip(inventory.GetLastIndex());
+                    actor.GetComponentInParent<Character>().SwitchWeaponManual(inventory.GetLastIndex());
 
 
                 }

@@ -1,6 +1,7 @@
 //Copyright 2022, Infima Games. All Rights Reserved.
 
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace InfimaGames.LowPolyShooterPack
 {
@@ -18,7 +19,12 @@ namespace InfimaGames.LowPolyShooterPack
         [SerializeField]
         protected GameObject interactButton;
 
+        [SerializeField]
+        protected Sprite promptIcon;
+
         #endregion
+
+        private bool showIcon;
 
         #region UNITY
 
@@ -79,8 +85,17 @@ namespace InfimaGames.LowPolyShooterPack
 
         //TODO
         public virtual string GetPromptText() => promptText;
+        public virtual Sprite GetPromptIcon() => promptIcon;
+        public virtual bool GetShowPromptIcon() => showIcon;
+
+
+        #endregion
+
+        #region SETTERS
+
         public virtual string SetPromptText(string text) => promptText = text;
 
+        public virtual bool SetShowPromptIcon(bool show) => showIcon = show;
 
         #endregion
     }

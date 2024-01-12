@@ -2,6 +2,7 @@
 
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 // ReSharper disable once CheckNamespace
 namespace InfimaGames.LowPolyShooterPack.Interface
@@ -74,10 +75,15 @@ namespace InfimaGames.LowPolyShooterPack.Interface
                 {
                     //Show.
                     animator.SetBool(stateName, true);
-                        
+
                     //Modify Text.
-                    if(textToModify != null)
+                    if (textToModify != null)
+                    {
                         textToModify.text = interactable.GetPromptText().ToUpper();
+                        textToModify.transform.parent.GetComponentInChildren<Image>().sprite = interactable.GetPromptIcon();
+                        textToModify.transform.parent.GetComponentInChildren<Image>().enabled = interactable.GetShowPromptIcon();
+                    }
+
                 }
                 //Hide.
                 else

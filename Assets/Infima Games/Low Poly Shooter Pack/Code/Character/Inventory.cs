@@ -37,7 +37,7 @@ namespace InfimaGames.LowPolyShooterPack
             Equip(equippedAtStart);
         }
 
-        public override WeaponBehaviour Equip(int index)
+        public override WeaponBehaviour Equip(int index, bool manual=false)
         {
             //If we have no weapons, we can't really equip anything.
             if (weapons == null)
@@ -52,7 +52,7 @@ namespace InfimaGames.LowPolyShooterPack
                 return equipped;
             
             //Disable the currently equipped weapon, if we have one.
-            if (equipped != null)
+            if (equipped != null && !manual)
                 equipped.gameObject.SetActive(false);
 
             //Update index.
