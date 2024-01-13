@@ -70610,7 +70610,7 @@ PrefabInstance:
     - target: {fileID: 555133621666883522, guid: a40d7854b2bdd6047966a327dc7d335f,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 555133621666883522, guid: a40d7854b2bdd6047966a327dc7d335f,
         type: 3}
@@ -70761,10 +70761,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b46b189d39f414389a02c336e322b04c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  useEvents: 0
-  promptMessage: 
+  promptText: 
   interactButton: {fileID: 2039418539}
-  playerHand: {fileID: 902958018}
+  promptIcon: {fileID: 0}
   weaponGenerationTime: 10
   weaponCost: 100
   weaponPrefabs:
@@ -81461,6 +81460,11 @@ PrefabInstance:
       propertyPath: m_CullingMask.m_Bits
       value: 130487
       objectReference: {fileID: 0}
+    - target: {fileID: 2496723213727302341, guid: 19eadcf8fbed56b4da77ca94c1b4145f,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 2748913124992463393, guid: 19eadcf8fbed56b4da77ca94c1b4145f,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -86309,8 +86313,8 @@ Transform:
   m_GameObject: {fileID: 2095709731}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.11933335, z: -0.15666708}
-  m_LocalScale: {x: 0.6666667, y: 0.6666667, z: 0.6666667}
+  m_LocalPosition: {x: 0, y: -0.174, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1135001191}
