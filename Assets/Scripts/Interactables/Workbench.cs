@@ -1,8 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
-using EvolveGames;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem.OnScreen;
 using UnityEngine.UI;
@@ -55,6 +51,25 @@ namespace InfimaGames.LowPolyShooterPack
             //playerPoints = playerHand.GetComponentInParent<PlayerPoints>();
             weaponUpgradeLevel = 0;
             SetShowPromptIcon(true);
+            Debug.Log("WORKBENCH AWAKE.");
+        }
+
+        // Start is called before the first frame update
+        protected override void Start()
+        {
+            Debug.Log("WORKBENCH STARTED.");
+
+            if (upgradeCost != null)
+            {
+                if (weapon.GetUpgradeLevel() < 5)
+                {
+                    SetPromptText("Upgrade Weapon (" + upgradeCost + ")");
+                }
+                else
+                {
+                    SetPromptText("No More Upgrades");
+                }
+            }
         }
 
         public override void OnLook(GameObject actor)
@@ -271,21 +286,7 @@ namespace InfimaGames.LowPolyShooterPack
         }
 
 
-        // Start is called before the first frame update
-        protected override void Start()
-        {
-            if (upgradeCost != null)
-            {
-                if (weapon.GetUpgradeLevel() < 5)
-                {
-                    SetPromptText("Upgrade Weapon (" + upgradeCost + ")");
-                }
-                else
-                {
-                    SetPromptText("No More Upgrades");
-                }
-            }
-        }
+
 
         // Update is called once per frame
         protected override void Update()
@@ -322,7 +323,6 @@ namespace InfimaGames.LowPolyShooterPack
             var children = root.GetComponentsInChildren<Transform>(includeInactive: true);
             foreach (var child in children)
             {
-                //            Debug.Log(child.name);
                 child.gameObject.layer = layer;
             }
         }
