@@ -36,7 +36,7 @@ namespace InfimaGames.LowPolyShooterPack
 
         private PlayerPoints playerPoints;
 
-        private int itemUpgradingIndex;
+        private int weaponIndex;
 
         private bool isUpgraded;
 
@@ -59,52 +59,58 @@ namespace InfimaGames.LowPolyShooterPack
 
         public override void OnLook(GameObject actor)
         {
-
-            if (!isUpgrading)
+            if (!actor.GetComponentInParent<Character>().IsHolstering())
             {
-                SetShowPromptIcon(true);
-                //weapon = playerHand.GetComponentInChildren<WeaponBehaviour>();
-                weapon = actor.GetComponentInParent<CharacterController>().gameObject.GetComponentInChildren<Weapon>();
-                //playerPoints = playerHand.GetComponentInParent<PlayerPoints>();
-                //Debug.Log("PLAYER****: " + actor.GetComponentInParent<CharacterController>().gameObject.name);
-                //Debug.Log("WEAPON****: " + actor.GetComponentInParent<CharacterController>().gameObject.GetComponentInChildren<Weapon>().name);
-
-                if (weapon != null && switchWeaponButton != null)
-                {
-                    //upgradeCost = weapon.GetUpgradeCost();
-                    upgradeCost = (weapon.GetUpgradeLevel()+1) * 1000;
-                    switchWeaponButton.SetActive(false);
-                    SetPromptText("Upgrade Weapon (" + upgradeCost + ")");
-                }
-                interactButton.GetComponentInChildren<TextMeshProUGUI>().enabled = true;
-                if ((interactButton != null) && weapon.GetUpgradeLevel() < 5)
-                {
-                    interactButton.GetComponentInChildren<TextMeshProUGUI>().text = "UPGRADE";
-                    interactButton.GetComponentInChildren<TextMeshProUGUI>().enabled = true;
-                    interactButton.GetComponent<Image>().enabled = true;
-                    interactButton.GetComponent<OnScreenButton>().enabled = true;
-                }
-            }
-            else if(isUpgrading && !finishedUpgrade)
-            {
-                SetShowPromptIcon(false);
-                if ( isUpgraded)
+                if (!isUpgrading)
                 {
                     SetShowPromptIcon(true);
-                    SetPromptText("Pick Up Weapon");
-                    interactButton.GetComponentInChildren<TextMeshProUGUI>().text = "GRAB";
-                    interactButton.GetComponentInChildren<TextMeshProUGUI>().enabled = true;
-                    interactButton.GetComponent<Image>().enabled = true;
-                    interactButton.GetComponent<OnScreenButton>().enabled = true;
+                    //weapon = playerHand.GetComponentInChildren<WeaponBehaviour>();
+                    weapon = actor.GetComponentInParent<CharacterController>().gameObject.GetComponentInChildren<Weapon>();
+
+                    //playerPoints = playerHand.GetComponentInParent<PlayerPoints>();
+                    //Debug.Log("PLAYER****: " + actor.GetComponentInParent<CharacterController>().gameObject.name);
+                    //Debug.Log("WEAPON****: " + actor.GetComponentInParent<CharacterController>().gameObject.GetComponentInChildren<Weapon>().name);
+
+                    if (weapon != null && switchWeaponButton != null)
+                    {
+                        //upgradeCost = weapon.GetUpgradeCost();
+                        upgradeCost = (weapon.GetUpgradeLevel() + 1) * 1000;
+                        switchWeaponButton.SetActive(false);
+                        SetPromptText("Upgrade Weapon (" + upgradeCost + ")");
+                    }
+                    if ((interactButton != null) && weapon.GetUpgradeLevel() < 5)
+                    {
+                        interactButton.GetComponentInChildren<TextMeshProUGUI>().text = "UPGRADE";
+                        interactButton.GetComponentInChildren<TextMeshProUGUI>().enabled = true;
+                        interactButton.GetComponent<Image>().enabled = true;
+                        interactButton.GetComponent<OnScreenButton>().enabled = true;
+                    }
+                    else
+                    {
+                        SetPromptText("Max Upgrade Reached");
+
+                    }
                 }
-                else
+                else if (isUpgrading && !finishedUpgrade)
                 {
-                    upgradeBar.SetActive(true);
+                    SetShowPromptIcon(false);
+                    if (isUpgraded)
+                    {
+                        SetShowPromptIcon(true);
+                        SetPromptText("Pick Up Weapon");
+                        interactButton.GetComponentInChildren<TextMeshProUGUI>().text = "GRAB";
+                        interactButton.GetComponentInChildren<TextMeshProUGUI>().enabled = true;
+                        interactButton.GetComponent<Image>().enabled = true;
+                        interactButton.GetComponent<OnScreenButton>().enabled = true;
+                    }
+                    else
+                    {
+                        upgradeBar.SetActive(true);
+                    }
                 }
+
+                //  base.OnLook();
             }
-
-          //  base.OnLook();
-
         }
 
         public override void OnLookOff()
@@ -147,100 +153,107 @@ namespace InfimaGames.LowPolyShooterPack
 
         public override void Interact(GameObject actor)
         {
-            Inventory inventory = actor.GetComponentInParent<CharacterController>().gameObject.GetComponentInChildren<Inventory>();
-            if (!isUpgrading)
-            {
-                //if ((playerPoints.points >= upgradeCost) && weapon.GetUpgradeLevel() <= 5)
-                if ((10000 >= upgradeCost) && weapon.GetUpgradeLevel() <= 5 && inventory.GetNextIndex() != inventory.GetEquippedIndex()  )
+
+                Inventory inventory = actor.GetComponentInParent<CharacterController>().gameObject.GetComponentInChildren<Inventory>();
+                if (!isUpgrading)
                 {
-                    //playerPoints.RemovePoints((int)upgradeCost);
+                    //if ((playerPoints.points >= upgradeCost) && weapon.GetUpgradeLevel() <= 5)
+                    if ((10000 >= upgradeCost) && weapon.GetUpgradeLevel() <= 5 && inventory.GetNextIndex() != inventory.GetLastIndex())
+                    {
+                        //playerPoints.RemovePoints((int)upgradeCost);
 
 
-                    weapon.gameObject.transform.SetParent(workbenchUpgradeSlot.transform);
-                    weapon.gameObject.transform.localPosition = Vector3.zero;
-                    weapon.gameObject.transform.localRotation = Quaternion.Euler(0, 0, 0);
-                    weapon.gameObject.layer = workbenchUpgradeSlot.gameObject.layer;
-                    SetLayerAllChildren(weapon.gameObject.transform, workbenchUpgradeSlot.gameObject.layer);
-                    //inventory.Equip(inventory.GetNextIndex());
-                    actor.GetComponentInParent<Character>().SwitchWeaponManual(inventory.GetNextIndex());
+                        weapon.gameObject.transform.SetParent(workbenchUpgradeSlot.transform);
+                        weapon.gameObject.transform.localPosition = Vector3.zero;
+                        weapon.gameObject.transform.localRotation = Quaternion.Euler(0, 0, 0);
+                        weapon.gameObject.layer = workbenchUpgradeSlot.gameObject.layer;
+                        SetLayerAllChildren(weapon.gameObject.transform, workbenchUpgradeSlot.gameObject.layer);
+                        //inventory.Equip(inventory.GetNextIndex());
+                        weaponIndex = inventory.GetEquippedIndex();
+                        actor.GetComponentInParent<Character>().SwitchWeaponManual(inventory.GetNextIndex());
 
 
-                    // workbenchUpgradeSlot = weapon.gameObject;
-                    // workbenchUpgradeSlot.SetActive(true);
+                        // workbenchUpgradeSlot = weapon.gameObject;
+                        // workbenchUpgradeSlot.SetActive(true);
 
-                    isUpgrading = true;
-                    SetPromptText("");
+                        isUpgrading = true;
+                        SetPromptText("");
+                    SetShowPromptIcon(false);
+
                     upgradeBarCurrent.fillAmount = 0;
-                    weaponUpgradeLevel = weapon.GetUpgradeLevel() + 1;
+                        weaponUpgradeLevel = weapon.GetUpgradeLevel() + 1;
 
-                    //itemUpgradingIndex = playerPoints.GetComponent<ItemChange>().DropItem();
+                        //itemUpgradingIndex = playerPoints.GetComponent<ItemChange>().DropItem();
 
-                }
-                else if (weapon.GetUpgradeLevel() == 5)
-                {
-                    SetPromptText("No More Upgrades");
-                }
-                else
-                {
-                    Debug.Log("NO POINTS");
-                    SetPromptText("Insufficent Points");
-                }
-            }
-            else
-            {
-                if (isUpgraded && !finishedUpgrade)
-                {
-                    isUpgraded = false;
-                    finishedUpgrade = true;
-
-                    weapon.gameObject.transform.SetParent(inventory.gameObject.transform);
-                    weapon.gameObject.transform.localPosition = Vector3.zero;
-                    weapon.gameObject.transform.localRotation = Quaternion.Euler(0, 0, 0);
-                    weapon.gameObject.layer = actor.GetComponentInParent<CharacterController>().gameObject.layer;
-                    SetLayerAllChildren(weapon.gameObject.transform, weapon.gameObject.layer);
-
-
-
-                    MagazineBehaviour magazine = weapon.GetAttachmentManager().GetEquippedMagazine();
-
-                    if (weapon.name.Contains("AR") || weapon.name.Contains("SMG"))
-                    {
-                        weapon.SetRateOfFire(Mathf.RoundToInt(weapon.GetRateOfFire() * 1.25f));
-                        magazine.SetAmmunitionTotal(magazine.GetAmmunitionTotal() + 5);
                     }
-                    else if(weapon.name.Contains("RL") || weapon.name.Contains("GL"))
+                    else if (weapon.GetUpgradeLevel() == 5)
                     {
-                        //magazine.SetAmmunitionTotal(magazine.GetAmmunitionTotal() + 5);
-                        //make ammunition TOTAL go up, clip must remain 1
-                    }
-                    else if(weapon.name.Contains("Sniper"))
-                    {
-                        magazine.SetAmmunitionTotal(magazine.GetAmmunitionTotal() + 1);
-                    }
-                    else if(weapon.name.Contains("Shotgun"))
-                    {
-                        magazine.SetAmmunitionTotal(magazine.GetAmmunitionTotal() + 3);
-                        weapon.SetShotCount(weapon.GetShotCount() + 1);
+                        SetPromptText("No More Upgrades");
                     }
                     else
                     {
-                        magazine.SetAmmunitionTotal(magazine.GetAmmunitionTotal() + 5);
+                        Debug.Log("NO POINTS");
+                        SetPromptText("Insufficent Points");
                     }
-
-
-                    weapon.SetMultiplierMovementSpeed(weapon.GetMultiplierMovementSpeed() * 1.1f);
-                    weapon.SetDamage(Mathf.RoundToInt(weapon.GetDamage() + ((weaponUpgradeLevel + 1) * (weaponUpgradeLevel + 1) * 0.5f)));
-                    weapon.SetSpread(weapon.GetSpread() * 0.85f);
-                    // playerPoints.GetComponent<ItemChange>().ReturnItem(itemUpgradingIndex);
-
-                    weapon.SetUpgradeLevel(weaponUpgradeLevel);
-                    //inventory.Equip(inventory.GetLastIndex());
-                    actor.GetComponentInParent<Character>().SwitchWeaponManual(inventory.GetLastIndex());
-
-
                 }
-            }
+                else
+                {
+                    if (isUpgraded && !finishedUpgrade)
+                    {
+                        isUpgraded = false;
+                        finishedUpgrade = true;
+
+                        weapon.gameObject.SetActive(false);
+                        weapon.gameObject.transform.SetParent(inventory.gameObject.transform);
+                        weapon.gameObject.transform.localPosition = Vector3.zero;
+                        weapon.gameObject.transform.localRotation = Quaternion.Euler(0, 0, 0);
+                        weapon.gameObject.layer = actor.GetComponentInParent<CharacterController>().gameObject.layer;
+                        SetLayerAllChildren(weapon.gameObject.transform, weapon.gameObject.layer);
+
+
+
+                        MagazineBehaviour magazine = weapon.GetAttachmentManager().GetEquippedMagazine();
+
+                        if (weapon.name.Contains("AR") || weapon.name.Contains("SMG"))
+                        {
+                            weapon.SetRateOfFire(Mathf.RoundToInt(weapon.GetRateOfFire() * 1.25f));
+                            magazine.SetAmmunitionTotal(magazine.GetAmmunitionTotal() + 5);
+                        }
+                        else if (weapon.name.Contains("RL") || weapon.name.Contains("GL"))
+                        {
+                            //magazine.SetAmmunitionTotal(magazine.GetAmmunitionTotal() + 5);
+                            //make ammunition TOTAL go up, clip must remain 1
+                        }
+                        else if (weapon.name.Contains("Sniper"))
+                        {
+                            magazine.SetAmmunitionTotal(magazine.GetAmmunitionTotal() + 1);
+                        }
+                        else if (weapon.name.Contains("Shotgun"))
+                        {
+                            magazine.SetAmmunitionTotal(magazine.GetAmmunitionTotal() + 3);
+                            weapon.SetShotCount(weapon.GetShotCount() + 1);
+                        }
+                        else
+                        {
+                            magazine.SetAmmunitionTotal(magazine.GetAmmunitionTotal() + 5);
+                        }
+
+
+                        weapon.SetMultiplierMovementSpeed(weapon.GetMultiplierMovementSpeed() * 1.1f);
+                        weapon.SetDamage(Mathf.RoundToInt(weapon.GetDamage() + ((weaponUpgradeLevel + 1) * (weaponUpgradeLevel + 1) * 0.5f)));
+                        weapon.SetSpread(weapon.GetSpread() * 0.85f);
+                        // playerPoints.GetComponent<ItemChange>().ReturnItem(itemUpgradingIndex);
+
+                        weapon.SetUpgradeLevel(weaponUpgradeLevel);
+                        weapon.transform.SetSiblingIndex(weaponIndex);
+                        actor.GetComponentInParent<Character>().SwitchWeaponManual(inventory.GetLastIndex(), false);
+
+                    }
+                }
+            
         }
+
+
 
 
         public override void CancelInteract()
@@ -250,13 +263,14 @@ namespace InfimaGames.LowPolyShooterPack
                 isUpgrading = false;
                 finishedUpgrade = false;
                 upgradeCost = (weapon.GetUpgradeLevel()+1) * 1000;
-                SetPromptText("Upgrade Weapon (" + upgradeCost + ")");
+                //SetPromptText("Upgrade Weapon (" + upgradeCost + ")");
                 weaponUpgradeLevel = 0;
 
             }
-            //promptMessage = "Upgrade Weapon (" + upgradeCost + ")";
 
         }
+
+
         // Start is called before the first frame update
         protected override void Start()
         {
@@ -297,10 +311,6 @@ namespace InfimaGames.LowPolyShooterPack
                     isUpgraded = true;
                     upgradeTimer = 0;
                     upgradeBar.SetActive(false);
-                    interactButton.GetComponentInChildren<TextMeshProUGUI>().text = "GRAB";
-                    interactButton.GetComponentInChildren<TextMeshProUGUI>().enabled = true;
-                    interactButton.GetComponent<Image>().enabled = true;
-                    interactButton.GetComponent<OnScreenButton>().enabled = true;
 
                 }
             }

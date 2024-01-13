@@ -452,6 +452,8 @@ namespace InfimaGames.LowPolyShooterPack
 		/// </summary>
 		public override bool IsHolstered() => holstered;
 
+		public bool IsHolstering() => holstering;
+
 		/// <summary>
 		/// Is Crouching.
 		/// </summary>
@@ -516,12 +518,12 @@ namespace InfimaGames.LowPolyShooterPack
 
 		#endregion
 
-		#region METHODS
+        #region METHODS
 
-		/// <summary>
-		/// Updates all the animator properties for this frame.
-		/// </summary>
-		private void UpdateAnimator()
+        /// <summary>
+        /// Updates all the animator properties for this frame.
+        /// </summary>
+        private void UpdateAnimator()
 		{
 			#region Reload Stop
 
@@ -680,9 +682,9 @@ namespace InfimaGames.LowPolyShooterPack
 			RefreshWeaponSetup();
 		}
 
-		public void SwitchWeaponManual(int index)
+		public void SwitchWeaponManual(int index, bool manual=true)
 		{
-            StartCoroutine(Equip(index,true));
+            StartCoroutine(Equip(index,manual));
         }
 		/// <summary>
 		/// Refresh all weapon things to make sure we're all set up!
@@ -1325,7 +1327,7 @@ namespace InfimaGames.LowPolyShooterPack
 					
 					//Make sure we're allowed to change, and also that we're not using the same index, otherwise weird things happen!
 					if (CanChangeWeapon() && (indexCurrent != indexNext))
-						StartCoroutine(nameof(Equip), indexNext);
+						StartCoroutine(Equip(indexNext));
 					break;
 			}
 		}
