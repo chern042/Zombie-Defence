@@ -182,7 +182,7 @@ namespace InfimaGames.LowPolyShooterPack
                         weapon.gameObject.transform.localPosition = Vector3.zero;
                         weapon.gameObject.transform.localRotation = Quaternion.Euler(0, 0, 0);
                         weapon.gameObject.layer = workbenchUpgradeSlot.gameObject.layer;
-                        SetLayerAllChildren(weapon.gameObject.transform, workbenchUpgradeSlot.gameObject.layer);
+                        SceneHelper.SetLayerAllChildren(weapon.gameObject.transform, workbenchUpgradeSlot.gameObject.layer);
                         //inventory.Equip(inventory.GetNextIndex());
                         weaponIndex = inventory.GetEquippedIndex();
                         actor.GetComponentInParent<Character>().SwitchWeaponManual(inventory.GetNextIndex());
@@ -223,7 +223,7 @@ namespace InfimaGames.LowPolyShooterPack
                         weapon.gameObject.transform.localPosition = Vector3.zero;
                         weapon.gameObject.transform.localRotation = Quaternion.Euler(0, 0, 0);
                         weapon.gameObject.layer = actor.GetComponentInParent<CharacterController>().gameObject.layer;
-                        SetLayerAllChildren(weapon.gameObject.transform, weapon.gameObject.layer);
+                        SceneHelper.SetLayerAllChildren(weapon.gameObject.transform, weapon.gameObject.layer);
 
 
 
@@ -318,14 +318,14 @@ namespace InfimaGames.LowPolyShooterPack
         }
 
 
-        private void SetLayerAllChildren(Transform root, int layer)
-        {
-            var children = root.GetComponentsInChildren<Transform>(includeInactive: true);
-            foreach (var child in children)
-            {
-                child.gameObject.layer = layer;
-            }
-        }
+        //private void SetLayerAllChildren(Transform root, int layer)
+        //{
+        //    var children = root.GetComponentsInChildren<Transform>(includeInactive: true);
+        //    foreach (var child in children)
+        //    {
+        //        child.gameObject.layer = layer;
+        //    }
+        //}
 
     }
 }

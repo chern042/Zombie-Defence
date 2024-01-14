@@ -70605,7 +70605,7 @@ PrefabInstance:
     - target: {fileID: 555133621666883522, guid: a40d7854b2bdd6047966a327dc7d335f,
         type: 3}
       propertyPath: m_Layer
-      value: 6
+      value: 16
       objectReference: {fileID: 0}
     - target: {fileID: 555133621666883522, guid: a40d7854b2bdd6047966a327dc7d335f,
         type: 3}
@@ -70685,12 +70685,12 @@ PrefabInstance:
     - target: {fileID: 2926320452223950100, guid: a40d7854b2bdd6047966a327dc7d335f,
         type: 3}
       propertyPath: m_Layer
-      value: 6
+      value: 16
       objectReference: {fileID: 0}
     - target: {fileID: 8264260236098961257, guid: a40d7854b2bdd6047966a327dc7d335f,
         type: 3}
       propertyPath: m_Layer
-      value: 6
+      value: 16
       objectReference: {fileID: 0}
     - target: {fileID: 8264260236098961257, guid: a40d7854b2bdd6047966a327dc7d335f,
         type: 3}
@@ -70763,16 +70763,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   promptText: 
   interactButton: {fileID: 2039418539}
-  promptIcon: {fileID: 0}
+  promptIcon: {fileID: 21300000, guid: 698effdb976f6d049bd07f87f8ea5e14, type: 3}
   weaponGenerationTime: 10
   weaponCost: 100
   weaponPrefabs:
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 8445401694592989334, guid: 8c7ba79f8ec05794aba7ffdd3d8aba93, type: 3}
+  - {fileID: 8445401694592989334, guid: f985fca8d5251c049ab9579d483160b4, type: 3}
+  - {fileID: 1494106612615314066, guid: 4a4b8a3ad4e704d41951ddfdb2797d07, type: 3}
+  - {fileID: 5708224683135725906, guid: 12038d9fe9b50784c91441fad6056ebd, type: 3}
+  - {fileID: 8445401694592989334, guid: d3308534d30856e42b7a585baa7a886b, type: 3}
+  - {fileID: 3438908114058917180, guid: 8e4a73c62bb7a404db9c33a2c4369c16, type: 3}
 --- !u!114 &1716162208
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -86297,7 +86297,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2095709732}
-  m_Layer: 6
+  m_Layer: 16
   m_Name: Weapon Prefabs
   m_TagString: Untagged
   m_Icon: {fileID: 0}
