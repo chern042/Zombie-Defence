@@ -56,7 +56,6 @@ namespace InfimaGames.LowPolyShooterPack
            // playerPoints = playerHand.GetComponentInParent<PlayerPoints>();
             //playerItems = playerHand.GetComponentInParent<ItemChange>();
             timeGenerating = 0;
-            //weaponList = playerItems.GetWeaponList();
             isGeneratingWeapon = false;
             weaponGenerationComplete = false;
             insufficientPoints = false;
@@ -186,12 +185,13 @@ namespace InfimaGames.LowPolyShooterPack
                         instantiatedWeapon.transform.SetParent(inventory.gameObject.transform);
                         instantiatedWeapon.gameObject.transform.localPosition = Vector3.zero;
                         instantiatedWeapon.gameObject.transform.localRotation = Quaternion.Euler(0, 0, 0);
+                        instantiatedWeapon.gameObject.transform.localScale = Vector3.one;
 
                         instantiatedWeapon.gameObject.layer = actor.GetComponentInParent<CharacterController>().gameObject.layer;
                         SceneHelper.SetLayerAllChildren(instantiatedWeapon.gameObject.transform, actor.GetComponentInParent<CharacterController>().gameObject.layer);
 
 
-                        instantiatedWeapon.transform.SetSiblingIndex(inventory.GetEquippedIndex());
+                        instantiatedWeapon.transform.SetSiblingIndex(inventory.GetEquippedIndex()+1);
                         instantiatedWeapon.SetActive(false);
                         inventory.GetInventoryIsFull();
                         actor.GetComponentInParent<Character>().SwitchWeaponManual(inventory.GetNextIndex(), false);
@@ -206,7 +206,9 @@ namespace InfimaGames.LowPolyShooterPack
                         weaponGrabbed = true;
                         isGeneratingWeapon = false;
                         weaponGenerationComplete = false;
+                        animator.SetBool("WeaponGenerated", false);
                         animator.SetBool("ChestOpen", false);
+
                         //Invoke("SetWeaponPrefabInactive", 1f);
                       //  weaponGeneratedPrefab.GetComponent<Animator>().SetTrigger("WeaponHide");
 
@@ -249,10 +251,10 @@ namespace InfimaGames.LowPolyShooterPack
                     SetPromptText("Weapon Generated");
                     TurnOffInteractButton();
                     boxDelay = 0.5f;
+                    animator.SetBool("WeaponGenerated", false);
                     animator.SetBool("ChestOpen", false);
                     //Invoke("SetWeaponPrefabInactive", 1f);
                     //weaponGeneratedPrefab.GetComponent<Animator>().SetTrigger("WeaponHide");
-                    animator.SetBool("WeaponGenerated", false);
 
 
                 }

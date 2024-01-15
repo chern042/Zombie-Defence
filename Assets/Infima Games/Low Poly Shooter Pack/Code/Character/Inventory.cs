@@ -116,7 +116,7 @@ namespace InfimaGames.LowPolyShooterPack
 
         public override WeaponBehaviour GetEquipped() => equipped;
         public override int GetEquippedIndex() => equippedIndex;
-        public bool GetInventoryIsFull() => GetInventorySize() >= carryingCapacity;
+        public bool GetInventoryIsFull() => GetInventorySize() > carryingCapacity;
 
         #endregion
 
@@ -126,6 +126,7 @@ namespace InfimaGames.LowPolyShooterPack
             {
                 if (!equipped.GetComponentInParent<Character>().IsHolstering())
                 {
+                    Debug.Log("DesTROYING WEAPON");
                     isEquippingFull = false;
                     Destroy(weaponToDestroy);
                 }
