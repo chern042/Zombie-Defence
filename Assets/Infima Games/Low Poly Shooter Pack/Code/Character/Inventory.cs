@@ -1,11 +1,16 @@
 ﻿//Copyright 2022, Infima Games. All Rights Reserved.
 
+using UnityEngine;
+
 namespace InfimaGames.LowPolyShooterPack
 {
     public class Inventory : InventoryBehaviour
     {
         #region FIELDS
-        
+
+        [SerializeField]
+        private int carryingCapacity = 2;
+
         /// <summary>
         /// Array of all weapons. These are gotten in the order that they are parented to this object.
         /// </summary>
@@ -20,6 +25,10 @@ namespace InfimaGames.LowPolyShooterPack
         /// </summary>
         private int equippedIndex = -1;
 
+        private bool isEquippingFull;
+
+        private GameObject weaponToDestroy;
+
         #endregion
         
         #region METHODS
@@ -28,6 +37,7 @@ namespace InfimaGames.LowPolyShooterPack
         {
             //Cache all weapons. Beware that weapons need to be parented to the object this component is on!
             weapons = GetComponentsInChildren<WeaponBehaviour>(true);
+            isEquippingFull = false;
             
             //Disable all weapons. This makes it easier for us to only activate the one we need.
             foreach (WeaponBehaviour weapon in weapons)
@@ -54,6 +64,12 @@ namespace InfimaGames.LowPolyShooterPack
             //Disable the currently equipped weapon, if we have one.
             if (equipped != null && !manual)
                 equipped.gameObject.SetActive(false);
+
+            if (GetInventoryIsFull())
+            {
+                isEquippingFull = true;
+                weaponToDestroy = equipped.gameObject;
+            }
 
             //Update index.
             equippedIndex = index;
@@ -92,9 +108,28 @@ namespace InfimaGames.LowPolyShooterPack
             return newIndex;
         }
 
+        public int GetInventorySize()
+        {
+            weapons = GetComponentsInChildren<WeaponBehaviour>(true);
+            return weapons.Length;
+        }
+
         public override WeaponBehaviour GetEquipped() => equipped;
         public override int GetEquippedIndex() => equippedIndex;
+        public bool GetInventoryIsFull() => GetInventorySize() >= carryingCapacity;
 
         #endregion
+
+        private void Update()
+        {
+            if (isEquippingFull)
+            {
+                if (!equipped.GetComponentInParent<Character>().IsHolstering())
+                {
+                    isEquippingFull = false;
+                    Destroy(weaponToDestroy);
+                }
+            }
+        }
     }
 }

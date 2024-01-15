@@ -70764,7 +70764,7 @@ MonoBehaviour:
   promptText: 
   interactButton: {fileID: 2039418539}
   promptIcon: {fileID: 21300000, guid: 698effdb976f6d049bd07f87f8ea5e14, type: 3}
-  weaponGenerationTime: 10
+  weaponGenerationTime: 5
   weaponCost: 100
   weaponPrefabs:
   - {fileID: 8445401694592989334, guid: 8c7ba79f8ec05794aba7ffdd3d8aba93, type: 3}
@@ -70773,6 +70773,7 @@ MonoBehaviour:
   - {fileID: 5708224683135725906, guid: 12038d9fe9b50784c91441fad6056ebd, type: 3}
   - {fileID: 8445401694592989334, guid: d3308534d30856e42b7a585baa7a886b, type: 3}
   - {fileID: 3438908114058917180, guid: 8e4a73c62bb7a404db9c33a2c4369c16, type: 3}
+  weaponChestSlot: {fileID: 2095709732}
 --- !u!114 &1716162208
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -81590,6 +81591,11 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 8195332293463410009, guid: 19eadcf8fbed56b4da77ca94c1b4145f,
+        type: 3}
+      propertyPath: carryingCapacity
+      value: 19
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -86312,13 +86318,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2095709731}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.174, z: 0}
+  m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
+  m_LocalPosition: {x: 0, y: -0.174, z: -0.1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1135001191}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: -90, z: 0}
 --- !u!1001 &2095774147
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -89650,7 +89656,7 @@ PrefabInstance:
     - target: {fileID: 6375672588578057929, guid: bdb29a3f4a110415e9a2d65cb6823461,
         type: 3}
       propertyPath: m_Enabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6375672588578057929, guid: bdb29a3f4a110415e9a2d65cb6823461,
         type: 3}
@@ -89672,7 +89678,7 @@ PrefabInstance:
     - target: {fileID: 7499229040735194308, guid: bdb29a3f4a110415e9a2d65cb6823461,
         type: 3}
       propertyPath: m_Enabled
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
