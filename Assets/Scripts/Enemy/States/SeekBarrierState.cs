@@ -41,15 +41,16 @@ public class SeekBarrierState : BaseState
 
             }
 
-            if (Vector3.Distance(enemy.transform.position, barrierPoint) < 1f)
-            {
+            //if (Vector3.Distance(enemy.transform.position, barrierPoint) < 1f)
+            //{
 
-                enemy.Agent.SetDestination(enemy.transform.position);
-            }
+            //    enemy.Agent.SetDestination(enemy.transform.position);
+            //}
             if (enemy.HasReachedBarrier(barrierPoint))
             {
                 //Debug.Log("Enemy has reached: " + enemy.HasReachedBarrier(barrierPoint));
                 enemy.Agent.SetDestination(enemy.transform.position);
+                enemy.Agent.speed = 0f;
                 //enemy.Agent.isStopped = true ;
                 state = new DestroyBarrierState();
                 stateMachine.ChangeState(state);

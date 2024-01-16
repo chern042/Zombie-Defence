@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading;
 using EvolveGames;
+using InfimaGames.LowPolyShooterPack;
 using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.AI;
@@ -38,7 +39,8 @@ public class Enemy : MonoBehaviour
     public float attackDelaySpeed = 1f;
     public float damage = 5f;
     public float enemyHealth = 10f;
-    public LayerMask mask;
+    public LayerMask barrierMask;
+    public LayerMask playerMask; 
 
     private BarrierController barrier;
 
@@ -53,14 +55,14 @@ public class Enemy : MonoBehaviour
 
     private PlayerPoints playerPoints;
 
-
-    public Transform[] concreteImpactPrefabs;
-
-    private Collider[] enemyColliders;
+    private MeshCollider[] enemyColliders;
 
     private bool barrierReached;
+
     [HideInInspector]
     public bool enemyDying;
+
+    private EnemyAnimationController animationController;
 
 
     BaseState state;
@@ -71,13 +73,15 @@ public class Enemy : MonoBehaviour
         agent = GetComponent<NavMeshAgent>();
         stateMachine.Initialize();
         player = GameObject.FindGameObjectWithTag("GameController");
+
         enemyAnimator = GetComponent<Animator>();
+        animationController = GetComponent<EnemyAnimationController>();
         playerLocation = player.transform;
         playerPoints = player.GetComponent<PlayerPoints>();
         eyeHeight = 0.1f;
         state = stateMachine.activeState;
         barrier = mainBarrier.GetComponent<BarrierController>();
-        enemyColliders = GetComponentsInChildren<Collider>();
+        enemyColliders = GetComponentsInChildren<MeshCollider>();
         barrierReached = false;
         enemyDying = false;
 
@@ -135,7 +139,7 @@ public class Enemy : MonoBehaviour
 
                     //foreach(RaycastHit hit in hits)
                     RaycastHit hit = new RaycastHit();
-                    if (Physics.Raycast(ray, out hit, sightDistance))
+                    if (Physics.Raycast(ray, out hit, sightDistance, playerMask))
                     {
                         if(hit.transform.gameObject == player)
                         {
@@ -187,17 +191,24 @@ public class Enemy : MonoBehaviour
                     {
                         eyeHeight = 0.1f;
                     }
-                    Vector3 targetDirection = transform.forward;// - (Vector3.up * eyeHeight);
-                    //Debug.Log("ENEMYHIT**************");
 
-                    Ray ray = new Ray(transform.position+(transform.forward*0.35f) + (Vector3.up * eyeHeight), targetDirection);
+                    Vector3 targetDirection = transform.forward;// - (Vector3.up * eyeHeight);
+                                                                //Debug.Log("ENEMYHIT**************");
+
+                    Ray ray = new Ray(transform.position + (transform.forward * 0.35f) + (Vector3.up * eyeHeight), targetDirection);
                     RaycastHit hitInfo = new RaycastHit();
-                    if (Physics.Raycast(ray, out hitInfo, meleeReach-0.35f, mask))
+
+                    //if (Physics.Raycast(ray, out hitInfo, meleeReach-0.35f, mask))
+                    //if (Physics.SphereCast(transform.position, 1f, targetDirection, out hitInfo, meleeReach, barrierMask))
+                    if (Physics.SphereCast(ray, 1f, out hitInfo, meleeReach, barrierMask))
                     {
                         //Debug.Log("ENEMYHIT**************"+hitInfo.transform.name);
 
-                        Debug.DrawRay(ray.origin, ray.direction * (meleeReach - 0.35f), Color.red);
-                        if (hitInfo.transform.gameObject.CompareTag("Barrier"))
+                        //Debug.DrawRay(ray.origin, ray.direction * (meleeReach - 0.35f), Color.red);
+                        Debug.Log("SPHERECAST HITTING NAME: " + hitInfo.transform.gameObject.name);
+                        Debug.Log("SPHERECAST HITTING TAG: " + hitInfo.transform.gameObject.tag);
+
+                        if (hitInfo.transform.gameObject.CompareTag("Barrier") || hitInfo.transform.gameObject.CompareTag("Main Barrier"))
                         {
 
                             //Debug.Log("ENEMY REach barrier**************");
@@ -205,7 +216,8 @@ public class Enemy : MonoBehaviour
                             return true;
                         }
                     }
-                    Debug.DrawRay(ray.origin, ray.direction * meleeReach);
+
+                    //Debug.DrawRay(ray.origin, ray.direction * meleeReach);
 
                     eyeHeight += 0.1f * Time.deltaTime;
 
@@ -221,6 +233,34 @@ public class Enemy : MonoBehaviour
         {
             barrierReached = true;
             return true;
+        }
+    }
+
+    private void OnDrawGizmos()
+    {
+        Vector3 targetDirection = transform.forward;// - (Vector3.up * eyeHeight);
+                                                    //Debug.Log("ENEMYHIT**************");
+
+        Ray ray = new Ray(transform.position + (transform.forward * 0.35f) + (Vector3.up * eyeHeight), targetDirection);
+        RaycastHit hitInfo = new RaycastHit();
+        //if (Physics.Raycast(ray, out hitInfo, meleeReach-0.35f, mask))
+        //if (Physics.SphereCast(transform.position, 1f, targetDirection, out hitInfo, meleeReach, barrierMask))
+        if (Physics.SphereCast(ray, 1f, meleeReach, barrierMask))
+        {
+            //Debug.Log("ENEMYHIT**************"+hitInfo.transform.name);
+
+            Gizmos.color = Color.green;
+            Vector3 sphereCastMidpoint = transform.position + (transform.forward * hitInfo.distance);
+            Gizmos.DrawWireSphere(sphereCastMidpoint, 1f);
+            Gizmos.DrawSphere(hitInfo.point, 0.1f);
+            Debug.DrawLine(transform.position, sphereCastMidpoint, Color.green);
+        }
+        else
+        {
+            Gizmos.color = Color.red;
+            Vector3 sphereCastMidpoint = transform.position + (transform.forward * (meleeReach - 1f));
+            Gizmos.DrawWireSphere(sphereCastMidpoint, 1f);
+            Debug.DrawLine(transform.position, sphereCastMidpoint, Color.red);
         }
     }
 
@@ -255,8 +295,9 @@ public class Enemy : MonoBehaviour
 
             if (barrierReached)
             {
+                animationController.SetIsAttacking();
+                //enemyAnimator.SetTrigger("HitBarrier");
 
-                enemyAnimator.SetTrigger("HitBarrier");
             }
         }
     }
@@ -281,8 +322,8 @@ public class Enemy : MonoBehaviour
         {
             if (CanSeePlayer())
             {
-
-                enemyAnimator.SetTrigger("HitPlayer");
+                animationController.SetIsAttacking();
+               // enemyAnimator.SetTrigger("HitPlayer");
             }
         }
 
@@ -311,7 +352,7 @@ public class Enemy : MonoBehaviour
 
     public void DamageBarrier()
     {
-        //Debug.Log("barrier controller founds in enemy attack?: " + barrier);
+        Debug.Log("barrier controller founds in enemy attack?: " + barrier);
 
         if (barrier != null)
         {
@@ -341,18 +382,21 @@ public class Enemy : MonoBehaviour
             agent.isStopped = true;
             if (Random.Range(0, 2) == 0 && !enemyDying)
             {
-                enemyAnimator.SetTrigger("Death1");
+                animationController.SetIsDying();
+                //enemyAnimator.SetTrigger("Death1");
             }
             else
             {
-                enemyAnimator.SetTrigger("Death2");
+                animationController.SetIsDying();
+                //enemyAnimator.SetTrigger("Death2");
             }
             Invoke("DropItemOnDeath", 1f);
             enemyDying = true;
         }
         else
         {
-            enemyAnimator.SetTrigger("GetHit");
+            //enemyAnimator.SetTrigger("GetHit");
+            animationController.SetIsHit();
         }
     }
 
