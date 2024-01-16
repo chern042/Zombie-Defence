@@ -62690,7 +62690,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 478570, guid: b9ef8090c2ab2db41bd606407e13cfba, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -22.45
+      value: -25.587
       objectReference: {fileID: 0}
     - target: {fileID: 478570, guid: b9ef8090c2ab2db41bd606407e13cfba, type: 3}
       propertyPath: m_LocalRotation.w
@@ -89716,7 +89716,7 @@ PrefabInstance:
     - target: {fileID: 2869956492248969289, guid: a8bdee9ff621d47bf9daee27f32ec3ac,
         type: 3}
       propertyPath: m_Layer
-      value: 17
+      value: 16
       objectReference: {fileID: 0}
     - target: {fileID: 2869956492248969289, guid: a8bdee9ff621d47bf9daee27f32ec3ac,
         type: 3}
@@ -89756,7 +89756,7 @@ PrefabInstance:
     - target: {fileID: 4840347790287110984, guid: a8bdee9ff621d47bf9daee27f32ec3ac,
         type: 3}
       propertyPath: m_Layer
-      value: 17
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5193125436976374984, guid: a8bdee9ff621d47bf9daee27f32ec3ac,
         type: 3}
@@ -89767,6 +89767,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Layer
       value: 17
+      objectReference: {fileID: 0}
+    - target: {fileID: 6520167661817539445, guid: a8bdee9ff621d47bf9daee27f32ec3ac,
+        type: 3}
+      propertyPath: m_ExcludeLayers.m_Bits
+      value: 257
       objectReference: {fileID: 0}
     - target: {fileID: 6952959748324062896, guid: a8bdee9ff621d47bf9daee27f32ec3ac,
         type: 3}
@@ -89842,6 +89847,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_TagString
       value: Wood
+      objectReference: {fileID: 0}
+    - target: {fileID: 9107830683361957456, guid: a8bdee9ff621d47bf9daee27f32ec3ac,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9107830683361957456, guid: a8bdee9ff621d47bf9daee27f32ec3ac,
         type: 3}

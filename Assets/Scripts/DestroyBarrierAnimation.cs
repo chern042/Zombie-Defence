@@ -63,8 +63,8 @@ public class DestroyBarrierAnimation : MonoBehaviour
 
     public void ThrowLogs(int logToThrowIndex)
     {
-        Physics.IgnoreCollision(gameModeService.GetPlayerCharacter().GetComponent<Collider>(), barrierLeftCollider[logToThrowIndex]);
-        Physics.IgnoreCollision(gameModeService.GetPlayerCharacter().GetComponent<Collider>(), barrierRightCollider[logToThrowIndex]);
+       // Physics.IgnoreCollision(gameModeService.GetPlayerCharacter().GetComponent<CharacterController>(), barrierLeftCollider[logToThrowIndex]);
+       // Physics.IgnoreCollision(gameModeService.GetPlayerCharacter().GetComponent<CharacterController>(), barrierRightCollider[logToThrowIndex]);
 
         if (logToThrowIndex > 1)
         {

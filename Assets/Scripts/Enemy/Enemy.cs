@@ -187,15 +187,17 @@ public class Enemy : MonoBehaviour
             {
                 if (Vector3.Distance(transform.position, barrierPoint) < sightDistance)
                 {
-                    if (eyeHeight >= 1.8f)
-                    {
-                        eyeHeight = 0.1f;
-                    }
+                    //if (eyeHeight >= 1.8f)
+                    //{
+                    //    eyeHeight = 0.1f;
+                    //}
 
                     Vector3 targetDirection = transform.forward;// - (Vector3.up * eyeHeight);
                                                                 //Debug.Log("ENEMYHIT**************");
 
-                    Ray ray = new Ray(transform.position + (transform.forward * 0.35f) + (Vector3.up * eyeHeight), targetDirection);
+                  //  Ray ray = new Ray(transform.position + (transform.forward * 0.35f) + (Vector3.up * eyeHeight), targetDirection);
+                    Ray ray = new Ray(transform.position + (Vector3.up ), targetDirection);
+
                     RaycastHit hitInfo = new RaycastHit();
 
                     //if (Physics.Raycast(ray, out hitInfo, meleeReach-0.35f, mask))
@@ -219,7 +221,7 @@ public class Enemy : MonoBehaviour
 
                     //Debug.DrawRay(ray.origin, ray.direction * meleeReach);
 
-                    eyeHeight += 0.1f * Time.deltaTime;
+                   // eyeHeight += 0.1f * Time.deltaTime;
 
 
 
@@ -241,7 +243,9 @@ public class Enemy : MonoBehaviour
         Vector3 targetDirection = transform.forward;// - (Vector3.up * eyeHeight);
                                                     //Debug.Log("ENEMYHIT**************");
 
-        Ray ray = new Ray(transform.position + (transform.forward * 0.35f) + (Vector3.up * eyeHeight), targetDirection);
+        //   Ray ray = new Ray(transform.position + (transform.forward * 0.35f) + (Vector3.up * eyeHeight), targetDirection);
+        Ray ray = new Ray(transform.position + (Vector3.up), targetDirection);
+
         RaycastHit hitInfo = new RaycastHit();
         //if (Physics.Raycast(ray, out hitInfo, meleeReach-0.35f, mask))
         //if (Physics.SphereCast(transform.position, 1f, targetDirection, out hitInfo, meleeReach, barrierMask))
@@ -353,7 +357,7 @@ public class Enemy : MonoBehaviour
     public void DamageBarrier()
     {
         Debug.Log("barrier controller founds in enemy attack?: " + barrier);
-
+        //test
         if (barrier != null)
         {
             if (barrierReached)

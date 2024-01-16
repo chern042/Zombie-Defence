@@ -33,7 +33,7 @@ public class EnemyAnimationController : MonoBehaviour
     // Update is called once per frame
     void Update()
 	{
-        if ((state != MovementState.attacking && state != MovementState.hit && state != MovementState.dying) || Mathf.Abs(agent.velocity.magnitude) > 0.1f)
+        if (Mathf.Abs(agent.velocity.magnitude) > 0.2f)
         {
             UpdateAnimationState();
         }
