@@ -28193,7 +28193,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3bcd032d45f08426fb0724c30f5e05c9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  zombiePrefab: {fileID: 1352753130415908}
+  zombiePrefab: {fileID: 0}
 --- !u!4 &676647391
 Transform:
   m_ObjectHideFlags: 0
@@ -62827,6 +62827,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 1534286999}
+    - targetCorrespondingSourceObject: {fileID: 104324, guid: b9ef8090c2ab2db41bd606407e13cfba,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1534287002}
     - targetCorrespondingSourceObject: {fileID: 193806, guid: b9ef8090c2ab2db41bd606407e13cfba,
         type: 3}
       insertIndex: -1
@@ -62997,6 +63001,30 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   barrierPath: {fileID: 1062635120}
+--- !u!114 &1534287002
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1534286990}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b8274681b285e40f8b79267d9581785b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bodyPartPrefabs:
+  - {fileID: 400000, guid: c5303216438117c4499ab27e1d5a7494, type: 3}
+  - {fileID: 400000, guid: f277dccf60fe2ea48b51c8ed5ffdd1ff, type: 3}
+  - {fileID: 400000, guid: ba33ae6a352d330429bb241a02844bd2, type: 3}
+  - {fileID: 400000, guid: ec37a06abee21dd43946a682a9982c36, type: 3}
+  - {fileID: 400000, guid: 4f12d4f1821f654489c2f4155580cdbd, type: 3}
+  - {fileID: 400000, guid: 8b34484454a84254abecbf02187e04d6, type: 3}
+  - {fileID: 400000, guid: cb453346aba4cc843a2768aca725c00b, type: 3}
+  - {fileID: 400000, guid: 2a029893fd9bf38498216f39b9ee9f3a, type: 3}
+  - {fileID: 400000, guid: b94f1d786060d0b4790e59b42bae4824, type: 3}
+  explosionRange: 2
+  destroyAfterTime: 5
 --- !u!1001 &1536470457
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -89606,105 +89634,6 @@ Transform:
   - {fileID: 439940405}
   m_Father: {fileID: 1553871740}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1352753130415908 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5018820575080288778, guid: 62e4076fbf1654b399edca562475c4af,
-    type: 3}
-  m_PrefabInstance: {fileID: 2056916730736901598}
-  m_PrefabAsset: {fileID: 0}
---- !u!1001 &2056916730736901598
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 0}
-    m_Modifications:
-    - target: {fileID: 2362632393800652782, guid: 62e4076fbf1654b399edca562475c4af,
-        type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 39.116
-      objectReference: {fileID: 0}
-    - target: {fileID: 2362632393800652782, guid: 62e4076fbf1654b399edca562475c4af,
-        type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 2362632393800652782, guid: 62e4076fbf1654b399edca562475c4af,
-        type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -22.803
-      objectReference: {fileID: 0}
-    - target: {fileID: 2362632393800652782, guid: 62e4076fbf1654b399edca562475c4af,
-        type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 0.7040545
-      objectReference: {fileID: 0}
-    - target: {fileID: 2362632393800652782, guid: 62e4076fbf1654b399edca562475c4af,
-        type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2362632393800652782, guid: 62e4076fbf1654b399edca562475c4af,
-        type: 3}
-      propertyPath: m_LocalRotation.y
-      value: 0.71014607
-      objectReference: {fileID: 0}
-    - target: {fileID: 2362632393800652782, guid: 62e4076fbf1654b399edca562475c4af,
-        type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2362632393800652782, guid: 62e4076fbf1654b399edca562475c4af,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2362632393800652782, guid: 62e4076fbf1654b399edca562475c4af,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 90.494
-      objectReference: {fileID: 0}
-    - target: {fileID: 2362632393800652782, guid: 62e4076fbf1654b399edca562475c4af,
-        type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 2779318171818459901, guid: 62e4076fbf1654b399edca562475c4af,
-        type: 3}
-      propertyPath: m_Enabled
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4936592735788838519, guid: 62e4076fbf1654b399edca562475c4af,
-        type: 3}
-      propertyPath: barrierPath
-      value: 
-      objectReference: {fileID: 1062635120}
-    - target: {fileID: 5018820575080288778, guid: 62e4076fbf1654b399edca562475c4af,
-        type: 3}
-      propertyPath: m_Name
-      value: Zombie (1)
-      objectReference: {fileID: 0}
-    - target: {fileID: 5018820575080288778, guid: 62e4076fbf1654b399edca562475c4af,
-        type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8896202645163677346, guid: 62e4076fbf1654b399edca562475c4af,
-        type: 3}
-      propertyPath: barrierPath
-      value: 
-      objectReference: {fileID: 1062635120}
-    - target: {fileID: 8896202645163677346, guid: 62e4076fbf1654b399edca562475c4af,
-        type: 3}
-      propertyPath: mainBarrier
-      value: 
-      objectReference: {fileID: 956500497}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 62e4076fbf1654b399edca562475c4af, type: 3}
 --- !u!1001 &2435544854984592662
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -90703,7 +90632,6 @@ SceneRoots:
   - {fileID: 1559005988}
   - {fileID: 705507995}
   - {fileID: 3765665978034356452}
-  - {fileID: 2056916730736901598}
   - {fileID: 2877798955200933029}
   - {fileID: 1464933240}
   - {fileID: 941596752}
