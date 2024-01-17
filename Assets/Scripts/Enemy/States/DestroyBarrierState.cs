@@ -42,7 +42,7 @@ public class DestroyBarrierState : BaseState
                 enemy.AttackBarrier();
 
 
-                // Debug.Log("enemy barrier found?: " + enemy.mainBarrier);
+                Debug.Log("enemy barrier reached?: " + enemy.mainBarrier);
                 // Debug.Log("enemy barrier found?: " + enemy.mainBarrier.GetComponent<BarrierController>());
 
 

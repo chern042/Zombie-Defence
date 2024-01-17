@@ -62,7 +62,7 @@ public class Enemy : MonoBehaviour
     [HideInInspector]
     public bool enemyDying;
 
-    private EnemyAnimationController animationController;
+    //private EnemyAnimationController animationController;
 
 
     BaseState state;
@@ -75,7 +75,7 @@ public class Enemy : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("GameController");
 
         enemyAnimator = GetComponent<Animator>();
-        animationController = GetComponent<EnemyAnimationController>();
+        //animationController = GetComponent<EnemyAnimationController>();
         playerLocation = player.transform;
         playerPoints = player.GetComponent<PlayerPoints>();
         eyeHeight = 0.1f;
@@ -187,41 +187,39 @@ public class Enemy : MonoBehaviour
             {
                 if (Vector3.Distance(transform.position, barrierPoint) < sightDistance)
                 {
-                    //if (eyeHeight >= 1.8f)
-                    //{
-                    //    eyeHeight = 0.1f;
-                    //}
+                    if (eyeHeight >= 1f)
+                    {
+                        eyeHeight = 0.1f;
+                    }
 
                     Vector3 targetDirection = transform.forward;// - (Vector3.up * eyeHeight);
                                                                 //Debug.Log("ENEMYHIT**************");
 
-                  //  Ray ray = new Ray(transform.position + (transform.forward * 0.35f) + (Vector3.up * eyeHeight), targetDirection);
-                    Ray ray = new Ray(transform.position + (Vector3.up ), targetDirection);
+                    Ray ray = new Ray(transform.position + (Vector3.up * eyeHeight), targetDirection);
+                    //Ray ray = new Ray(transform.position +(transform.forward * (meleeReach - 1f)) + (Vector3.up ), targetDirection);
 
                     RaycastHit hitInfo = new RaycastHit();
-
-                    //if (Physics.Raycast(ray, out hitInfo, meleeReach-0.35f, mask))
-                    //if (Physics.SphereCast(transform.position, 1f, targetDirection, out hitInfo, meleeReach, barrierMask))
-                    if (Physics.SphereCast(ray, 1f, out hitInfo, meleeReach, barrierMask))
+                    if (Physics.Raycast(ray, out hitInfo, meleeReach-0.35f, barrierMask))
                     {
                         //Debug.Log("ENEMYHIT**************"+hitInfo.transform.name);
 
-                        //Debug.DrawRay(ray.origin, ray.direction * (meleeReach - 0.35f), Color.red);
-                        Debug.Log("SPHERECAST HITTING NAME: " + hitInfo.transform.gameObject.name);
-                        Debug.Log("SPHERECAST HITTING TAG: " + hitInfo.transform.gameObject.tag);
+                        Debug.DrawRay(ray.origin, ray.direction, Color.red);
+                        Debug.DrawLine(ray.origin, hitInfo.transform.position, Color.blue);
 
-                        if (hitInfo.transform.gameObject.CompareTag("Barrier") || hitInfo.transform.gameObject.CompareTag("Main Barrier"))
+
+
+                        if (hitInfo.transform.gameObject.layer == GetLayerIndex(barrierMask))
                         {
 
-                            //Debug.Log("ENEMY REach barrier**************");
+                            Debug.Log("ENEMY REach barrier**************");
                             barrierReached = true;
                             return true;
                         }
                     }
 
-                    //Debug.DrawRay(ray.origin, ray.direction * meleeReach);
+                    Debug.DrawRay(ray.origin, ray.direction, Color.white );
 
-                   // eyeHeight += 0.1f * Time.deltaTime;
+                    eyeHeight += 0.15f * Time.deltaTime;
 
 
 
@@ -238,45 +236,24 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    private void OnDrawGizmos()
-    {
-        Vector3 targetDirection = transform.forward;// - (Vector3.up * eyeHeight);
-                                                    //Debug.Log("ENEMYHIT**************");
 
-        //   Ray ray = new Ray(transform.position + (transform.forward * 0.35f) + (Vector3.up * eyeHeight), targetDirection);
-        Ray ray = new Ray(transform.position + (Vector3.up), targetDirection);
-
-        RaycastHit hitInfo = new RaycastHit();
-        //if (Physics.Raycast(ray, out hitInfo, meleeReach-0.35f, mask))
-        //if (Physics.SphereCast(transform.position, 1f, targetDirection, out hitInfo, meleeReach, barrierMask))
-        if (Physics.SphereCast(ray, 1f, meleeReach, barrierMask))
-        {
-            //Debug.Log("ENEMYHIT**************"+hitInfo.transform.name);
-
-            Gizmos.color = Color.green;
-            Vector3 sphereCastMidpoint = transform.position + (transform.forward * hitInfo.distance);
-            Gizmos.DrawWireSphere(sphereCastMidpoint, 1f);
-            Gizmos.DrawSphere(hitInfo.point, 0.1f);
-            Debug.DrawLine(transform.position, sphereCastMidpoint, Color.green);
-        }
-        else
-        {
-            Gizmos.color = Color.red;
-            Vector3 sphereCastMidpoint = transform.position + (transform.forward * (meleeReach - 1f));
-            Gizmos.DrawWireSphere(sphereCastMidpoint, 1f);
-            Debug.DrawLine(transform.position, sphereCastMidpoint, Color.red);
-        }
-    }
-
-
-    public void FollowPlayer()
+    public void FollowPlayer(bool running = false)
     {
         Vector3 destination = player.transform.position + (Random.insideUnitSphere * 2f);
-        while(Vector3.Distance(player.transform.position, destination) < 1f)
+        while(Vector3.Distance(player.transform.position, destination) < 0.5f)
         {
             destination = player.transform.position + (Random.insideUnitSphere * 2f);
         }
-        agent.SetDestination(destination);
+
+        if (running)
+        {
+            RunTowards(destination);
+        }
+        else
+        {
+            WalkTowards(destination);
+        }
+
 
     }
 
@@ -284,7 +261,6 @@ public class Enemy : MonoBehaviour
 
     public void AttackBarrier()
     {
-        //Make sure that we have a camera cached, otherwise we don't really have the ability to perform traces.
 
         if (!meleeReadyToAttack )
         {
@@ -299,9 +275,7 @@ public class Enemy : MonoBehaviour
 
             if (barrierReached)
             {
-                animationController.SetIsAttacking();
-                //enemyAnimator.SetTrigger("HitBarrier");
-
+                Attack();
             }
         }
     }
@@ -326,8 +300,7 @@ public class Enemy : MonoBehaviour
         {
             if (CanSeePlayer())
             {
-                animationController.SetIsAttacking();
-               // enemyAnimator.SetTrigger("HitPlayer");
+                Attack();
             }
         }
 
@@ -386,21 +359,18 @@ public class Enemy : MonoBehaviour
             agent.isStopped = true;
             if (Random.Range(0, 2) == 0 && !enemyDying)
             {
-                animationController.SetIsDying();
-                //enemyAnimator.SetTrigger("Death1");
+                Death();
             }
             else
             {
-                animationController.SetIsDying();
-                //enemyAnimator.SetTrigger("Death2");
+                Death();
             }
             Invoke("DropItemOnDeath", 1f);
             enemyDying = true;
         }
         else
         {
-            //enemyAnimator.SetTrigger("GetHit");
-            animationController.SetIsHit();
+            Damage();
         }
     }
 
@@ -420,6 +390,70 @@ public class Enemy : MonoBehaviour
         }
     }
 
+    private int GetLayerIndex(LayerMask layerMask)
+    {
+        int layerNumber = 0;
+        int layer = layerMask.value;
+        while (layer > 0)
+        {
+            layer = layer >> 1;
+            layerNumber++;
+        }
+        return layerNumber-1;
+    }
 
+
+
+    public void WalkTowards(Vector3 destination)
+    {
+        agent.speed = 0.5f;
+
+        enemyAnimator.SetBool("Attack", false);
+        enemyAnimator.SetBool("Damage", false);
+        enemyAnimator.SetBool("Death", false);
+        agent.SetDestination(destination);
+
+    }
+
+    public void RunTowards(Vector3 destination)
+    {
+        agent.speed = 1f;
+
+        enemyAnimator.SetBool("Attack", false);
+        enemyAnimator.SetBool("Damage", false);
+        enemyAnimator.SetBool("Death", false);
+        agent.SetDestination(destination);
+    }
+
+    public void StopMoving()
+    {
+
+        enemyAnimator.SetBool("Attack", false);
+        enemyAnimator.SetBool("Damage", false);
+        enemyAnimator.SetBool("Death", false);
+        agent.SetDestination(transform.position);
+        agent.speed = 0;
+    }
+
+    public void Attack()
+    {
+        enemyAnimator.SetBool("Attack", true);
+        enemyAnimator.SetBool("Damage", false);
+        enemyAnimator.SetBool("Death", false);
+
+    }
+    public void Damage()
+    {
+        enemyAnimator.SetBool("Attack", false);
+        enemyAnimator.SetBool("Damage", true);
+        enemyAnimator.SetBool("Death", false);
+    }
+
+    public void Death()
+    {
+        enemyAnimator.SetBool("Attack", false);
+        enemyAnimator.SetBool("Damage", false);
+        enemyAnimator.SetBool("Death", true);
+    }
 
 }

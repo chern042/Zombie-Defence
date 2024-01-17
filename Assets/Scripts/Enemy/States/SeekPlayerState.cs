@@ -37,7 +37,7 @@ public class SeekPlayerState : BaseState
             {
                 Debug.Log("can see, cant reach player*******");
 
-                enemy.FollowPlayer();
+                enemy.FollowPlayer(true);
                 enemy.Agent.speed = 2f;
                 stateMachine.ChangeState(new AttackPlayerState());
             }
