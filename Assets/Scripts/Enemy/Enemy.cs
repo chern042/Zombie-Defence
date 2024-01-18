@@ -355,7 +355,7 @@ public class Enemy : MonoBehaviour
         enemyHealth -= damage;
         if(enemyHealth <= 0 && !enemyDying)
         {
-            playerPoints.AddPoints(pointsWorth);
+            //playerPoints.AddPoints(pointsWorth);
             agent.isStopped = true;
             if (Random.Range(0, 2) == 0 && !enemyDying)
             {
@@ -365,7 +365,7 @@ public class Enemy : MonoBehaviour
             {
                 Death();
             }
-            Invoke("DropItemOnDeath", 1f);
+            //Invoke("DropItemOnDeath", 1f);
             enemyDying = true;
         }
         else

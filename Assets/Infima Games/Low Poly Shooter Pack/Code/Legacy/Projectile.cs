@@ -34,6 +34,8 @@ namespace InfimaGames.LowPolyShooterPack.Legacy
         public Transform[] softImpactPrefabs;
         public Transform[] sandImpactPrefabs;
 
+		private Weapon weapon;
+		private CharacterBehaviour player;
 
         private void Start()
 		{
@@ -42,9 +44,10 @@ namespace InfimaGames.LowPolyShooterPack.Legacy
 			//Ignore the main player character's collision. A little hacky, but it should work.
 			Physics.IgnoreCollision(gameModeService.GetPlayerCharacter().GetComponent<Collider>(),
 				GetComponent<Collider>());
-
-			//Start destroy timer
-			StartCoroutine(DestroyAfter());
+            player = gameModeService.GetPlayerCharacter();
+            weapon = gameModeService.GetPlayerCharacter().GetComponentInChildren<Weapon>();
+            //Start destroy timer
+            StartCoroutine(DestroyAfter());
 		}
 
 		//If the bullet collides with anything
@@ -83,53 +86,94 @@ namespace InfimaGames.LowPolyShooterPack.Legacy
 			//If bullet collides with "Blood" tag
 			if (collision.transform.tag == "Blood")
 			{
-				//Instantiate random impact prefab from array
-				Instantiate(bloodImpactPrefabs[Random.Range
+                //Instantiate random impact prefab from array
+                Instantiate(bloodImpactPrefabs[Random.Range
 						(0, bloodImpactPrefabs.Length)], transform.position,
 					Quaternion.LookRotation(collision.contacts[0].normal));
 				//Destroy bullet object
 				Destroy(gameObject);
 			}
+            if (collision.transform.tag == "Zombie")
+            {
+                weapon = player.GetComponentInChildren<Weapon>();
+                float weaponDamage = weapon.GetDamage();
 
-			//If bullet collides with "Metal" tag
-			if (collision.transform.tag == "Metal")
+                //Instantiate random impact prefab from array
+                collision.collider.gameObject.GetComponentInParent<Enemy>().DamageEnemy(weaponDamage);
+
+                Transform impact = Instantiate(bloodImpactPrefabs[Random.Range
+                    (0, bloodImpactPrefabs.Length)], transform.position,
+                    Quaternion.LookRotation(collision.contacts[0].normal));
+                impact.SetParent(collision.transform);
+
+                //Destroy bullet object
+                Destroy(gameObject);
+            }
+            if (collision.transform.tag == "Zombie Head")
+            {
+                weapon = player.GetComponentInChildren<Weapon>();
+                float weaponDamage = weapon.GetDamage();
+
+                //Instantiate random impact prefab from array
+                collision.collider.gameObject.GetComponentInParent<Enemy>().DamageEnemy(weapon.GetDamage() * 2f);
+
+                Transform impact = Instantiate(bloodImpactPrefabs[Random.Range
+                    (0, bloodImpactPrefabs.Length)], transform.position,
+                    Quaternion.LookRotation(collision.contacts[0].normal));
+                impact.SetParent(collision.transform);
+
+                //Destroy bullet object
+                Destroy(gameObject);
+            }
+
+
+            //If bullet collides with "Metal" tag
+            if (collision.transform.tag == "Metal")
 			{
 				//Instantiate random impact prefab from array
-				Instantiate(metalImpactPrefabs[Random.Range
+				Transform impact = Instantiate(metalImpactPrefabs[Random.Range
 						(0, metalImpactPrefabs.Length)], transform.position,
 					Quaternion.LookRotation(collision.contacts[0].normal));
-				//Destroy bullet object
-				Destroy(gameObject);
+                impact.SetParent(collision.transform);
+
+                //Destroy bullet object
+                Destroy(gameObject);
 			}
 
 			//If bullet collides with "Dirt" tag
 			if (collision.transform.tag == "Dirt")
 			{
 				//Instantiate random impact prefab from array
-				Instantiate(dirtImpactPrefabs[Random.Range
+				Transform impact = Instantiate(dirtImpactPrefabs[Random.Range
 						(0, dirtImpactPrefabs.Length)], transform.position,
 					Quaternion.LookRotation(collision.contacts[0].normal));
-				//Destroy bullet object
-				Destroy(gameObject);
+                impact.SetParent(collision.transform);
+
+                //Destroy bullet object
+                Destroy(gameObject);
 			}
 
 			//If bullet collides with "Concrete" tag
 			if (collision.transform.tag == "Concrete")
 			{
-				//Instantiate random impact prefab from array
-				Instantiate(concreteImpactPrefabs[Random.Range
+                //Instantiate random impact prefab from array
+                Transform impact = Instantiate(concreteImpactPrefabs[Random.Range
 						(0, concreteImpactPrefabs.Length)], transform.position,
 					Quaternion.LookRotation(collision.contacts[0].normal));
-				//Destroy bullet object
-				Destroy(gameObject);
+                impact.SetParent(collision.transform);
+
+                //Destroy bullet object
+                Destroy(gameObject);
 			}
 
             if (collision.transform.tag == "Wood")
             {
                 //Instantiate random impact prefab from array
-                Instantiate(woodImpactPrefabs[Random.Range
+                Transform impact = Instantiate(woodImpactPrefabs[Random.Range
                         (0, woodImpactPrefabs.Length)], transform.position,
                     Quaternion.LookRotation(collision.contacts[0].normal));
+                impact.SetParent(collision.transform);
+
                 //Destroy bullet object
                 Destroy(gameObject);
             }
@@ -137,9 +181,11 @@ namespace InfimaGames.LowPolyShooterPack.Legacy
             if (collision.transform.tag == "Soft")
             {
                 //Instantiate random impact prefab from array
-                Instantiate(softImpactPrefabs[Random.Range
+                Transform impact = Instantiate(softImpactPrefabs[Random.Range
                         (0, softImpactPrefabs.Length)], transform.position,
                     Quaternion.LookRotation(collision.contacts[0].normal));
+                impact.SetParent(collision.transform);
+
                 //Destroy bullet object
                 Destroy(gameObject);
             }
@@ -147,9 +193,11 @@ namespace InfimaGames.LowPolyShooterPack.Legacy
             if (collision.transform.tag == "Sand")
             {
                 //Instantiate random impact prefab from array
-                Instantiate(sandImpactPrefabs[Random.Range
+                Transform impact = Instantiate(sandImpactPrefabs[Random.Range
                         (0, sandImpactPrefabs.Length)], transform.position,
                     Quaternion.LookRotation(collision.contacts[0].normal));
+                impact.SetParent(collision.transform);
+
                 //Destroy bullet object
                 Destroy(gameObject);
             }
