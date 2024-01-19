@@ -120,7 +120,7 @@ public class Enemy : MonoBehaviour
 
         if (player != null)
         {
-
+            Debug.Log("PLAYER NOT NULL");
             //is player close enough to be seen
             if (Vector3.Distance(transform.position, player.transform.position) < sightDistance)
             {
@@ -141,7 +141,9 @@ public class Enemy : MonoBehaviour
                     RaycastHit hit = new RaycastHit();
                     if (Physics.Raycast(ray, out hit, sightDistance, playerMask))
                     {
-                        if(hit.transform.gameObject == player)
+                        Debug.Log("RAYCAST HIT:"+hit.transform.name);
+
+                        if (hit.transform.gameObject == player)
                         {
                             Debug.DrawRay(ray.origin, ray.direction * sightDistance);
                             return true;
@@ -282,7 +284,7 @@ public class Enemy : MonoBehaviour
 
     public void AttackResetEvent()
     {
-        Invoke(nameof(ResetAttack), attackDelaySpeed);
+        Invoke(nameof(ResetAttack), attackDelaySpeed+1.5f); //Length of attack animation is 1.5s
     }
 
 
@@ -310,6 +312,7 @@ public class Enemy : MonoBehaviour
     public void ResetAttack()
     {
         meleeReadyToAttack = true;
+        enemyAnimator.SetBool("Attack", false);
     }
 
 
@@ -351,11 +354,11 @@ public class Enemy : MonoBehaviour
 
     public void DamageEnemy(float damage)
     {
-
+        //StopMoving();
         enemyHealth -= damage;
         if(enemyHealth <= 0 && !enemyDying)
         {
-            //playerPoints.AddPoints(pointsWorth);
+            playerPoints.AddPoints(pointsWorth);
             agent.isStopped = true;
             if (Random.Range(0, 2) == 0 && !enemyDying)
             {
@@ -370,7 +373,8 @@ public class Enemy : MonoBehaviour
         }
         else
         {
-            Damage();
+            //Damage();
+            enemyAnimator.SetTrigger("Damage");
         }
     }
 
@@ -409,7 +413,6 @@ public class Enemy : MonoBehaviour
         agent.speed = 0.5f;
 
         enemyAnimator.SetBool("Attack", false);
-        enemyAnimator.SetBool("Damage", false);
         enemyAnimator.SetBool("Death", false);
         agent.SetDestination(destination);
 
@@ -420,7 +423,6 @@ public class Enemy : MonoBehaviour
         agent.speed = 1f;
 
         enemyAnimator.SetBool("Attack", false);
-        enemyAnimator.SetBool("Damage", false);
         enemyAnimator.SetBool("Death", false);
         agent.SetDestination(destination);
     }
@@ -429,7 +431,6 @@ public class Enemy : MonoBehaviour
     {
 
         enemyAnimator.SetBool("Attack", false);
-        enemyAnimator.SetBool("Damage", false);
         enemyAnimator.SetBool("Death", false);
         agent.SetDestination(transform.position);
         agent.speed = 0;
@@ -438,21 +439,14 @@ public class Enemy : MonoBehaviour
     public void Attack()
     {
         enemyAnimator.SetBool("Attack", true);
-        enemyAnimator.SetBool("Damage", false);
         enemyAnimator.SetBool("Death", false);
 
     }
-    public void Damage()
-    {
-        enemyAnimator.SetBool("Attack", false);
-        enemyAnimator.SetBool("Damage", true);
-        enemyAnimator.SetBool("Death", false);
-    }
+
 
     public void Death()
     {
         enemyAnimator.SetBool("Attack", false);
-        enemyAnimator.SetBool("Damage", false);
         enemyAnimator.SetBool("Death", true);
     }
 

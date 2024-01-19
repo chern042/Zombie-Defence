@@ -48,7 +48,6 @@ namespace InfimaGames.LowPolyShooterPack
             isUpgrading = false;
             isUpgraded = false;
             finishedUpgrade = false;
-            //playerPoints = playerHand.GetComponentInParent<PlayerPoints>();
             weaponUpgradeLevel = 0;
             SetShowPromptIcon(true);
             Debug.Log("WORKBENCH AWAKE.");
@@ -170,12 +169,13 @@ namespace InfimaGames.LowPolyShooterPack
         {
 
                 Inventory inventory = actor.GetComponentInParent<CharacterController>().gameObject.GetComponentInChildren<Inventory>();
-                if (!isUpgrading)
+                playerPoints = actor.GetComponentInParent<PlayerPoints>();
+
+            if (!isUpgrading)
                 {
-                    //if ((playerPoints.points >= upgradeCost) && weapon.GetUpgradeLevel() <= 5)
-                    if ((10000 >= upgradeCost) && weapon.GetUpgradeLevel() <= 5 && inventory.GetNextIndex() != inventory.GetLastIndex())
+                    if ((playerPoints.points >= upgradeCost) && weapon.GetUpgradeLevel() <= 5 && inventory.GetNextIndex() != inventory.GetLastIndex())
                     {
-                        //playerPoints.RemovePoints((int)upgradeCost);
+                        playerPoints.RemovePoints((int)upgradeCost);
 
 
                         weapon.gameObject.transform.SetParent(workbenchUpgradeSlot.transform);
@@ -183,13 +183,8 @@ namespace InfimaGames.LowPolyShooterPack
                         weapon.gameObject.transform.localRotation = Quaternion.Euler(0, 0, 0);
                         weapon.gameObject.layer = workbenchUpgradeSlot.gameObject.layer;
                         SceneHelper.SetLayerAllChildren(weapon.gameObject.transform, workbenchUpgradeSlot.gameObject.layer);
-                        //inventory.Equip(inventory.GetNextIndex());
                         weaponIndex = inventory.GetEquippedIndex();
                         actor.GetComponentInParent<Character>().SwitchWeaponManual(inventory.GetNextIndex());
-
-
-                        // workbenchUpgradeSlot = weapon.gameObject;
-                        // workbenchUpgradeSlot.SetActive(true);
 
                         isUpgrading = true;
                         SetPromptText("");
@@ -198,12 +193,13 @@ namespace InfimaGames.LowPolyShooterPack
                     upgradeBarCurrent.fillAmount = 0;
                         weaponUpgradeLevel = weapon.GetUpgradeLevel() + 1;
 
-                        //itemUpgradingIndex = playerPoints.GetComponent<ItemChange>().DropItem();
-
                     }
                     else if (weapon.GetUpgradeLevel() == 5)
                     {
                         SetPromptText("No More Upgrades");
+                    }
+                    else if (inventory.GetNextIndex() != inventory.GetLastIndex()) {
+                        SetPromptText("Secondary Weapon Required");
                     }
                     else
                     {
@@ -257,8 +253,6 @@ namespace InfimaGames.LowPolyShooterPack
                         weapon.SetMultiplierMovementSpeed(weapon.GetMultiplierMovementSpeed() * 1.1f);
                         weapon.SetDamage(Mathf.RoundToInt(weapon.GetDamage() + ((weaponUpgradeLevel + 1) * (weaponUpgradeLevel + 1) * 0.5f)));
                         weapon.SetSpread(weapon.GetSpread() * 0.85f);
-                        // playerPoints.GetComponent<ItemChange>().ReturnItem(itemUpgradingIndex);
-
                         weapon.SetUpgradeLevel(weaponUpgradeLevel);
                         weapon.transform.SetSiblingIndex(weaponIndex);
                         actor.GetComponentInParent<Character>().SwitchWeaponManual(inventory.GetLastIndex(), false);
@@ -318,14 +312,6 @@ namespace InfimaGames.LowPolyShooterPack
         }
 
 
-        //private void SetLayerAllChildren(Transform root, int layer)
-        //{
-        //    var children = root.GetComponentsInChildren<Transform>(includeInactive: true);
-        //    foreach (var child in children)
-        //    {
-        //        child.gameObject.layer = layer;
-        //    }
-        //}
 
     }
 }

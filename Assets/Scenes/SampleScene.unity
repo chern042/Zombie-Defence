@@ -63172,7 +63172,7 @@ MonoBehaviour:
   meleeReach: 1.5
   attackDelaySpeed: 1
   damage: 5
-  enemyHealth: 10
+  enemyHealth: 50
   barrierMask:
     serializedVersion: 2
     m_Bits: 131072
@@ -82496,6 +82496,10 @@ PrefabInstance:
         type: 3}
       insertIndex: -1
       addedObject: {fileID: 1998399428}
+    - targetCorrespondingSourceObject: {fileID: 2751027687307977091, guid: 19eadcf8fbed56b4da77ca94c1b4145f,
+        type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1998399429}
   m_SourcePrefab: {fileID: 100100000, guid: 19eadcf8fbed56b4da77ca94c1b4145f, type: 3}
 --- !u!1 &1998399427 stripped
 GameObject:
@@ -82523,6 +82527,22 @@ MonoBehaviour:
   overlay: {fileID: 1160379762}
   duration: 2
   fadeSpeed: 1.5
+--- !u!114 &1998399429
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1998399427}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53a9ab0041cd04d8cac2234865e1c109, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pointsText: {fileID: 1118471588}
+  addedPointsAnimatedPrefab: {fileID: 4347068696636449452}
+  canvas: {fileID: 1559005987}
+  points: 0
 --- !u!1001 &2009772892
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -90899,6 +90919,18 @@ RectTransform:
     type: 3}
   m_PrefabInstance: {fileID: 4347068696636449450}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &4347068696636449452 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 828851662880638162, guid: 9a632907b6bfb4975a3399a1333402d6,
+    type: 3}
+  m_PrefabInstance: {fileID: 4347068696636449450}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &5385137655577636941 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2438603885532729327, guid: b13412c360a7b42d89b9bd815a063220,

@@ -91,7 +91,7 @@ namespace InfimaGames.LowPolyShooterPack
                 interactTime = 0;
                 readyToInteract = false;
                 barrierController.RepairDamage(barrierRepairAmount);
-                //Invoke(nameof(ResetInteract), interactDelay); //interact delay
+                Invoke(nameof(ResetInteract), interactDelay); //interact delay
 
             }
 
