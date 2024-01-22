@@ -106,7 +106,7 @@ public class WaveController : MonoBehaviour
                 GameObject zombie = Instantiate(zombiePrefab, spawnPoint, Quaternion.identity);
                 Debug.Log("ZOMBIE MADE: " + zombie.name);
                 Debug.Log("ZOMBIE MADE: " + zombie);
-
+                Debug.Log("ZOMBIE MADE: " + zombie.GetComponent<Enemy>().enemyDying);
                 instantiatedZombies.Add(zombie);
                 spawnPoint = new Vector3(path.spawnWaypoints[0].position.x, path.spawnWaypoints[0].position.y, (path.spawnWaypoints[0].position.z + path.spawnWaypoints[1].position.z) / 2);
                 waveLengthTimer = 0;

@@ -53,23 +53,26 @@ namespace InfimaGames.LowPolyShooterPack.Legacy
 		//If the bullet collides with anything
 		private void OnCollisionEnter(Collision collision)
 		{
-			//Ignore collisions with other projectiles.
-			if (collision.gameObject.GetComponent<Projectile>() != null)
+			Debug.Log("COLLISION WITH: " + collision.gameObject.name);
+            Debug.Log("COLLISION WITH: " + collision.collider.name);
+
+            //Ignore collisions with other projectiles.
+            if (collision.gameObject.GetComponent<Projectile>() != null)
 				return;
 
-			// //Ignore collision if bullet collides with "Player" tag
-			// if (collision.gameObject.CompareTag("Player")) 
-			// {
-			// 	//Physics.IgnoreCollision (collision.collider);
-			// 	Debug.LogWarning("Collides with player");
-			// 	//Physics.IgnoreCollision(GetComponent<Collider>(), GetComponent<Collider>());
-			//
-			// 	//Ignore player character collision, otherwise this moves it, which is quite odd, and other weird stuff happens!
-			// 	Physics.IgnoreCollision(collision.collider, GetComponent<Collider>());
-			//
-			// 	//Return, otherwise we will destroy with this hit, which we don't want!
-			// 	return;
-			// }
+			//Ignore collision if bullet collides with "Player" tag
+			if (collision.gameObject.CompareTag("GameController"))
+			{
+				//Physics.IgnoreCollision (collision.collider);
+				Debug.LogWarning("Collides with player");
+				//Physics.IgnoreCollision(GetComponent<Collider>(), GetComponent<Collider>());
+
+				//Ignore player character collision, otherwise this moves it, which is quite odd, and other weird stuff happens!
+				Physics.IgnoreCollision(collision.collider, GetComponent<CapsuleCollider>(), true);
+
+				//Return, otherwise we will destroy with this hit, which we don't want!
+				return;
+			}
 			//
 			//If destroy on impact is false, start 
 			//coroutine with random destroy timer

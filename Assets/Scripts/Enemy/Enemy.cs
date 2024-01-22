@@ -31,7 +31,7 @@ public class Enemy : MonoBehaviour
 
     public BarrierPath barrierPath;
     private GameObject player;
-    public GameObject mainBarrier;
+    //public GameObject mainBarrier;
     public float sightDistance = 20f;
     public float fieldOfView = 85f;
     private float eyeHeight = 1f;
@@ -40,9 +40,10 @@ public class Enemy : MonoBehaviour
     public float damage = 5f;
     public float enemyHealth = 10f;
     public LayerMask barrierMask;
-    public LayerMask playerMask; 
+    public LayerMask playerMask;
 
-    private BarrierController barrier;
+    [HideInInspector]
+    public BarrierController barrier;
 
     private bool meleeReadyToAttack = true;
 
@@ -66,6 +67,47 @@ public class Enemy : MonoBehaviour
 
 
     BaseState state;
+
+
+    private void Awake()
+    {
+        Transform[] zombieParts = GetComponentsInChildren<Transform>(true);
+
+        List<Transform> heads = new List<Transform>();
+        List<Transform> bodies = new List<Transform>();
+        List<Transform> legs = new List<Transform>();
+        foreach(Transform part in zombieParts)
+        {
+
+            if (part.name.Contains("M_body"))
+            {
+                if (part.gameObject.activeSelf)
+                {
+                    part.gameObject.SetActive(false);
+                }
+                bodies.Add(part);
+            }else if (part.name.Contains("M_head"))
+            {
+                if (part.gameObject.activeSelf)
+                {
+                    part.gameObject.SetActive(false);
+                }
+                heads.Add(part);
+            }else if (part.name.Contains("M_legs"))
+            {
+                if (part.gameObject.activeSelf)
+                {
+                    part.gameObject.SetActive(false);
+                }
+                legs.Add(part);
+            }
+        }
+        heads[Random.Range(0, heads.Count)].gameObject.SetActive(true);
+        bodies[Random.Range(0, bodies.Count)].gameObject.SetActive(true);
+        legs[Random.Range(0, legs.Count)].gameObject.SetActive(true);
+
+    }
+
     void Start()
     {
         barrierMiddlePoint = new Vector3(barrierPath.barrierWaypoints[0].position.x, barrierPath.barrierWaypoints[0].position.y, (barrierPath.barrierWaypoints[0].position.z + barrierPath.barrierWaypoints[1].position.z) / 2);
@@ -80,7 +122,8 @@ public class Enemy : MonoBehaviour
         playerPoints = player.GetComponent<PlayerPoints>();
         eyeHeight = 0.1f;
         state = stateMachine.activeState;
-        barrier = mainBarrier.GetComponent<BarrierController>();
+        barrier = GameObject.FindGameObjectWithTag("Main Barrier").GetComponent<BarrierController>();
+        //barrier = mainBarrier.GetComponent<BarrierController>();
         enemyColliders = GetComponentsInChildren<MeshCollider>();
         barrierReached = false;
         enemyDying = false;

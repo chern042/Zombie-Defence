@@ -9,7 +9,7 @@ public class DestroyBarrierState : BaseState
     private SeekBarrierState state;
     public override void Enter()
     {
-        barrierController = enemy.mainBarrier.GetComponent<BarrierController>();
+        barrierController = enemy.barrier;
     }
 
     public override void Perform()
@@ -42,7 +42,7 @@ public class DestroyBarrierState : BaseState
                 enemy.AttackBarrier();
 
 
-                Debug.Log("enemy barrier reached?: " + enemy.mainBarrier);
+                Debug.Log("enemy barrier reached?: " + enemy.barrier);
                 // Debug.Log("enemy barrier found?: " + enemy.mainBarrier.GetComponent<BarrierController>());
 
 
