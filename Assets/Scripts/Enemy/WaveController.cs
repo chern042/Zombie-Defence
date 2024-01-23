@@ -111,6 +111,7 @@ public class WaveController : MonoBehaviour
                 spawnPoint = new Vector3(path.spawnWaypoints[0].position.x, path.spawnWaypoints[0].position.y, (path.spawnWaypoints[0].position.z + path.spawnWaypoints[1].position.z) / 2);
                 waveLengthTimer = 0;
                 zombieSpawnCount++;
+                zombie.GetComponent<Enemy>().enemyCount = zombieSpawnCount;
                 Debug.Log("ZOMBIE SPAWNED COUNT: "+zombieSpawnCount);
 
             }

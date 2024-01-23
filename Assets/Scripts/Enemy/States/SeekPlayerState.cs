@@ -29,17 +29,23 @@ public class SeekPlayerState : BaseState
                 if (seekPlayerTimer > Random.Range(3, 7)) //last point updated every between 3 and 6 seconds (inclusive)
                 {
                     enemy.FollowPlayer();
-                    enemy.Agent.speed = 1f;
-                    seekPlayerTimer = 0;
+                    
                 }
             }
             else if (!enemy.CanReachPlayer() && enemy.CanSeePlayer())
             {
+                seekPlayerTimer = 0;
                 Debug.Log("can see, cant reach player*******");
 
                 enemy.FollowPlayer(true);
-                enemy.Agent.speed = 2f;
-                stateMachine.ChangeState(new AttackPlayerState());
+                //stateMachine.ChangeState(new AttackPlayerState());
+            }
+            else
+            {
+                seekPlayerTimer = 0;
+                Debug.Log("can see, can reach player*******");
+                //stateMachine.ChangeState(new AttackPlayerState());
+                enemy.AttackPlayer();
             }
         }
     }

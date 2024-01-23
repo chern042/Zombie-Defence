@@ -35,7 +35,8 @@ public class Enemy : MonoBehaviour
     public float sightDistance = 20f;
     public float fieldOfView = 85f;
     private float eyeHeight = 1f;
-    public float meleeReach = 1.5f;
+    public float meleeReach = 2.5f;
+    private float? circleMeleeReach;
     public float attackDelaySpeed = 1f;
     public float damage = 5f;
     public float enemyHealth = 10f;
@@ -62,6 +63,9 @@ public class Enemy : MonoBehaviour
 
     [HideInInspector]
     public bool enemyDying;
+
+    [HideInInspector]
+    public int enemyCount;
 
     //private EnemyAnimationController animationController;
 
@@ -202,21 +206,29 @@ public class Enemy : MonoBehaviour
 
     public bool CanReachPlayer()
     {
-        if (player != null)
+        if (player != null && circleMeleeReach != null)
         {
 
-            Vector3 targetDirection = player.transform.position - transform.position - (Vector3.up * eyeHeight);
+            Vector3 targetDirection = player.transform.position - transform.position;
 
-                    Ray ray = new Ray(transform.position + (Vector3.up * eyeHeight) + (transform.forward * 0.35f), targetDirection);
-                    RaycastHit hitInfo = new RaycastHit();
-                    if (Physics.Raycast(ray, out hitInfo, meleeReach))
-                    {
-                        if (hitInfo.transform.gameObject == player)
-                        {
-                            Debug.DrawRay(ray.origin, ray.direction * meleeReach);
-                            return true;
-                        }
-                    }
+            Ray ray = new Ray(transform.position + (Vector3.up * eyeHeight), targetDirection);
+            RaycastHit hitInfo = new RaycastHit();
+            if (Physics.Raycast(ray, out hitInfo, (float)circleMeleeReach, playerMask))
+            {
+                if (hitInfo.transform.gameObject == player)
+                {
+                    Debug.DrawRay(ray.origin, ray.direction * (float)circleMeleeReach);
+                    return true;
+                }
+            }
+            //if(Vector3.Distance(transform.position, player.transform.position)<= (circleMeleeReach))
+            //{
+            //    return true;
+            //}
+            //else
+            //{
+            //    return false;
+            //}
 
         }
         return false;
@@ -284,21 +296,23 @@ public class Enemy : MonoBehaviour
 
     public void FollowPlayer(bool running = false)
     {
-        Vector3 destination = player.transform.position + (Random.insideUnitSphere * 2f);
-        while(Vector3.Distance(player.transform.position, destination) < 0.5f)
-        {
-            destination = player.transform.position + (Random.insideUnitSphere * 2f);
-        }
 
-        if (running)
-        {
-            RunTowards(destination);
-        }
-        else
-        {
-            WalkTowards(destination);
-        }
+        enemyCount = (enemyCount % 8);
 
+        Vector3 destination = new Vector3(
+            player.transform.position.x + meleeReach * Mathf.Cos(2 * Mathf.PI * enemyCount / 8),
+            player.transform.position.y,
+            player.transform.position.z + meleeReach * Mathf.Sin(2 * Mathf.PI * enemyCount / 8));
+        circleMeleeReach = Vector3.Distance(player.transform.position, destination);
+
+            if (running)
+            {
+                RunTowards(destination);
+            }
+            else
+            {
+                WalkTowards(destination);
+            } 
 
     }
 
@@ -472,7 +486,6 @@ public class Enemy : MonoBehaviour
 
     public void StopMoving()
     {
-
         enemyAnimator.SetBool("Attack", false);
         enemyAnimator.SetBool("Death", false);
         agent.SetDestination(transform.position);
