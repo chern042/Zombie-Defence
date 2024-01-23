@@ -23,7 +23,7 @@ public class SeekPlayerState : BaseState
         {
             if (!enemy.CanSeePlayer())
             {
-                Debug.Log("cant see, follow player*******");
+                Debug.Log("cant see, follow player*******: "+enemy.name);
 
                 seekPlayerTimer += Time.deltaTime;
                 if (seekPlayerTimer > Random.Range(3, 7)) //last point updated every between 3 and 6 seconds (inclusive)
@@ -31,19 +31,29 @@ public class SeekPlayerState : BaseState
                     enemy.FollowPlayer();
                     
                 }
+                if(enemy.Agent.remainingDistance < 0.2f)
+                {
+                    enemy.FacePlayer();
+                }
             }
             else if (!enemy.CanReachPlayer() && enemy.CanSeePlayer())
             {
                 seekPlayerTimer = 0;
-                Debug.Log("can see, cant reach player*******");
+                Debug.Log("can see, cant reach player*******: "+enemy.name);
 
                 enemy.FollowPlayer(true);
                 //stateMachine.ChangeState(new AttackPlayerState());
+                //enemy.FacePlayer();
+                if (enemy.Agent.remainingDistance < 0.2f)
+                {
+                    enemy.FacePlayer();
+                }
+
             }
-            else
+            else if(enemy.CanReachPlayer())
             {
                 seekPlayerTimer = 0;
-                Debug.Log("can see, can reach player*******");
+                Debug.Log("can see, can reach player*******: "+enemy.name);
                 //stateMachine.ChangeState(new AttackPlayerState());
                 enemy.AttackPlayer();
             }

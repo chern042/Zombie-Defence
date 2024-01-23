@@ -100,7 +100,7 @@ public class WaveController : MonoBehaviour
             float timePerZombie = waveLength / zombieCount;
             waveLengthTimer += Time.deltaTime;
             zombieKillCheckTimer += Time.deltaTime;
-            if((waveLengthTimer >= timePerZombie)&&(zombieSpawnCount != zombieCount))
+            if((waveLengthTimer >= timePerZombie/4)&&(zombieSpawnCount != zombieCount)) //SPAWNING FASTER THAN NORMAL
             {
                 Debug.Log("ZOMBIE BOUTTA BE SPAWNED");
                 GameObject zombie = Instantiate(zombiePrefab, spawnPoint, Quaternion.identity);
@@ -112,6 +112,7 @@ public class WaveController : MonoBehaviour
                 waveLengthTimer = 0;
                 zombieSpawnCount++;
                 zombie.GetComponent<Enemy>().enemyCount = zombieSpawnCount;
+                zombie.gameObject.name = zombie.gameObject.name.Substring(0, 11) + zombieSpawnCount; //unique zombie names
                 Debug.Log("ZOMBIE SPAWNED COUNT: "+zombieSpawnCount);
 
             }

@@ -204,22 +204,39 @@ public class Enemy : MonoBehaviour
         return false;
     }
 
-    public bool CanReachPlayer()
+    public bool CanReachPlayer()//bool facePlayer=false)
     {
-        if (player != null && circleMeleeReach != null)
+        if (player != null)
         {
 
             Vector3 targetDirection = player.transform.position - transform.position;
 
-            Ray ray = new Ray(transform.position + (Vector3.up * eyeHeight), targetDirection);
+
+
+            Ray ray = new Ray(transform.position + (Vector3.up * eyeHeight), targetDirection.normalized);
             RaycastHit hitInfo = new RaycastHit();
-            if (Physics.Raycast(ray, out hitInfo, (float)circleMeleeReach, playerMask))
+            if (Physics.Raycast(ray, out hitInfo, circleMeleeReach==null?meleeReach:(float)circleMeleeReach, playerMask))
             {
+                Debug.DrawRay(ray.origin, ray.direction * (circleMeleeReach == null ? meleeReach : (float)circleMeleeReach), Color.green);
+
                 if (hitInfo.transform.gameObject == player)
                 {
-                    Debug.DrawRay(ray.origin, ray.direction * (float)circleMeleeReach);
+                    Debug.Log("hitting player returning truw reach; " + gameObject.name);
+
+                    Debug.DrawRay(ray.origin, ray.direction * (circleMeleeReach == null ? meleeReach : (float)circleMeleeReach), Color.red);
+                    //FacePlayer();
                     return true;
                 }
+            }
+            else
+            {
+                Debug.DrawRay(ray.origin, ray.direction * (circleMeleeReach == null ? meleeReach : (float)circleMeleeReach), Color.blue);
+
+                //if (facePlayer)
+                //{
+
+                //    FacePlayer();
+                //}
             }
             //if(Vector3.Distance(transform.position, player.transform.position)<= (circleMeleeReach))
             //{
@@ -232,6 +249,20 @@ public class Enemy : MonoBehaviour
 
         }
         return false;
+    }
+
+    public void FacePlayer()
+    {
+        var turnTowardNavSteerTarget = agent.steeringTarget;
+
+        //Vector3 targetDirection = player.transform.position - transform.position;
+        //Vector3 targetDirection = (turnTowardNavSteerTarget - transform.position).normalized;
+        Vector3 targetDirection = (player.transform.position - turnTowardNavSteerTarget).normalized;
+
+
+        Quaternion rotationToPlayer = Quaternion.LookRotation(new Vector3(targetDirection.x, 0, targetDirection.z));
+
+        transform.rotation = Quaternion.Slerp(transform.rotation, rotationToPlayer, Time.deltaTime * 5);
     }
 
 
@@ -351,16 +382,18 @@ public class Enemy : MonoBehaviour
         {
             return;
         }
-        //Debug.Log("got through player camera check");
+        Debug.Log("got through melee ready to attack; "+gameObject.name);
         meleeReadyToAttack = false;
 
 
          if(player.GetComponent<PlayerLife>().PlayerAlive)
         {
-            if (CanSeePlayer())
-            {
-                Attack();
-            }
+            Debug.Log("got through player alive check; " + gameObject.name);
+            //if (CanSeePlayer())
+            //if(CanReachPlayer())
+            //{
+            Attack();
+           // }
         }
 
 
@@ -494,6 +527,8 @@ public class Enemy : MonoBehaviour
 
     public void Attack()
     {
+        Debug.Log("setting atack bool; " + gameObject.name);
+
         enemyAnimator.SetBool("Attack", true);
         enemyAnimator.SetBool("Death", false);
 
