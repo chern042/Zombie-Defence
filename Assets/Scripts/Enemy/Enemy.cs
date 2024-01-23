@@ -46,8 +46,8 @@ public class Enemy : MonoBehaviour
     [HideInInspector]
     public BarrierController barrier;
 
-    private bool meleeReadyToAttack = true;
-
+    private bool meleeReadyToAttack;
+    private bool barrierReadyToAttack;
 
     private Vector3 barrierMiddlePoint;
 
@@ -131,7 +131,8 @@ public class Enemy : MonoBehaviour
         enemyColliders = GetComponentsInChildren<MeshCollider>();
         barrierReached = false;
         enemyDying = false;
-
+        meleeReadyToAttack = true;
+        barrierReadyToAttack = true;
 
     }
 
@@ -204,7 +205,7 @@ public class Enemy : MonoBehaviour
         return false;
     }
 
-    public bool CanReachPlayer()//bool facePlayer=false)
+    public bool CanReachPlayer()
     {
         if (player != null)
         {
@@ -224,28 +225,16 @@ public class Enemy : MonoBehaviour
                     Debug.Log("hitting player returning truw reach; " + gameObject.name);
 
                     Debug.DrawRay(ray.origin, ray.direction * (circleMeleeReach == null ? meleeReach : (float)circleMeleeReach), Color.red);
-                    //FacePlayer();
                     return true;
                 }
             }
             else
             {
                 Debug.DrawRay(ray.origin, ray.direction * (circleMeleeReach == null ? meleeReach : (float)circleMeleeReach), Color.blue);
+                return false;
 
-                //if (facePlayer)
-                //{
-
-                //    FacePlayer();
-                //}
             }
-            //if(Vector3.Distance(transform.position, player.transform.position)<= (circleMeleeReach))
-            //{
-            //    return true;
-            //}
-            //else
-            //{
-            //    return false;
-            //}
+            
 
         }
         return false;
@@ -352,11 +341,11 @@ public class Enemy : MonoBehaviour
     public void AttackBarrier()
     {
 
-        if (!meleeReadyToAttack )
+        if (!barrierReadyToAttack )
         {
             return;
         }
-        meleeReadyToAttack = false;
+        barrierReadyToAttack = false;
 
 
 
@@ -378,22 +367,18 @@ public class Enemy : MonoBehaviour
 
     public void AttackPlayer()
     {
+
         if (!meleeReadyToAttack)
         {
             return;
         }
-        Debug.Log("got through melee ready to attack; "+gameObject.name);
         meleeReadyToAttack = false;
 
 
          if(player.GetComponent<PlayerLife>().PlayerAlive)
         {
             Debug.Log("got through player alive check; " + gameObject.name);
-            //if (CanSeePlayer())
-            //if(CanReachPlayer())
-            //{
             Attack();
-           // }
         }
 
 
@@ -402,6 +387,7 @@ public class Enemy : MonoBehaviour
     public void ResetAttack()
     {
         meleeReadyToAttack = true;
+        barrierReadyToAttack = true;
         enemyAnimator.SetBool("Attack", false);
     }
 
@@ -444,7 +430,6 @@ public class Enemy : MonoBehaviour
 
     public void DamageEnemy(float damage)
     {
-        //StopMoving();
         enemyHealth -= damage;
         if(enemyHealth <= 0 && !enemyDying)
         {
@@ -463,7 +448,6 @@ public class Enemy : MonoBehaviour
         }
         else
         {
-            //Damage();
             enemyAnimator.SetTrigger("Damage");
         }
     }

@@ -112,7 +112,7 @@ public class WaveController : MonoBehaviour
                 waveLengthTimer = 0;
                 zombieSpawnCount++;
                 zombie.GetComponent<Enemy>().enemyCount = zombieSpawnCount;
-                zombie.gameObject.name = zombie.gameObject.name.Substring(0, 11) + zombieSpawnCount; //unique zombie names
+                zombie.gameObject.name = zombie.gameObject.name.Substring(0, 11) + "_" +zombieSpawnCount; //unique zombie names
                 Debug.Log("ZOMBIE SPAWNED COUNT: "+zombieSpawnCount);
 
             }

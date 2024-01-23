@@ -42,8 +42,7 @@ public class SeekPlayerState : BaseState
                 Debug.Log("can see, cant reach player*******: "+enemy.name);
 
                 enemy.FollowPlayer(true);
-                //stateMachine.ChangeState(new AttackPlayerState());
-                //enemy.FacePlayer();
+
                 if (enemy.Agent.remainingDistance < 0.2f)
                 {
                     enemy.FacePlayer();
@@ -54,7 +53,6 @@ public class SeekPlayerState : BaseState
             {
                 seekPlayerTimer = 0;
                 Debug.Log("can see, can reach player*******: "+enemy.name);
-                //stateMachine.ChangeState(new AttackPlayerState());
                 enemy.AttackPlayer();
             }
         }
