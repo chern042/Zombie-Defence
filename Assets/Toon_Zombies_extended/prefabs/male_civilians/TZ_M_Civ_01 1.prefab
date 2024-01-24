@@ -4542,6 +4542,7 @@ MonoBehaviour:
     m_Bits: 512
   barrier: {fileID: 0}
   enemyDying: 0
+  enemyCount: 0
 --- !u!114 &6254447331490941671
 MonoBehaviour:
   m_ObjectHideFlags: 0

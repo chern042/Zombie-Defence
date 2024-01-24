@@ -162,6 +162,11 @@ public class Enemy : MonoBehaviour
         //}
     }
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        Debug.Log("COLLISION: " + collision.collider.name);
+    }
+
 
     public bool CanSeePlayer()
     {
@@ -222,7 +227,6 @@ public class Enemy : MonoBehaviour
 
                 if (hitInfo.transform.gameObject == player)
                 {
-                    Debug.Log("hitting player returning truw reach; " + gameObject.name);
 
                     Debug.DrawRay(ray.origin, ray.direction * (circleMeleeReach == null ? meleeReach : (float)circleMeleeReach), Color.red);
                     return true;
@@ -325,14 +329,40 @@ public class Enemy : MonoBehaviour
             player.transform.position.z + meleeReach * Mathf.Sin(2 * Mathf.PI * enemyCount / 8));
         circleMeleeReach = Vector3.Distance(player.transform.position, destination);
 
-            if (running)
+        Vector3 targetDirection = transform.forward;
+        Ray ray = new Ray(transform.position + (Vector3.up * eyeHeight), targetDirection);
+        RaycastHit hitInfo = new RaycastHit();
+        if (Physics.Raycast(ray, out hitInfo,  meleeReach/2, playerMask))
+        {
+            Debug.DrawRay(ray.origin, ray.direction * (meleeReach/2) , Color.green);
+
+            if (hitInfo.transform.gameObject.tag == "Zombie")
+            {
+                Debug.DrawRay(ray.origin, ray.direction * (meleeReach / 2), Color.red);
+                destination = transform.position;
+                StopMoving();
+            }
+            else
+            {
+
+            }
+        }
+        else
+        {
+            Debug.DrawRay(ray.origin, ray.direction * (meleeReach / 2), Color.blue);
+
+        }
+
+        if (running)
             {
                 RunTowards(destination);
             }
             else
             {
                 WalkTowards(destination);
-            } 
+            }
+
+
 
     }
 

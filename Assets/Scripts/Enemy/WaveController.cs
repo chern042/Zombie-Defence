@@ -47,12 +47,15 @@ public class WaveController : MonoBehaviour
         spawnPoint = new Vector3(path.spawnWaypoints[0].position.x, path.spawnWaypoints[0].position.y, (path.spawnWaypoints[0].position.z + path.spawnWaypoints[1].position.z) / 2);
         waveTextDurationTimer = 0;
         waveLength = 60f* Mathf.Pow(waveCount, 0.5f);
-        zombieCount = Mathf.RoundToInt(4f * Mathf.Pow(waveCount, 0.875f));
+        //zombieCount = Mathf.RoundToInt(4f * Mathf.Pow(waveCount, 0.875f));
+        zombieCount = 20;
         waveText.color = new Color(waveText.color.r, waveText.color.g, waveText.color.b, 1f);
         waveText.text = "WAVE " + waveCount;
         waveLengthTimer = 0;
         zombieSpawnCount = 0;
         zombieKillCheckTimer = 0;
+
+
 
 
     }
