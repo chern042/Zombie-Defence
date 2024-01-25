@@ -37,6 +37,7 @@ public class WaveController : MonoBehaviour
 	private float waveLength; //Duration that zombies get spawn over. Wave ends when they are all dead.
     private float waveLengthTimer;
     private float waveTextDurationTimer;
+    private bool fadeText;
 
 	
 	// Use this for initialization
@@ -47,14 +48,13 @@ public class WaveController : MonoBehaviour
         spawnPoint = new Vector3(path.spawnWaypoints[0].position.x, path.spawnWaypoints[0].position.y, (path.spawnWaypoints[0].position.z + path.spawnWaypoints[1].position.z) / 2);
         waveTextDurationTimer = 0;
         waveLength = 60f* Mathf.Pow(waveCount, 0.5f);
-        //zombieCount = Mathf.RoundToInt(4f * Mathf.Pow(waveCount, 0.875f));
-        zombieCount = 20;
-        waveText.color = new Color(waveText.color.r, waveText.color.g, waveText.color.b, 1f);
+        zombieCount = Mathf.RoundToInt(4f * Mathf.Pow(waveCount, 0.875f));
+        waveText.color = new Color(waveText.color.r, waveText.color.g, waveText.color.b, 0f);
         waveText.text = "WAVE " + waveCount;
         waveLengthTimer = 0;
         zombieSpawnCount = 0;
         zombieKillCheckTimer = 0;
-
+        fadeText = false;
 
 
 
@@ -72,17 +72,32 @@ public class WaveController : MonoBehaviour
         float tempAlpha = waveText.color.a;
         tempAlpha -= Time.deltaTime * waveTextFadeSpeed;
         waveText.color = new Color(waveText.color.r, waveText.color.g, waveText.color.b, Mathf.Clamp01(tempAlpha));
+
     }
 
     // Update is called once per frame
     void Update()
 	{
-        if (waveText.color.a >= 0.99f)
+        if (fadeText)
         {
-            waveTextDurationTimer += Time.deltaTime;
+            if (waveText.color.a >= 0.00001f)
+            {
+                waveTextDurationTimer += Time.deltaTime;
+            }
             if (waveTextDurationTimer > waveTextDuration)
             {
                 FadeWaveTextOut();
+                if(waveText.color.a <= 0.00001f)
+                {
+                    waveTextDurationTimer = 0;
+                }
+            }
+        }else
+        {
+            FadeWaveTextIn();
+            if(waveText.color.a >= 0.99f)
+            {
+                fadeText = !fadeText;
             }
         }
         if(prevWave != waveCount)
@@ -91,7 +106,7 @@ public class WaveController : MonoBehaviour
             waveTextDurationTimer = 0;
             waveLength = 60f * Mathf.Pow(waveCount, 0.5f);
             zombieCount = Mathf.RoundToInt(4f * Mathf.Pow(waveCount, 0.875f));
-            FadeWaveTextIn();
+            fadeText = false;
             waveText.text = "WAVE " + waveCount;
             prevWave = waveCount;
             zombieSpawnCount = 0;

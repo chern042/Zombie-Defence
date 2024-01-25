@@ -39401,47 +39401,6 @@ CapsuleCollider:
   m_Height: 3.39091
   m_Direction: 0
   m_Center: {x: 0.02671671, y: 0.6450231, z: 6.442183e-17}
---- !u!114 &915279922
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 915279914}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1e3fdca004f2d45fe8abbed571a8abd5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_OverrideArea: 0
-  m_Area: 0
-  m_OverrideGenerateLinks: 0
-  m_GenerateLinks: 0
-  m_IgnoreFromBuild: 0
-  m_ApplyToChildren: 1
-  m_AffectedAgents: ffffffff
---- !u!64 &915279923
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 915279914}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 0
-  serializedVersion: 5
-  m_Convex: 1
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -2903291391148871114, guid: 4c6c192b35c498f4c8ce6240df182c1d, type: 3}
 --- !u!1001 &918715040
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -48319,8 +48278,9 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'POINTS: 0'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 2e498d1c8094910479dc3e1b768306a4, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 2e498d1c8094910479dc3e1b768306a4, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 3d68ba70dced00f4d8c9714edf29e952, type: 2}
+  m_sharedMaterial: {fileID: 3824567959482964183, guid: 3d68ba70dced00f4d8c9714edf29e952,
+    type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -81537,6 +81497,11 @@ PrefabInstance:
       propertyPath: fieldOfViewWeapon
       value: 60
       objectReference: {fileID: 0}
+    - target: {fileID: 311715146319078261, guid: 19eadcf8fbed56b4da77ca94c1b4145f,
+        type: 3}
+      propertyPath: damage
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 601192529242639950, guid: 19eadcf8fbed56b4da77ca94c1b4145f,
         type: 3}
       propertyPath: m_ActionEvents.Array.size
@@ -89815,18 +89780,12 @@ PrefabInstance:
       propertyPath: m_TagString
       value: Wood
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 8288394428827913504, guid: a8bdee9ff621d47bf9daee27f32ec3ac, type: 3}
+    - {fileID: 1913831457424506727, guid: a8bdee9ff621d47bf9daee27f32ec3ac, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 1607259791111110603, guid: a8bdee9ff621d47bf9daee27f32ec3ac,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 915279923}
-    - targetCorrespondingSourceObject: {fileID: 1607259791111110603, guid: a8bdee9ff621d47bf9daee27f32ec3ac,
-        type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 915279922}
     - targetCorrespondingSourceObject: {fileID: 1607259791111110603, guid: a8bdee9ff621d47bf9daee27f32ec3ac,
         type: 3}
       insertIndex: -1
