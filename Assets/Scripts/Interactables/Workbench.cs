@@ -40,35 +40,27 @@ namespace InfimaGames.LowPolyShooterPack
 
         private int weaponUpgradeLevel;
 
+        private bool insufficientPoints;
+
         protected override void Awake()
         {
-            //weapon = playerHand.GetComponentInChildren<WeaponBehaviour>();
-            //upgradeCost = weapon.GetUpgradeCost();
             upgradeTimer = 0;
             isUpgrading = false;
             isUpgraded = false;
             finishedUpgrade = false;
+            insufficientPoints = false;
             weaponUpgradeLevel = 0;
             SetShowPromptIcon(true);
-            Debug.Log("WORKBENCH AWAKE.");
         }
 
         // Start is called before the first frame update
         protected override void Start()
         {
-            Debug.Log("WORKBENCH STARTED.");
-
             if (upgradeCost != null)
             {
-                if (weapon.GetUpgradeLevel() < 5)
-                {
-                    SetPromptText("Upgrade Weapon (" + upgradeCost + ")");
-                }
-                else
-                {
-                    SetPromptText("No More Upgrades");
-                }
+                SetPromptText("Upgrade Weapon (" + upgradeCost + ")");
             }
+
         }
 
         public override void OnLook(GameObject actor)
@@ -78,30 +70,38 @@ namespace InfimaGames.LowPolyShooterPack
                 if (!isUpgrading)
                 {
                     SetShowPromptIcon(true);
-                    //weapon = playerHand.GetComponentInChildren<WeaponBehaviour>();
                     weapon = actor.GetComponentInParent<CharacterController>().gameObject.GetComponentInChildren<Weapon>();
 
-                    //playerPoints = playerHand.GetComponentInParent<PlayerPoints>();
-                    //Debug.Log("PLAYER****: " + actor.GetComponentInParent<CharacterController>().gameObject.name);
-                    //Debug.Log("WEAPON****: " + actor.GetComponentInParent<CharacterController>().gameObject.GetComponentInChildren<Weapon>().name);
 
-                    if (weapon != null && switchWeaponButton != null)
+                    if (weapon != null && switchWeaponButton != null && !insufficientPoints)
                     {
-                        //upgradeCost = weapon.GetUpgradeCost();
                         upgradeCost = (weapon.GetUpgradeLevel() + 1) * 1000;
                         switchWeaponButton.SetActive(false);
-                        SetPromptText("Upgrade Weapon (" + upgradeCost + ")");
-                    }
-                    if ((interactButton != null) && weapon.GetUpgradeLevel() < 5)
+
+                        if ((interactButton != null) && weapon.GetUpgradeLevel() < 5)
+                        {
+                            interactButton.GetComponentInChildren<TextMeshProUGUI>().text = "UPGRADE";
+                            interactButton.GetComponentInChildren<TextMeshProUGUI>().enabled = true;
+                            interactButton.GetComponent<Image>().enabled = true;
+                            interactButton.GetComponent<OnScreenButton>().enabled = true;
+                            SetPromptText("Upgrade Weapon (" + upgradeCost + ")");
+                        }
+                        else if(weapon.GetUpgradeLevel() == 5)
+                        {
+                            interactButton.GetComponentInChildren<TextMeshProUGUI>().text = "INTERACT";
+                            interactButton.GetComponentInChildren<TextMeshProUGUI>().enabled = false;
+                            interactButton.GetComponent<Image>().enabled = false;
+                            interactButton.GetComponent<OnScreenButton>().enabled = false;
+                            SetPromptText("Max Upgrade Reached");
+
+                        }
+                    }else if (insufficientPoints)
                     {
-                        interactButton.GetComponentInChildren<TextMeshProUGUI>().text = "UPGRADE";
-                        interactButton.GetComponentInChildren<TextMeshProUGUI>().enabled = true;
-                        interactButton.GetComponent<Image>().enabled = true;
-                        interactButton.GetComponent<OnScreenButton>().enabled = true;
-                    }
-                    else
-                    {
-                        SetPromptText("Max Upgrade Reached");
+                        interactButton.GetComponentInChildren<TextMeshProUGUI>().text = "INTERACT";
+                        interactButton.GetComponentInChildren<TextMeshProUGUI>().enabled = false;
+                        interactButton.GetComponent<Image>().enabled = false;
+                        interactButton.GetComponent<OnScreenButton>().enabled = false;
+                        SetPromptText("Insufficent Points");
 
                     }
                 }
@@ -147,6 +147,7 @@ namespace InfimaGames.LowPolyShooterPack
                     interactButton.GetComponent<Image>().enabled = false;
                     interactButton.GetComponent<OnScreenButton>().enabled = false;
                 }
+                insufficientPoints = false;
             }
             else
             {
@@ -194,17 +195,13 @@ namespace InfimaGames.LowPolyShooterPack
                         weaponUpgradeLevel = weapon.GetUpgradeLevel() + 1;
 
                     }
-                    else if (weapon.GetUpgradeLevel() == 5)
-                    {
-                        SetPromptText("No More Upgrades");
-                    }
-                    else if (inventory.GetNextIndex() != inventory.GetLastIndex()) {
+                    else if (inventory.GetNextIndex() == inventory.GetLastIndex()) {
                         SetPromptText("Secondary Weapon Required");
                     }
                     else
                     {
                         Debug.Log("NO POINTS");
-                        SetPromptText("Insufficent Points");
+                        insufficientPoints = true;
                     }
                 }
                 else
