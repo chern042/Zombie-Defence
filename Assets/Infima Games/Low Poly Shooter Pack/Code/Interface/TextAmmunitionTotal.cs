@@ -1,6 +1,7 @@
 ﻿//Copyright 2022, Infima Games. All Rights Reserved.
 
 using System.Globalization;
+using UnityEngine;
 
 namespace InfimaGames.LowPolyShooterPack.Interface
 {

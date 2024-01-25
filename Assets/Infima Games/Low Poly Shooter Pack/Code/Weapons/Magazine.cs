@@ -13,7 +13,7 @@ namespace InfimaGames.LowPolyShooterPack
 
         [Title(label: "Settings")]
         
-        [Tooltip("Total Ammunition.")]
+        [Tooltip("Total Ammunition. (Magazine/Clip Size)")]
         [SerializeField]
         private int ammunitionTotal = 10;
 
@@ -30,7 +30,7 @@ namespace InfimaGames.LowPolyShooterPack
         /// <summary>
         /// Ammunition Total.
         /// </summary>
-        public override int GetAmmunitionTotal() => ammunitionTotal;
+        public override int GetMagazineSize() => ammunitionTotal;
         /// <summary>
         /// Sprite.
         /// </summary>
@@ -40,7 +40,7 @@ namespace InfimaGames.LowPolyShooterPack
 
         #region SETTERS
 
-        public override void SetAmmunitionTotal(int newTotal) => ammunitionTotal = newTotal;
+        public override void SetMagazineSize(int newTotal) => ammunitionTotal = newTotal;
 
 
         #endregion

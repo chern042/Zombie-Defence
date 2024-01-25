@@ -159,6 +159,10 @@ namespace InfimaGames.LowPolyShooterPack
         /// </summary>
         private int ammunitionCurrent;
 
+
+        //Total Amount of ammunition available.
+        private int ammunitionTotal;
+
         #region Attachment Behaviours
         
         /// <summary>
@@ -240,9 +244,9 @@ namespace InfimaGames.LowPolyShooterPack
             gripBehaviour = attachmentManager.GetEquippedGrip();
 
             #endregion
-
+            ammunitionTotal = 2 * magazineBehaviour.GetMagazineSize();
             //Max Out Ammo.
-            ammunitionCurrent = magazineBehaviour.GetAmmunitionTotal();
+            ammunitionCurrent = magazineBehaviour.GetMagazineSize();
         }
 
         #endregion
@@ -350,7 +354,10 @@ namespace InfimaGames.LowPolyShooterPack
         /// <summary>
         /// GetAmmunitionTotal.
         /// </summary>
-        public override int GetAmmunitionTotal() => magazineBehaviour.GetAmmunitionTotal();
+        public override int GetAmmunitionTotal() => ammunitionTotal;
+
+        public override int GetMagazineSize() => magazineBehaviour.GetMagazineSize();
+
         /// <summary>
         /// HasCycledReload.
         /// </summary>
@@ -392,11 +399,12 @@ namespace InfimaGames.LowPolyShooterPack
         /// <summary>
         /// IsFull.
         /// </summary>
-        public override bool IsFull() => ammunitionCurrent == magazineBehaviour.GetAmmunitionTotal();
+        public override bool IsFull() => ammunitionCurrent == magazineBehaviour.GetMagazineSize();
         /// <summary>
         /// HasAmmunition.
         /// </summary>
         public override bool HasAmmunition() => ammunitionCurrent > 0;
+
 
         /// <summary>
         /// GetAnimatorController.
@@ -436,13 +444,15 @@ namespace InfimaGames.LowPolyShooterPack
         {
             //Set Reloading Bool. This helps cycled reloads know when they need to stop cycling.
             const string boolName = "Reloading";
+
             animator.SetBool(boolName, true);
-            
+
             //Try Play Reload Sound.
             ServiceLocator.Current.Get<IAudioManagerService>().PlayOneShot(HasAmmunition() ? audioClipReload : audioClipReloadEmpty, new AudioSettings(1.0f, 0.0f, false));
-            
+
             //Play Reload Animation.
             animator.Play(cycledReload ? "Reload Open" : (HasAmmunition() ? "Reload" : "Reload Empty"), 0, 0.0f);
+
         }
         /// <summary>
         /// Fire.
@@ -461,7 +471,7 @@ namespace InfimaGames.LowPolyShooterPack
             const string stateName = "Fire";
             animator.Play(stateName, 0, 0.0f);
             //Reduce ammunition! We just shot, so we need to get rid of one!
-            ammunitionCurrent = Mathf.Clamp(ammunitionCurrent - 1, 0, magazineBehaviour.GetAmmunitionTotal());
+            ammunitionCurrent = Mathf.Clamp(ammunitionCurrent - 1, 0, magazineBehaviour.GetMagazineSize());
 
             //Set the slide back if we just ran out of ammunition.
             if (ammunitionCurrent == 0)
@@ -492,9 +502,17 @@ namespace InfimaGames.LowPolyShooterPack
         /// </summary>
         public override void FillAmmunition(int amount)
         {
+            int fillAmount = ammunitionCurrent != 0 ? magazineBehaviour.GetMagazineSize() - ammunitionCurrent : magazineBehaviour.GetMagazineSize();
             //Update the value by a certain amount.
-            ammunitionCurrent = amount != 0 ? Mathf.Clamp(ammunitionCurrent + amount, 
-                0, GetAmmunitionTotal()) : magazineBehaviour.GetAmmunitionTotal();
+            //ammunitionCurrent = ammunitionCurrent != 0 ? Mathf.Clamp(ammunitionCurrent + amount, 
+            //    0, GetAmmunitionTotal()) : magazineBehaviour.GetMagazineSize();
+            if(ammunitionTotal - fillAmount < 0)
+            {
+                fillAmount = ammunitionTotal;
+            }
+            ammunitionCurrent += fillAmount;
+            ammunitionTotal -= fillAmount;
+
         }
         /// <summary>
         /// SetSlideBack.

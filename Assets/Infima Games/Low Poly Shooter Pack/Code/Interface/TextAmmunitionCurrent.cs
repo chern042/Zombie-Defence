@@ -38,7 +38,7 @@ namespace InfimaGames.LowPolyShooterPack.Interface
             //Current Ammunition.
             float current = equippedWeaponBehaviour.GetAmmunitionCurrent();
             //Total Ammunition.
-            float total = equippedWeaponBehaviour.GetAmmunitionTotal();
+            float total = equippedWeaponBehaviour.GetMagazineSize();
             
             //Update Text.
             textMesh.text = current.ToString(CultureInfo.InvariantCulture);

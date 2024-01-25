@@ -96,6 +96,12 @@ namespace InfimaGames.LowPolyShooterPack
         /// </summary>
         public abstract int GetAmmunitionTotal();
 
+
+        /// <summary>
+        /// Returns The Size (Capacity) of the magazine.
+        /// </summary>
+        public abstract int GetMagazineSize();
+
         /// <summary>
         /// Determines if this Weapon reloads in cycles.
         /// </summary>

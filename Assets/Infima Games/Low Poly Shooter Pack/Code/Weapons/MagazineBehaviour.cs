@@ -14,7 +14,7 @@ namespace InfimaGames.LowPolyShooterPack
         /// <summary>
         /// Returns The Total Ammunition.
         /// </summary>
-        public abstract int GetAmmunitionTotal();
+        public abstract int GetMagazineSize();
         /// <summary>
         /// Returns the Sprite used on the Character's Interface.
         /// </summary>
@@ -24,7 +24,7 @@ namespace InfimaGames.LowPolyShooterPack
 
         #region SETTERS
 
-        public abstract void SetAmmunitionTotal(int newTotal);
+        public abstract void SetMagazineSize(int newSize);
 
         #endregion
     }

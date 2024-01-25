@@ -225,7 +225,7 @@ namespace InfimaGames.LowPolyShooterPack
                         if (weapon.name.Contains("AR") || weapon.name.Contains("SMG"))
                         {
                             weapon.SetRateOfFire(Mathf.RoundToInt(weapon.GetRateOfFire() * 1.25f));
-                            magazine.SetAmmunitionTotal(magazine.GetAmmunitionTotal() + 5);
+                            magazine.SetMagazineSize(magazine.GetMagazineSize() + 5);
                         }
                         else if (weapon.name.Contains("RL") || weapon.name.Contains("GL"))
                         {
@@ -234,16 +234,16 @@ namespace InfimaGames.LowPolyShooterPack
                         }
                         else if (weapon.name.Contains("Sniper"))
                         {
-                            magazine.SetAmmunitionTotal(magazine.GetAmmunitionTotal() + 1);
+                            magazine.SetMagazineSize(magazine.GetMagazineSize() + 1);
                         }
                         else if (weapon.name.Contains("Shotgun"))
                         {
-                            magazine.SetAmmunitionTotal(magazine.GetAmmunitionTotal() + 3);
+                            magazine.SetMagazineSize(magazine.GetMagazineSize() + 3);
                             weapon.SetShotCount(weapon.GetShotCount() + 1);
                         }
                         else
                         {
-                            magazine.SetAmmunitionTotal(magazine.GetAmmunitionTotal() + 5);
+                            magazine.SetMagazineSize(magazine.GetMagazineSize() + 5);
                         }
 
 
