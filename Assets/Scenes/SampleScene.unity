@@ -88441,6 +88441,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: TZ_M_Civ_01
       objectReference: {fileID: 0}
+    - target: {fileID: 5102436934489154700, guid: 7d08ca238c0d5438ba46021e159f7246,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5649229433009673888, guid: 7d08ca238c0d5438ba46021e159f7246,
         type: 3}
       propertyPath: barrierPath
