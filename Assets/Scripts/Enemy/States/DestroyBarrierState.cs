@@ -6,7 +6,9 @@ public class DestroyBarrierState : BaseState
 {
     private Vector3 barrierPoint;
     private BarrierController barrierController;
-    private SeekBarrierState state;
+    private SeekBarrierState barrierState;
+    private SeekPlayerState playerState;
+
     public override void Enter()
     {
         barrierController = enemy.barrier;
@@ -22,9 +24,13 @@ public class DestroyBarrierState : BaseState
 
     public override void Exit()
     {
-        if(state!= null)
+        if(barrierState!= null)
         {
-            state.SetBarrierPoint(barrierPoint);
+            barrierState.SetBarrierPoint(barrierPoint);
+        }
+        if (playerState != null)
+        {
+            playerState.SetBarrierPoint(barrierPoint);
         }
     }
 
@@ -51,8 +57,8 @@ public class DestroyBarrierState : BaseState
             else if(!enemy.HasReachedBarrier(barrierPoint))
             {
                 CheckBarrier();
-                state = new SeekBarrierState();
-                stateMachine.ChangeState(state);
+                barrierState = new SeekBarrierState();
+                stateMachine.ChangeState(barrierState);
 
             }
 
@@ -62,11 +68,11 @@ public class DestroyBarrierState : BaseState
 
     private void CheckBarrier()
     {
-        if (barrierController.BarrierDestroyed)
+        if (barrierController.BarrierDestroyed )
         {
             Debug.Log("BARRIER DESTROYED*******");
-
-            stateMachine.ChangeState(new SeekPlayerState());
+            playerState = new SeekPlayerState();
+            stateMachine.ChangeState(playerState);
         }
     }
 

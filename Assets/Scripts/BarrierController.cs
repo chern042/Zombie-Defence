@@ -82,15 +82,15 @@ public class BarrierController : MonoBehaviour
             Debug.Log("Repaired piece: " + (pieceHealth - repairAmount) + " to: " + pieceHealth);
             if (pieceHealth > healthPerPiece)
             {
+                piecesRemoved--;
                 destroyBarrierAnimation.ReturnLogs(piecesRemoved);
                 pieceHealth = pieceHealth - healthPerPiece;
-                piecesRemoved--;
                 barrierDestroyed = false;
             }else if(pieceHealth == healthPerPiece)
             {
+                piecesRemoved--;
                 destroyBarrierAnimation.ReturnLogs(piecesRemoved);
                 pieceHealth = 0;
-                piecesRemoved--;
                 barrierDestroyed = false;
             }
         }
