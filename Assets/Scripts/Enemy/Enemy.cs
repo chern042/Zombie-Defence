@@ -367,32 +367,31 @@ public class Enemy : MonoBehaviour
     }
 
 
-
+    //Using a trigger?
     public void AttackBarrier()
     {
-
         if (!barrierReadyToAttack )
         {
+
             return;
         }
-        barrierReadyToAttack = false;
-
-
 
         if (!barrier.BarrierDestroyed)
         {
-
             if (barrierReached)
             {
+                barrierReadyToAttack = false;
                 Attack();
+                Invoke("ResetAttack", attackDelaySpeed + 1.5f);
             }
         }
+
     }
 
-    public void AttackResetEvent()
-    {
-        Invoke(nameof(ResetAttack), attackDelaySpeed+1.5f); //Length of attack animation is 1.5s
-    }
+    //public void AttackResetEvent()
+    //{
+    //    Invoke(nameof(ResetAttack), attackDelaySpeed+1.5f); //Length of attack animation is 1.5s
+    //}
 
 
     public void AttackPlayer()
@@ -402,12 +401,12 @@ public class Enemy : MonoBehaviour
         {
             return;
         }
-        meleeReadyToAttack = false;
-
 
          if(player.GetComponent<PlayerLife>().PlayerAlive)
         {
             Debug.Log("got through player alive check; " + gameObject.name);
+            meleeReadyToAttack = false;
+            Invoke("ResetAttack", attackDelaySpeed + 1.5f);
             Attack();
         }
 

@@ -70,7 +70,6 @@ public class DestroyBarrierState : BaseState
     {
         if (barrierController.BarrierDestroyed )
         {
-            Debug.Log("BARRIER DESTROYED*******");
             playerState = new SeekPlayerState();
             stateMachine.ChangeState(playerState);
         }

@@ -68,7 +68,6 @@ public class SeekPlayerState : BaseState
     {
         if (!barrierController.BarrierDestroyed && enemy.transform.position.x < 54.2)
         {
-            Debug.Log("BARRIER FIXED*******");
             barrierState = new SeekBarrierState();
             stateMachine.ChangeState(barrierState);
         }
