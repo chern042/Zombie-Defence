@@ -6,129 +6,129 @@ using UnityEngine.UI;
 using UnityEngine.InputSystem.OnScreen;
 using EvolveGames;
 
-
-public class Ammo : Interactable
+namespace InfimaGames.LowPolyShooterPack
 {
-    [SerializeField]
-    public int ammoAmount = 30;
-
-    [SerializeField]
-    public string ammoType = "Any";
-
-
-    private InputManager player;
-
-    private GunBehaviour weapon;
-
-    private Animator animator;
-    private Viewpoint viewpoint;
-    private bool isCollecting;
-
-
-    private void Start()
+    public class Ammo : Interactable
     {
-        animator = GetComponentInChildren<Animator>();
-        promptMessage = "Ammo x"+ammoAmount+" ("+ammoType+")";
-        viewpoint = GetComponent<Viewpoint>();
-        var gameModeService = ServiceLocator.Current.Get<IGameModeService>();
+        [SerializeField]
+        public int ammoAmount = 30;
 
-        player = gameModeService.GetPlayerCharacter();
-        interactButton = gameModeService.GetInteractButton();
-        isCollecting = false;
-    }
+        [SerializeField]
+        public string ammoType = "Any";
 
-    protected override void Interact()
-    {
-        weapon = player.GetComponentInChildren<GunBehaviour>();
- 
-        if (weapon != null)
+
+
+
+        private Animator animator;
+        private Viewpoint viewpoint;
+        private bool isCollecting;
+
+
+        protected override void Start()
         {
-                if (ammoType == weapon.GetAmmunitionType())
-                {
-                    if (!weapon.IsFull() && !isCollecting)
-                    {
+            animator = GetComponentInChildren<Animator>();
+            //promptMessage = "Ammo x" + ammoAmount + " (" + ammoType + ")";
+            viewpoint = GetComponent<Viewpoint>();
+            var gameModeService = ServiceLocator.Current.Get<IGameModeService>();
+
+            //player = gameModeService.GetPlayerCharacter();
+            //interactButton = gameModeService.GetInteractButton();
+            isCollecting = false;
+        }
+
+        public override void Interact(GameObject actor=null)
+        {
+            //weapon = player.GetComponentInChildren<GunBehaviour>();
+
+            //if (weapon != null)
+            //{
+                //if (ammoType == weapon.GetAmmunitionType())
+                //{
+                   // if (!weapon.IsFull() && !isCollecting)
+                   // {
                         isCollecting = true;
-                        weapon.FillAmmunition(ammoAmount);
+                        //weapon.FillAmmunition(ammoAmount);
                         animator.SetTrigger("Collect");
                         Invoke("DestroyObject", 0.3333f);
                         interactButton.GetComponentInChildren<TextMeshProUGUI>().text = "INTERACT";
                         interactButton.GetComponentInChildren<TextMeshProUGUI>().enabled = false;
                         interactButton.GetComponent<Image>().enabled = false;
                         interactButton.GetComponent<OnScreenButton>().enabled = false;
-                    }
-                    else
-                    {
-                        promptMessage = "Ammo Full";
-                    }
-                }
-                else
-                {
-                    promptMessage = "Wrong Ammo Type";
-                }
+                   // }
+                   // else
+                    //{
+                       // promptMessage = "Ammo Full";
+                    //}
+                //}
+                //else
+                //{
+                    //promptMessage = "Wrong Ammo Type";
+                //}
 
+            //}
+            //else
+            //{
+                //promptMessage = "Weapon Does Not Require Ammo";
+            //}
         }
-        else
+
+        private void DestroyObject()
         {
-            promptMessage = "Weapon Does Not Require Ammo";
+            viewpoint.DestroyViewpointUI();
+            Destroy(viewpoint.gameObject);
+            Destroy(gameObject);
         }
-    }
-
-    private void DestroyObject()
-    {
-        viewpoint.DestroyViewpointUI();
-        Destroy(viewpoint.gameObject);
-        Destroy(gameObject);
-    }
 
 
-    private void ResetPromptMessage()
-    {
-        promptMessage = "Ammo x" + ammoAmount + " (" + ammoType + ")";
-
-    }
-
-
-    protected override void OnLook()
-    {
-        base.OnLook();
-        if (interactButton != null && !isCollecting)
+        private void ResetPromptMessage()
         {
+           // promptMessage = "Ammo x" + ammoAmount + " (" + ammoType + ")";
 
-            interactButton.GetComponentInChildren<TextMeshProUGUI>().text = "GRAB";
-            interactButton.GetComponentInChildren<TextMeshProUGUI>().enabled = true;
-            interactButton.GetComponent<Image>().enabled = true;
-            interactButton.GetComponent<OnScreenButton>().enabled = true;
         }
-        else
+
+
+        public override void OnLook(GameObject actor=null)
         {
-            interactButton.GetComponentInChildren<TextMeshProUGUI>().text = "INTERACT";
-            interactButton.GetComponentInChildren<TextMeshProUGUI>().enabled = false;
-            interactButton.GetComponent<Image>().enabled = false;
-            interactButton.GetComponent<OnScreenButton>().enabled = false;
+            base.OnLook();
+            if (interactButton != null && !isCollecting)
+            {
+
+                interactButton.GetComponentInChildren<TextMeshProUGUI>().text = "GRAB";
+                interactButton.GetComponentInChildren<TextMeshProUGUI>().enabled = true;
+                interactButton.GetComponent<Image>().enabled = true;
+                interactButton.GetComponent<OnScreenButton>().enabled = true;
+            }
+            else
+            {
+                interactButton.GetComponentInChildren<TextMeshProUGUI>().text = "INTERACT";
+                interactButton.GetComponentInChildren<TextMeshProUGUI>().enabled = false;
+                interactButton.GetComponent<Image>().enabled = false;
+                interactButton.GetComponent<OnScreenButton>().enabled = false;
+            }
+
         }
 
-    }
-
-    public override void OnLookOff()
-    {
-        base.OnLookOff();
-        if (interactButton != null)
+        public override void OnLookOff()
         {
+            base.OnLookOff();
+            if (interactButton != null)
+            {
 
-            interactButton.GetComponentInChildren<TextMeshProUGUI>().text = "INTERACT";
-            interactButton.GetComponentInChildren<TextMeshProUGUI>().enabled = false;
-            interactButton.GetComponent<Image>().enabled = false;
-            interactButton.GetComponent<OnScreenButton>().enabled = false;
+                interactButton.GetComponentInChildren<TextMeshProUGUI>().text = "INTERACT";
+                interactButton.GetComponentInChildren<TextMeshProUGUI>().enabled = false;
+                interactButton.GetComponent<Image>().enabled = false;
+                interactButton.GetComponent<OnScreenButton>().enabled = false;
+            }
+            if (isCollecting)
+            {
+                interactButton.GetComponentInChildren<TextMeshProUGUI>().text = "INTERACT";
+                interactButton.GetComponentInChildren<TextMeshProUGUI>().enabled = false;
+                interactButton.GetComponent<Image>().enabled = false;
+                interactButton.GetComponent<OnScreenButton>().enabled = false;
+            }
+            ResetPromptMessage();
         }
-        if (isCollecting)
-        {
-            interactButton.GetComponentInChildren<TextMeshProUGUI>().text = "INTERACT";
-            interactButton.GetComponentInChildren<TextMeshProUGUI>().enabled = false;
-            interactButton.GetComponent<Image>().enabled = false;
-            interactButton.GetComponent<OnScreenButton>().enabled = false;
-        }
-        ResetPromptMessage();
+
     }
 
 }
-
