@@ -24,23 +24,31 @@ namespace InfimaGames.LowPolyShooterPack
 
         private bool readyToInteract;
         private float interactTime;
-        // Use this for initialization
-        protected override void Start()
+        private bool interacting;
+
+
+        protected override void Awake()
         {
             readyToInteract = true;
+            interacting = false;
             interactTime = 0;
-            SetPromptText("Repair.");
-
         }
 
-        // Update is called once per frame
-        //void Update()
-        //{
 
-        //}
 
         public override void OnLook(GameObject actor)
         {
+
+            if (!interacting && readyToInteract)
+            {
+                SetShowPromptIcon(true);
+                SetPromptText("Repair Damage");
+            }else if (!interacting && !readyToInteract)
+            {
+                SetShowPromptIcon(false);
+                SetPromptText("Please Wait");
+            }
+
             if (interactButton != null)
             {
 
@@ -52,7 +60,9 @@ namespace InfimaGames.LowPolyShooterPack
         }
 
         public override void OnLookOff()
-        {
+        { 
+            interactTime = 0;
+            interacting = false;
             if (interactButton != null)
             {
 
@@ -66,7 +76,6 @@ namespace InfimaGames.LowPolyShooterPack
         public void ResetInteract()
         {
             readyToInteract = true;
-            SetPromptText("Repair.");
         }
 
         public override void InteractHold(GameObject actor)
@@ -79,10 +88,11 @@ namespace InfimaGames.LowPolyShooterPack
 
 
             interactTime += Time.deltaTime;
-
+            interacting = true;
 
 
             int repairPercent = Mathf.RoundToInt((interactTime / interactSpeed) * 100f);
+            SetShowPromptIcon(false);
             SetPromptText("Repairing...: " + repairPercent + "%");
             if (interactTime >= interactSpeed)
             {
@@ -102,16 +112,7 @@ namespace InfimaGames.LowPolyShooterPack
         public override void CancelInteract()
         {
             interactTime = 0;
-            if (readyToInteract)
-            {
-                SetPromptText("Repair.");
-            }
-            else
-            {
-                SetPromptText("Please Rest.");
-                Invoke(nameof(ResetInteract), interactDelay); //interact delay
-
-            }
+            interacting = false;
         }
 
         public override void Interact(GameObject actor = null)
