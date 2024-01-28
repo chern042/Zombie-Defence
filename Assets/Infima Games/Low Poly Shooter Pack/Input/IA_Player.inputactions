@@ -819,7 +819,7 @@
                 },
                 {
                     "name": "Click",
-                    "type": "PassThrough",
+                    "type": "Button",
                     "id": "6fdba113-dfcd-44c1-8b94-650c8f3b2b40",
                     "expectedControlType": "Button",
                     "processors": "",
@@ -1216,11 +1216,11 @@
                 },
                 {
                     "name": "",
-                    "id": "efb29f2f-fe6b-48ab-8c0b-8293c3fa23ae",
+                    "id": "65fbd469-a6fb-4ce6-86e7-3469e7bef746",
                     "path": "<Touchscreen>/touch*/press",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Touch",
+                    "groups": "",
                     "action": "Click",
                     "isComposite": false,
                     "isPartOfComposite": false
