@@ -785,6 +785,54 @@
                     "isPartOfComposite": false
                 }
             ]
+        },
+        {
+            "name": "Joysticks",
+            "id": "e06718fe-473c-43ef-a9ae-b8f2655386a5",
+            "actions": [
+                {
+                    "name": "Joystick Left Position",
+                    "type": "Value",
+                    "id": "5175ef52-9c5e-4ccf-851b-44756c91d524",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "Joystick Left Enable",
+                    "type": "Button",
+                    "id": "85e32eae-d704-4e9e-9595-3332a8bf92a4",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "7357e93a-926b-4820-b515-50fc11f42c72",
+                    "path": "<Touchscreen>/touch*/position",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Joystick Left Position",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "68e123dc-26cc-4343-a836-479c18723e5a",
+                    "path": "<Touchscreen>/touch*/press",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Joystick Left Enable",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
         }
     ],
     "controlSchemes": []

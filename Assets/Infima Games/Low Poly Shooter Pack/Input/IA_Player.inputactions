@@ -7,9 +7,9 @@
             "actions": [
                 {
                     "name": "Look",
-                    "type": "Value",
+                    "type": "Button",
                     "id": "ba2b842b-3f5c-4fb3-83eb-219eb3515445",
-                    "expectedControlType": "Vector2",
+                    "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
@@ -211,6 +211,24 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Touch Position",
+                    "type": "Value",
+                    "id": "31d8ac8a-5ab7-4a58-ae1f-29ce510fd66a",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "Joystick Left Enable",
+                    "type": "Value",
+                    "id": "156ee8ad-993a-4002-92ac-64ee52426914",
+                    "expectedControlType": "Touch",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -772,6 +790,83 @@
                     "processors": "",
                     "groups": "",
                     "action": "Interact",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ad323d3c-44f3-46e6-9ed6-2ab247070e27",
+                    "path": "<Touchscreen>/position",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Touch Position",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f4b7d09e-f3c7-432b-a7a6-4f7559b8c8f5",
+                    "path": "<Touchscreen>/primaryTouch/position",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Touch Position",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "475b5a6e-8d3b-4935-b70e-fb535ed21be6",
+                    "path": "<Touchscreen>/touch2/indirectTouch",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Joystick Left Enable",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "e962ab3f-6581-4ddc-9dce-1bb9d8163644",
+                    "path": "<Keyboard>/z",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Joystick Left Enable",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "f7ef43e4-833e-4ebe-89c6-4edb0179d55b",
+                    "path": "<Touchscreen>/touch2",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Joystick Left Enable",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "63877a16-200c-46ad-aad1-c9cc6a4e196f",
+                    "path": "<Touchscreen>/touch2/press",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Joystick Left Enable",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "dca6dff1-d345-4cd2-894b-c85841042e7f",
+                    "path": "<Touchscreen>/touch2/tap",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Joystick Left Enable",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

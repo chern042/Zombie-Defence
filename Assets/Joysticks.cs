@@ -1,7 +1,10 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Controls;
+using UnityEngine.InputSystem.LowLevel;
 using UnityEngine.InputSystem.OnScreen;
 
 public class Joysticks : MonoBehaviour
@@ -26,40 +29,90 @@ public class Joysticks : MonoBehaviour
 
 
     public void OnTryClick(InputAction.CallbackContext context)
-    {
-        switch (context.phase)
+    {//Instead of button... try pass-through?
+        Debug.Log("CLICCCCCCKKKED: " + context.valueType);
+
+        if(context.valueType == typeof(TouchState))
         {
-            //Started.
-            case InputActionPhase.Started:
-                //Started.
-                Debug.Log("STARTED");
-                break;
-            //Performed.
-            case InputActionPhase.Performed:
-                //Performed.
+            Debug.Log("CLICCCCCCKKKED: " + context.ReadValue<TouchState>());
+
+        }else if(context.valueType == typeof(float))
+        {
+            Debug.Log("CLICCCCCCKKKED dingle: " + context.ReadValue<float>());
+            if(context.ReadValue<float>() == 1f)
+            {
+                        Debug.Log("STARTED");
                 joystickLeft.gameObject.SetActive(true);
                 joyStickOpen = true;
-                Debug.Log("PERFORMED");
-                break;
-            //Canceled.
-            case InputActionPhase.Canceled:
-                //Canceled.
-                Debug.Log("CANCELED: "+ joystickLeft.gameObject.GetComponentInChildren<OnScreenStick>().gameObject.name);
+            }else if(context.ReadValue<float>() == 0f)
+            {
+                Debug.Log("CANCELED: " + joystickLeft.gameObject.GetComponentInChildren<OnScreenStick>().gameObject.name);
                 joystickLeft.gameObject.GetComponentInChildren<OnScreenStick>().gameObject.transform.localPosition = new Vector3(0, 0, 0);
                 joystickLeft.gameObject.SetActive(false);
                 joyStickOpen = false;
-                break;
+            }
         }
+        else if (context.valueType == typeof(float))
+        {
+            Debug.Log("CLICCCCCCKKKED loat: " + context.ReadValue<float>());
+        }
+        else
+        {
+            Debug.Log("CLICCCCCCKKKED: " + context.valueType);
+
+        }
+
+
+
+        //switch (context.phase)
+        //{
+        //    //Started.
+        //    case InputActionPhase.Started:
+        //        //Started.
+        //        Debug.Log("STARTED");
+        //        break;
+        //    //Performed.
+        //    case InputActionPhase.Performed:
+        //        //Performed.
+        //        joystickLeft.gameObject.SetActive(true);
+        //        joyStickOpen = true;
+        //        Debug.Log("PERFORMED");
+        //        break;
+        //    //Canceled.
+        //    case InputActionPhase.Canceled:
+        //        //Canceled.
+        //         Debug.Log("CANCELED: "+ joystickLeft.gameObject.GetComponentInChildren<OnScreenStick>().gameObject.name);
+        //       joystickLeft.gameObject.GetComponentInChildren<OnScreenStick>().gameObject.transform.localPosition = new Vector3(0, 0, 0);
+        //        joystickLeft.gameObject.SetActive(false);
+        //        joyStickOpen = false;
+        //        break;
+        //}
     }
 
     public void OnTryPoint(InputAction.CallbackContext context)
+    //public void OnTryPoint(Vector2Control context)
     {
-        Debug.Log("TEEEEEEEEEEEEST"+ context.ReadValue<Vector2>());
+        //Debug.Log("TEEEEEEEEEEEEST" + context.ReadValue());
+
+       //check if touch is left screen or right screen half
+       // Debug.Log("TEEEEEEEEEEEEST"+ context.ReadValue<Vector2>());
+        Debug.Log("TEEEEEEEEEEEEST performed" + context.performed);
+        Debug.Log("TEEEEEEEEEEEEST canceled" + context.canceled);
+
         //Switch.
         if (!joyStickOpen)
         {
             Debug.Log("STARTED: " + context.ReadValue<Vector2>());
             joystickLeft.transform.position = new Vector3(context.ReadValue<Vector2>().x, context.ReadValue<Vector2>().y, 0);
+        }
+        if(context.ReadValue<Vector2>() != null)
+        {
+            Debug.Log("POINT NOT NULL");
+        }
+        else
+        {
+            Debug.Log("POINT NULL");
+
         }
     }
 }
