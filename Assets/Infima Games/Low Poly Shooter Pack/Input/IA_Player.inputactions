@@ -225,7 +225,7 @@
                     "name": "Joystick Left Enable",
                     "type": "Value",
                     "id": "156ee8ad-993a-4002-92ac-64ee52426914",
-                    "expectedControlType": "Touch",
+                    "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
