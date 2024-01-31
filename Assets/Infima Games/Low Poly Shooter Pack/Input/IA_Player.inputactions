@@ -216,19 +216,19 @@
                     "name": "Touch Position",
                     "type": "Value",
                     "id": "31d8ac8a-5ab7-4a58-ae1f-29ce510fd66a",
-                    "expectedControlType": "Vector2",
+                    "expectedControlType": "Touch",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
                 },
                 {
                     "name": "Joystick Left Enable",
-                    "type": "Value",
+                    "type": "PassThrough",
                     "id": "156ee8ad-993a-4002-92ac-64ee52426914",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
-                    "initialStateCheck": true
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -863,6 +863,17 @@
                     "name": "",
                     "id": "dca6dff1-d345-4cd2-894b-c85841042e7f",
                     "path": "<Touchscreen>/touch2/tap",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Joystick Left Enable",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "0a703f95-5e28-4f5d-b2e5-a96a0e5da58c",
+                    "path": "<Touchscreen>/touch0",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
