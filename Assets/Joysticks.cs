@@ -3,8 +3,13 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.LowLevel;
 using UnityEngine.InputSystem.OnScreen;
-using UnityEngine.EventSystems;
 using System.Collections.Generic;
+
+using System;
+using System.Reflection;
+
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 public class Joysticks : MonoBehaviour
 {
@@ -59,25 +64,34 @@ public class Joysticks : MonoBehaviour
         else if (context.valueType == typeof(TouchState))
         {
             object touchObj = context.ReadValueAsObject();
-            Debug.Log("VALUE TYPE TOUCHSTATE: " + touchObj.ToString());
-            Dictionary<string, object> touch = SceneHelper.ToDictionary<object>(touchObj);
 
-            IDictionary<string, object> touch2 = ObjectToDictionaryHelper.ToDictionary(touchObj);
+            JObject touch = JObject.Parse(JsonUtility.ToJson(touchObj));
 
-            Debug.Log("dict OBJ: " + touch);
+
+            Debug.Log("JSON OBJ toch 1: " + touch.ToString());
+            Debug.Log("**********$#$##$#$#$#$#********JSON OBJ toch 1: " + JObject.Parse(JsonUtility.ToJson(touchObj))["position"]["x"]);
+
             Debug.Log("JSON OBJ toch 1: " + JsonUtility.ToJson(touchObj)[1]);
-            foreach(var item in touch2)
+
+            if ((int)touch["phaseId"] == 1 && !joyStickOpen)
             {
-                Debug.Log("TOUCH2 PHASE: " + item.ToString());
-
+                if (!hitDetector.IsPointerOverUILayer())
+                {
+                    Debug.Log("STARTED");
+                    joystickLeft.transform.position = new Vector3((float)touch["position"]["x"], (float)touch["position"]["y"], 0);
+                    joystickLeft.gameObject.SetActive(true);
+                    joyStickOpen = true;
+                }
+                else
+                { }
             }
-            foreach (var item in touch)
+            else if ((int)touch["phaseId"] == 3 && joyStickOpen)
             {
-                Debug.Log("TOUCH1 PHASE: " + item.ToString());
-
+                Debug.Log("CANCELED: " + joystickLeft.gameObject.GetComponentInChildren<OnScreenStick>().gameObject.name);
+                joystickLeft.gameObject.SetActive(false);
+                joystickLeft.gameObject.GetComponentInChildren<OnScreenStick>().gameObject.transform.localPosition = new Vector3(0, 0, 0);
+                joyStickOpen = false;
             }
-
-
 
         }
         else
