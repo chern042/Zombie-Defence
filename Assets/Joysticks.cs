@@ -13,6 +13,7 @@ using Newtonsoft.Json.Linq;
 
 public class Joysticks : MonoBehaviour
 {
+    private enum TouchStates { NoTouch, Touch, TouchMoving, TouchEnded };
 
     [SerializeField]
     private GameObject joystickLeft;
@@ -20,12 +21,15 @@ public class Joysticks : MonoBehaviour
 
     private bool joyStickOpen;
     private CanvasHitDetector hitDetector;
+    private TouchStates touchState;
+    private float screenWidth;
 
     // Start is called before the first frame update
     void Start()
     {
         joyStickOpen = false;
         hitDetector = GetComponent<CanvasHitDetector>();
+        screenWidth = Screen.width;
     }
 
     // Update is called once per frame
@@ -36,61 +40,49 @@ public class Joysticks : MonoBehaviour
 
     public void OnTryClick(InputAction.CallbackContext context)
     {//Instead of button... try pass-through?
-        Debug.Log("phase: " + context.phase);
+       // Debug.Log("phase: " + context.phase);
 
         Debug.Log("EVENT SYSTEM TEST: "+ hitDetector.IsPointerOverUILayer());
 
-        if (context.valueType == typeof(float))
-        {
-            if (context.ReadValue<float>() == 1f)
-            {
-                if (!hitDetector.IsPointerOverUILayer())
-                {
-                    Debug.Log("STARTED");
-                    joystickLeft.gameObject.SetActive(true);
-                    joyStickOpen = true;
-                }
-                else
-                { }
-            }
-            else if (context.ReadValue<float>() == 0f)
-            {
-                Debug.Log("CANCELED: " + joystickLeft.gameObject.GetComponentInChildren<OnScreenStick>().gameObject.name);
-                joystickLeft.gameObject.SetActive(false);
-                joystickLeft.gameObject.GetComponentInChildren<OnScreenStick>().gameObject.transform.localPosition = new Vector3(0, 0, 0);
-                joyStickOpen = false;
-            }
-        }
-        else if (context.valueType == typeof(TouchState))
+
+       if (context.valueType == typeof(TouchState))
         {
             object touchObj = context.ReadValueAsObject();
 
             JObject touch = JObject.Parse(JsonUtility.ToJson(touchObj));
 
+            Vector2 touchPosition = new Vector2((float)touch["position"]["x"], (float)touch["position"]["y"]);
+            float screenMidPointX = screenWidth / 2f;
 
-            Debug.Log("JSON OBJ toch 1: " + touch.ToString());
-            Debug.Log("**********$#$##$#$#$#$#********JSON OBJ toch 1: " + JObject.Parse(JsonUtility.ToJson(touchObj))["position"]["x"]);
+            touchState = (TouchStates)(int)touch["phaseId"];
 
-            Debug.Log("JSON OBJ toch 1: " + JsonUtility.ToJson(touchObj)[1]);
 
-            if ((int)touch["phaseId"] == 1 && !joyStickOpen)
+
+
+
+            Debug.Log("JSON OBJ TOUCH: " + touch.ToString());
+
+
+            if (touchState == TouchStates.Touch && !joyStickOpen)
             {
-                if (!hitDetector.IsPointerOverUILayer())
+                if (!hitDetector.IsPointerOverUILayer() && touchPosition.x < screenMidPointX)
                 {
                     Debug.Log("STARTED");
                     joystickLeft.transform.position = new Vector3((float)touch["position"]["x"], (float)touch["position"]["y"], 0);
                     joystickLeft.gameObject.SetActive(true);
                     joyStickOpen = true;
                 }
-                else
-                { }
             }
-            else if ((int)touch["phaseId"] == 3 && joyStickOpen)
+            else if (touchState == TouchStates.TouchEnded && joyStickOpen)
             {
                 Debug.Log("CANCELED: " + joystickLeft.gameObject.GetComponentInChildren<OnScreenStick>().gameObject.name);
                 joystickLeft.gameObject.SetActive(false);
                 joystickLeft.gameObject.GetComponentInChildren<OnScreenStick>().gameObject.transform.localPosition = new Vector3(0, 0, 0);
                 joyStickOpen = false;
+            }
+            else
+            {
+                touchState = TouchStates.NoTouch;
             }
 
         }
@@ -104,48 +96,6 @@ public class Joysticks : MonoBehaviour
 
 
 
-        //switch (context.phase)
-        //{
-        //    //Started.
-        //    case InputActionPhase.Started:
-        //        //Started.
-        //        Debug.Log("STARTED");
-        //        break;
-        //    //Performed.
-        //    case InputActionPhase.Performed:
-        //        //Performed.
-        //        joystickLeft.gameObject.SetActive(true);
-        //        joyStickOpen = true;
-        //        Debug.Log("PERFORMED");
-        //        break;
-        //    //Canceled.
-        //    case InputActionPhase.Canceled:
-        //        //Canceled.
-        //         Debug.Log("CANCELED: "+ joystickLeft.gameObject.GetComponentInChildren<OnScreenStick>().gameObject.name);
-        //       joystickLeft.gameObject.GetComponentInChildren<OnScreenStick>().gameObject.transform.localPosition = new Vector3(0, 0, 0);
-        //        joystickLeft.gameObject.SetActive(false);
-        //        joyStickOpen = false;
-        //        break;
-        //}
     }
 
-    public void OnTryPoint(InputAction.CallbackContext context)
-    {
-
-        //Switch.
-        if (!joyStickOpen)
-        {
-            Debug.Log("STARTED: " + context.ReadValue<Vector2>());
-            joystickLeft.transform.position = new Vector3(context.ReadValue<Vector2>().x, context.ReadValue<Vector2>().y, 0);
-        }
-        if (context.ReadValue<Vector2>() != null)
-        {
-            Debug.Log("POINT NOT NULL");
-        }
-        else
-        {
-            Debug.Log("POINT NULL");
-
-        }
-    }
 }

@@ -1,13 +1,8 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.Threading;
 using EvolveGames;
 using InfimaGames.LowPolyShooterPack;
-using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.AI;
-using UnityEngine.UI;
-using static UnityEngine.GraphicsBuffer;
 
 public class Enemy : MonoBehaviour
 {
