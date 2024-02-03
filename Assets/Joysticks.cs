@@ -44,13 +44,12 @@ public class Joysticks : MonoBehaviour
 
 
     public void OnTryEnableJoystickOne(InputAction.CallbackContext context)
-    {//Instead of button... try pass-through?
-       // Debug.Log("phase: " + context.phase);
+    {
 
         Debug.Log("EVENT SYSTEM TEST: "+ hitDetector.IsPointerOverUILayer());
         Debug.Log("******************ON TRY ENABLE LEFT JOYSTICK*************");
 
-
+        
         if (context.valueType == typeof(TouchState))
         {
             object touchObj = context.ReadValueAsObject();
@@ -111,8 +110,7 @@ public class Joysticks : MonoBehaviour
     }
 
     public void OnTryEnableJoystickTwo(InputAction.CallbackContext context)
-    {//Instead of button... try pass-through?
-     // Debug.Log("phase: " + context.phase);
+    { 
 
         Debug.Log("EVENT SYSTEM TEST: " + hitDetector.IsPointerOverUILayer());
         Debug.Log("******************ON TRY ENABLE LEFT JOYSTICK*************");
