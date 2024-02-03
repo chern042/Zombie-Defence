@@ -6453,11 +6453,11 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1015281230}
-  m_Father: {fileID: 1113455343}
+  m_Father: {fileID: 931885899}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 400, y: 260}
+  m_AnchoredPosition: {x: 400.005, y: 260.00555}
   m_SizeDelta: {x: 300, y: 300}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &193194822
@@ -7894,7 +7894,7 @@ MonoBehaviour:
   m_MovementRange: 100
   m_DynamicOriginRange: 100
   m_ControlPath: <Gamepad>/rightStick
-  m_Behaviour: 0
+  m_Behaviour: 1
   m_UseIsolatedInputActions: 0
   m_PointerDownAction:
     m_Name: 
@@ -38016,8 +38016,10 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 1466367680}
+  - {fileID: 193194821}
+  - {fileID: 1690584126}
   - {fileID: 1113455343}
+  - {fileID: 1466367680}
   - {fileID: 1720191808}
   - {fileID: 1308880032}
   - {fileID: 926250429}
@@ -38144,6 +38146,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   joystickLeft: {fileID: 193194820}
+  joystickRight: {fileID: 1690584125}
 --- !u!114 &931885907
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -45430,15 +45433,13 @@ GameObject:
   - component: {fileID: 1113455343}
   - component: {fileID: 1113455346}
   - component: {fileID: 1113455345}
-  - component: {fileID: 1113455347}
-  - component: {fileID: 1113455348}
   m_Layer: 5
   m_Name: JoyStick Left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1113455343
 RectTransform:
   m_ObjectHideFlags: 0
@@ -45450,8 +45451,7 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 193194821}
+  m_Children: []
   m_Father: {fileID: 931885899}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
@@ -45497,32 +45497,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1113455342}
   m_CullTransparentMesh: 1
---- !u!114 &1113455347
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1113455342}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6d54531977ecb194c95e2d3aa7a5d72a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_ControlPath: <Touchscreen>/touch*/position
---- !u!114 &1113455348
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1113455342}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6d54531977ecb194c95e2d3aa7a5d72a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_ControlPath: <Keyboard>/z
 --- !u!1001 &1115012351
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -58350,7 +58324,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1466367680
 RectTransform:
   m_ObjectHideFlags: 0
@@ -58362,8 +58336,7 @@ RectTransform:
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 1690584126}
+  m_Children: []
   m_Father: {fileID: 931885899}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
@@ -66968,7 +66941,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1690584126
 RectTransform:
   m_ObjectHideFlags: 0
@@ -66982,11 +66955,11 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 219624272}
-  m_Father: {fileID: 1466367680}
+  m_Father: {fileID: 931885899}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -400, y: 260}
+  m_AnchoredPosition: {x: -402.68512, y: 260.00555}
   m_SizeDelta: {x: 300, y: 300}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1690584127
@@ -78917,12 +78890,12 @@ PrefabInstance:
     - target: {fileID: 601192529242639950, guid: 19eadcf8fbed56b4da77ca94c1b4145f,
         type: 3}
       propertyPath: m_ActionEvents.Array.data[33].m_ActionId
-      value: 31d8ac8a-5ab7-4a58-ae1f-29ce510fd66a
+      value: 156ee8ad-993a-4002-92ac-64ee52426914
       objectReference: {fileID: 0}
     - target: {fileID: 601192529242639950, guid: 19eadcf8fbed56b4da77ca94c1b4145f,
         type: 3}
       propertyPath: m_ActionEvents.Array.data[34].m_ActionId
-      value: 156ee8ad-993a-4002-92ac-64ee52426914
+      value: 40c91930-3f01-4126-af9a-1517a3ad1ca8
       objectReference: {fileID: 0}
     - target: {fileID: 601192529242639950, guid: 19eadcf8fbed56b4da77ca94c1b4145f,
         type: 3}
@@ -78987,15 +78960,14 @@ PrefabInstance:
     - target: {fileID: 601192529242639950, guid: 19eadcf8fbed56b4da77ca94c1b4145f,
         type: 3}
       propertyPath: m_ActionEvents.Array.data[33].m_ActionName
-      value: Player/Touch Position[/Device Simulator Touchscreen/position,/Device
-        Simulator Touchscreen/primaryTouch/position]
+      value: Player/Joystick Left Enable[/Device Simulator Touchscreen/touch2/indirectTouch,/Keyboard/z,/Device
+        Simulator Touchscreen/touch2,/Device Simulator Touchscreen/touch2/press,/Device
+        Simulator Touchscreen/touch2/tap]
       objectReference: {fileID: 0}
     - target: {fileID: 601192529242639950, guid: 19eadcf8fbed56b4da77ca94c1b4145f,
         type: 3}
       propertyPath: m_ActionEvents.Array.data[34].m_ActionName
-      value: Player/Joystick Left Enable[/Device Simulator Touchscreen/touch2/indirectTouch,/Keyboard/z,/Device
-        Simulator Touchscreen/touch2,/Device Simulator Touchscreen/touch2/press,/Device
-        Simulator Touchscreen/touch2/tap]
+      value: Player/Joystick Enable 2[/Device Simulator Touchscreen/touch1]
       objectReference: {fileID: 0}
     - target: {fileID: 601192529242639950, guid: 19eadcf8fbed56b4da77ca94c1b4145f,
         type: 3}
@@ -79041,12 +79013,12 @@ PrefabInstance:
         type: 3}
       propertyPath: m_ActionEvents.Array.data[26].m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 931885906}
+      objectReference: {fileID: 0}
     - target: {fileID: 601192529242639950, guid: 19eadcf8fbed56b4da77ca94c1b4145f,
         type: 3}
       propertyPath: m_ActionEvents.Array.data[27].m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
-      objectReference: {fileID: 931885906}
+      objectReference: {fileID: 0}
     - target: {fileID: 601192529242639950, guid: 19eadcf8fbed56b4da77ca94c1b4145f,
         type: 3}
       propertyPath: m_ActionEvents.Array.data[33].m_PersistentCalls.m_Calls.Array.data[0].m_Target
@@ -79090,12 +79062,12 @@ PrefabInstance:
     - target: {fileID: 601192529242639950, guid: 19eadcf8fbed56b4da77ca94c1b4145f,
         type: 3}
       propertyPath: m_ActionEvents.Array.data[33].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: OnTryPoint
+      value: OnTryEnableJoystickOne
       objectReference: {fileID: 0}
     - target: {fileID: 601192529242639950, guid: 19eadcf8fbed56b4da77ca94c1b4145f,
         type: 3}
       propertyPath: m_ActionEvents.Array.data[34].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: OnTryClick
+      value: OnTryEnableJoystickTwo
       objectReference: {fileID: 0}
     - target: {fileID: 601192529242639950, guid: 19eadcf8fbed56b4da77ca94c1b4145f,
         type: 3}
