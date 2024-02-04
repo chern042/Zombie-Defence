@@ -363,6 +363,24 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Joystick Enable 1",
+                    "type": "PassThrough",
+                    "id": "ad2ceb60-80c3-480b-bef7-b5ef361b196f",
+                    "expectedControlType": "Touch",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Joystick Enable 2",
+                    "type": "Value",
+                    "id": "4f2ee253-0ae4-4c5c-a3e4-e30445530c67",
+                    "expectedControlType": "Touch",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -781,6 +799,28 @@
                     "processors": "",
                     "groups": "XR",
                     "action": "TrackedDeviceOrientation",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "26f15ea3-b136-47e4-ac3e-7443c38de6b7",
+                    "path": "<Touchscreen>/touch0",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Joystick Enable 1",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "52a226fa-000e-475c-b182-3cbd55c7b8de",
+                    "path": "<Touchscreen>/touch1",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Joystick Enable 2",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

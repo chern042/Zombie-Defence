@@ -211,24 +211,6 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
-                },
-                {
-                    "name": "Joystick Enable 1",
-                    "type": "PassThrough",
-                    "id": "156ee8ad-993a-4002-92ac-64ee52426914",
-                    "expectedControlType": "Touch",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "Joystick Enable 2",
-                    "type": "Value",
-                    "id": "40c91930-3f01-4126-af9a-1517a3ad1ca8",
-                    "expectedControlType": "Touch",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": true
                 }
             ],
             "bindings": [
@@ -597,17 +579,6 @@
                 },
                 {
                     "name": "",
-                    "id": "945d257b-1aac-4f66-a799-695a8e0dea51",
-                    "path": "<Touchscreen>/touch1/delta",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Movement",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "25b34351-c1db-469f-93c4-b2db927cb789",
                     "path": "<Mouse>/scroll",
                     "interactions": "",
@@ -801,39 +772,6 @@
                     "processors": "",
                     "groups": "",
                     "action": "Interact",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "0c59d2ea-0619-42f1-948d-acfda259f863",
-                    "path": "<Touchscreen>/touch1",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Joystick Enable 2",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "c36b3cb4-fc4d-4196-848b-c0d72f9331a0",
-                    "path": "<Touchscreen>/touch0",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Joystick Enable 1",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "e68edf85-7c6c-440a-830b-2f023aa14f68",
-                    "path": "<Touchscreen>/touch1/delta",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Look",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

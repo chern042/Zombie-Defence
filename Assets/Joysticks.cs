@@ -65,16 +65,19 @@ public class Joysticks : MonoBehaviour
 
             if (touchState == TouchStates.Touch)
             {
-                if (!hitDetector.IsPointerOverUILayer() && touchPosition.x < screenMidPointX && !joyStickLeftOpen)
+                //if (!hitDetector.IsPointerOverUILayer() && touchPosition.x < screenMidPointX && !joyStickLeftOpen)
+                if (touchPosition.x < screenMidPointX && !joyStickLeftOpen)
                 {
                     Debug.Log("STARTED LEFT");
                     joystickLeft.transform.position = new Vector3((float)touch["position"]["x"], (float)touch["position"]["y"], 0);
                     joystickLeft.gameObject.SetActive(true);
                     joyStickLeftOpen = true;
                 }
-                else if (!hitDetector.IsPointerOverUILayer() && touchPosition.x > screenMidPointX && !joyStickRightOpen)
-                {
-                    Debug.Log("STARTED RIGHT");
+               // else if (!hitDetector.IsPointerOverUILayer() && touchPosition.x > screenMidPointX && !joyStickRightOpen)
+                  else if (touchPosition.x > screenMidPointX && !joyStickRightOpen)
+
+                        {
+                            Debug.Log("STARTED RIGHT");
                     joystickRight.transform.position = new Vector3((float)touch["position"]["x"], (float)touch["position"]["y"], 0);
                     joystickRight.gameObject.SetActive(true);
                     joyStickRightOpen = true;
@@ -131,17 +134,19 @@ public class Joysticks : MonoBehaviour
 
             if (touchState == TouchStates.Touch)
             {
-                if (!hitDetector.IsPointerOverUILayer() && touchPosition.x < screenMidPointX && !joyStickLeftOpen)
-                {
-                    Debug.Log("STARTED LEFT");
-                    joystickLeft.transform.position = new Vector3((float)touch["position"]["x"], (float)touch["position"]["y"], 0);
+                //if (!hitDetector.IsPointerOverUILayer() && touchPosition.x < screenMidPointX && !joyStickLeftOpen)
+                    if (touchPosition.x < screenMidPointX && !joyStickLeftOpen)
+                    {
+                        Debug.Log("STARTED LEFT");
+                    joystickLeft.transform.position = new Vector3((float)touch["position"]["x"], (float)touch["position"]["y"], 1f);
                     joystickLeft.gameObject.SetActive(true);
                     joyStickLeftOpen = true;
                 }
-                else if (!hitDetector.IsPointerOverUILayer() && touchPosition.x > screenMidPointX && !joyStickRightOpen)
-                {
-                    Debug.Log("STARTED RIGHT");
-                    joystickRight.transform.position = new Vector3((float)touch["position"]["x"], (float)touch["position"]["y"], 0);
+               // else if (!hitDetector.IsPointerOverUILayer() && touchPosition.x > screenMidPointX && !joyStickRightOpen)
+                  else if (touchPosition.x > screenMidPointX && !joyStickRightOpen)
+                        {
+                            Debug.Log("STARTED RIGHT");
+                    joystickRight.transform.position = new Vector3((float)touch["position"]["x"], (float)touch["position"]["y"], 1f);
                     joystickRight.gameObject.SetActive(true);
                     joyStickRightOpen = true;
                 }

@@ -385,6 +385,24 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Joystick Enable 1"",
+                    ""type"": ""PassThrough"",
+                    ""id"": ""ad2ceb60-80c3-480b-bef7-b5ef361b196f"",
+                    ""expectedControlType"": ""Touch"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Joystick Enable 2"",
+                    ""type"": ""Value"",
+                    ""id"": ""4f2ee253-0ae4-4c5c-a3e4-e30445530c67"",
+                    ""expectedControlType"": ""Touch"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": true
                 }
             ],
             ""bindings"": [
@@ -805,6 +823,28 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
                     ""action"": ""TrackedDeviceOrientation"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""26f15ea3-b136-47e4-ac3e-7443c38de6b7"",
+                    ""path"": ""<Touchscreen>/touch0"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Joystick Enable 1"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""52a226fa-000e-475c-b182-3cbd55c7b8de"",
+                    ""path"": ""<Touchscreen>/touch1"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Joystick Enable 2"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         },
@@ -880,6 +920,8 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         m_UI_RightClick = m_UI.FindAction("RightClick", throwIfNotFound: true);
         m_UI_TrackedDevicePosition = m_UI.FindAction("TrackedDevicePosition", throwIfNotFound: true);
         m_UI_TrackedDeviceOrientation = m_UI.FindAction("TrackedDeviceOrientation", throwIfNotFound: true);
+        m_UI_JoystickEnable1 = m_UI.FindAction("Joystick Enable 1", throwIfNotFound: true);
+        m_UI_JoystickEnable2 = m_UI.FindAction("Joystick Enable 2", throwIfNotFound: true);
         // Joysticks
         m_Joysticks = asset.FindActionMap("Joysticks", throwIfNotFound: true);
         m_Joysticks_JoystickLeftPosition = m_Joysticks.FindAction("Joystick Left Position", throwIfNotFound: true);
@@ -1049,6 +1091,8 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
     private readonly InputAction m_UI_RightClick;
     private readonly InputAction m_UI_TrackedDevicePosition;
     private readonly InputAction m_UI_TrackedDeviceOrientation;
+    private readonly InputAction m_UI_JoystickEnable1;
+    private readonly InputAction m_UI_JoystickEnable2;
     public struct UIActions
     {
         private @PlayerInput m_Wrapper;
@@ -1063,6 +1107,8 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         public InputAction @RightClick => m_Wrapper.m_UI_RightClick;
         public InputAction @TrackedDevicePosition => m_Wrapper.m_UI_TrackedDevicePosition;
         public InputAction @TrackedDeviceOrientation => m_Wrapper.m_UI_TrackedDeviceOrientation;
+        public InputAction @JoystickEnable1 => m_Wrapper.m_UI_JoystickEnable1;
+        public InputAction @JoystickEnable2 => m_Wrapper.m_UI_JoystickEnable2;
         public InputActionMap Get() { return m_Wrapper.m_UI; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -1102,6 +1148,12 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
             @TrackedDeviceOrientation.started += instance.OnTrackedDeviceOrientation;
             @TrackedDeviceOrientation.performed += instance.OnTrackedDeviceOrientation;
             @TrackedDeviceOrientation.canceled += instance.OnTrackedDeviceOrientation;
+            @JoystickEnable1.started += instance.OnJoystickEnable1;
+            @JoystickEnable1.performed += instance.OnJoystickEnable1;
+            @JoystickEnable1.canceled += instance.OnJoystickEnable1;
+            @JoystickEnable2.started += instance.OnJoystickEnable2;
+            @JoystickEnable2.performed += instance.OnJoystickEnable2;
+            @JoystickEnable2.canceled += instance.OnJoystickEnable2;
         }
 
         private void UnregisterCallbacks(IUIActions instance)
@@ -1136,6 +1188,12 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
             @TrackedDeviceOrientation.started -= instance.OnTrackedDeviceOrientation;
             @TrackedDeviceOrientation.performed -= instance.OnTrackedDeviceOrientation;
             @TrackedDeviceOrientation.canceled -= instance.OnTrackedDeviceOrientation;
+            @JoystickEnable1.started -= instance.OnJoystickEnable1;
+            @JoystickEnable1.performed -= instance.OnJoystickEnable1;
+            @JoystickEnable1.canceled -= instance.OnJoystickEnable1;
+            @JoystickEnable2.started -= instance.OnJoystickEnable2;
+            @JoystickEnable2.performed -= instance.OnJoystickEnable2;
+            @JoystickEnable2.canceled -= instance.OnJoystickEnable2;
         }
 
         public void RemoveCallbacks(IUIActions instance)
@@ -1229,6 +1287,8 @@ public partial class @PlayerInput: IInputActionCollection2, IDisposable
         void OnRightClick(InputAction.CallbackContext context);
         void OnTrackedDevicePosition(InputAction.CallbackContext context);
         void OnTrackedDeviceOrientation(InputAction.CallbackContext context);
+        void OnJoystickEnable1(InputAction.CallbackContext context);
+        void OnJoystickEnable2(InputAction.CallbackContext context);
     }
     public interface IJoysticksActions
     {
