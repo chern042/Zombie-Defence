@@ -1355,10 +1355,20 @@ namespace InfimaGames.LowPolyShooterPack
 			//Read.
 			axisMovement = cursorLocked ? context.ReadValue<Vector2>() : default;
 		}
-		/// <summary>
-		/// Look.
-		/// </summary>
-		public void OnLook(InputAction.CallbackContext context)
+
+
+        /// <summary>
+        /// Movement.
+        /// </summary>
+        public void OnMove(Vector2 moveValue)
+        {
+            //Read.
+            axisMovement = cursorLocked ? moveValue : default;
+        }
+        /// <summary>
+        /// Look.
+        /// </summary>
+        public void OnLook(InputAction.CallbackContext context)
 		{
 			//Read.
 			axisLook = cursorLocked ? context.ReadValue<Vector2>() : default;
@@ -1375,10 +1385,28 @@ namespace InfimaGames.LowPolyShooterPack
 			axisLook *= aiming ? equippedWeaponScope.GetMultiplierMouseSensitivity() : 1.0f * lookSensitivity;
 		}
 
-		/// <summary>
-		/// Called in order to update the tutorial text value.
-		/// </summary>
-		public void OnUpdateTutorial(InputAction.CallbackContext context)
+
+        public void OnLook(Vector2 moveValue)
+        {
+            //Read.
+            axisLook = cursorLocked ? moveValue : default;
+
+            //Make sure that we have a weapon.
+            if (equippedWeapon == null)
+                return;
+
+            //Make sure that we have a scope.
+            if (equippedWeaponScope == null)
+                return;
+
+            //If we're aiming, multiply by the mouse sensitivity multiplier of the equipped weapon's scope!
+            axisLook *= aiming ? equippedWeaponScope.GetMultiplierMouseSensitivity() : 1.0f * lookSensitivity;
+        }
+
+        /// <summary>
+        /// Called in order to update the tutorial text value.
+        /// </summary>
+        public void OnUpdateTutorial(InputAction.CallbackContext context)
 		{
 			//Switch.
 			tutorialTextVisible = context switch

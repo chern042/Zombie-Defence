@@ -26,8 +26,10 @@ namespace MoreMountains.Tools
 		/// if this is true, the joystick will return back to its initial position when released
 		[Tooltip("if this is true, the joystick will return back to its initial position when released")]
 		public bool ResetPositionToInitialOnRelease = false;
+        [Tooltip("if this is true, the joystick will disappear when released")]
+        public bool DisableJoystickOnRelease = false;
 
-		protected Vector3 _initialPosition;
+        protected Vector3 _initialPosition;
 		protected Vector3 _newPosition;
 		protected CanvasGroup _knobCanvasGroup;
 		protected RectTransform _rectTransform;
@@ -61,7 +63,12 @@ namespace MoreMountains.Tools
 		/// <param name="data">Data.</param>
 		public override void OnPointerDown(PointerEventData data)
 		{
-			base.OnPointerDown(data);
+            if (DisableJoystickOnRelease)
+            {
+                BackgroundCanvasGroup.gameObject.SetActive(true);
+                _knobTransform.gameObject.SetActive(true);
+            }
+            base.OnPointerDown(data);
 			
 			// if we're in "screen space - camera" render mode
 			if (ParentCanvasRenderMode == RenderMode.ScreenSpaceCamera)
@@ -111,6 +118,11 @@ namespace MoreMountains.Tools
 			{
 				BackgroundCanvasGroup.transform.position = _initialPosition;
 				_knobTransform.position = _initialPosition;
+			}
+			if (DisableJoystickOnRelease)
+			{
+				BackgroundCanvasGroup.gameObject.SetActive(false);
+				_knobTransform.gameObject.SetActive(false);
 			}
 		}
 		
