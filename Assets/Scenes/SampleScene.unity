@@ -13206,6 +13206,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: NiceTouchUICamera
       objectReference: {fileID: 0}
+    - target: {fileID: 5805401296883187491, guid: 15c7370c3482e434f986f12f072c2ea8,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5805401296883187500, guid: 15c7370c3482e434f986f12f072c2ea8,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -13259,7 +13264,7 @@ PrefabInstance:
     - target: {fileID: 5805401297027947597, guid: 15c7370c3482e434f986f12f072c2ea8,
         type: 3}
       propertyPath: m_RenderMode
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5805401297027947597, guid: 15c7370c3482e434f986f12f072c2ea8,
         type: 3}
@@ -66787,7 +66792,7 @@ PrefabInstance:
     - target: {fileID: 3994342968738844011, guid: 481d3cd03706848418e7f4eebe20bb9d,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -69991,7 +69996,7 @@ PrefabInstance:
     - target: {fileID: 3994342968738844011, guid: 481d3cd03706848418e7f4eebe20bb9d,
         type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
